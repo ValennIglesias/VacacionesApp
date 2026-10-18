@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About us · %BRAND%</title>
+    <meta name="description" content="What %BRAND% is, why it exists, how it&#x27;s funded and the principles it follows: free, never moves money, and collects as little data as possible." />
+    <link rel="canonical" href="%SITE%/en/about/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/about/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/nosotros/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="About us · %BRAND%" />
+    <meta property="og:description" content="What %BRAND% is, why it exists, how it&#x27;s funded and the principles it follows: free, never moves money, and collects as little data as possible." />
+    <meta property="og:url" content="%SITE%/en/about/" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "AboutPage", "name": "About us", "description": "What %BRAND% is, why it exists, how it's funded and the principles it follows: free, never moves money, and collects as little data as possible.", "inLanguage": "en", "url": "%SITE%/en/about/", "about": {"@type": "Organization", "name": "%BRAND%", "url": "%SITE%/", "logo": "%SITE%/icon-512.png", "email": "%CONTACT%"}}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+
+        <h1>About %BRAND%</h1>
+        <p class="lead">%BRAND% is a free app that helps groups of friends, couples and families split trip expenses without doing the math or arguing about money.</p>
+
+        <h2>Why it exists</h2>
+        <p>Almost every group trip goes the same way: one person pays for the lodging, another for the car, another for dinners, and by the end nobody remembers who paid what. The math happens on a napkin or in a spreadsheet only its author understands, and money becomes an awkward topic.</p>
+        <p>%BRAND% was built to fix that: logging an expense takes seconds, everyone sees the same numbers, and at the end the app says who pays whom, with as few transfers as possible.</p>
+
+        <h2>What it does</h2>
+        <ul>
+          <li>Logs expenses in the destination's currency, or any other with its exchange rate.</li>
+          <li>Splits each expense only among the people who took part.</li>
+          <li>Lets you settle up mid-trip without counting anything twice at the end.</li>
+          <li>Converts debts into the currency your group pays each other in.</li>
+          <li>Shows everyone's payment alias to copy, and lets each payment be confirmed.</li>
+        </ul>
+
+        <h2>How it's funded</h2>
+        <p>%BRAND% is free and supported by unobtrusive ads. It never moves money: it only calculates and keeps records. Everyone pays from their own bank or wallet. We don't sell personal data.</p>
+
+        <h2>Our principles</h2>
+        <ul>
+          <li><strong>Minimal data.</strong> We only ask for what the app needs, and you can delete your account anytime from the app.</li>
+          <li><strong>Transparent numbers.</strong> Every member sees the same expenses, balances and payments.</li>
+          <li><strong>Your own decisions.</strong> Only you add your payment alias, and only you mark or confirm your payments.</li>
+        </ul>
+
+        <h2>Who we are</h2>
+        <p>%BRAND% is an independent project built in Argentina, for travelers in Latin America and everywhere else.</p>
+        <p>Have an idea, found a bug or want to collaborate? <a href="/en/contact/">Get in touch</a>.</p>
+      </article>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

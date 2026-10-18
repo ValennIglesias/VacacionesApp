@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { isSafeAvatar } from "../shared/avatars";
+import { resetPasswordEmail, sendEmail } from "./email";
 
 // PBKDF2 nativo (WebCrypto): el scrypt en JS por defecto supera el límite de CPU del plan free de Workers.
 const ITER = 100_000;
@@ -32,7 +33,31 @@ export const getAuth = (env: Env) =>
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     trustedOrigins: [env.BETTER_AUTH_URL],
-    emailAndPassword: { enabled: true, minPasswordLength: 8, password: { hash, verify } },
+    emailAndPassword: {
+      enabled: true,
+      minPasswordLength: 8,
+      password: { hash, verify },
+      revokeSessionsOnPasswordReset: true,
+      sendResetPassword: async ({ user, url }, request) => {
+        const lang = request?.headers.get("accept-language")?.startsWith("es") ? "es" : "en";
+        const { subject, html } = resetPasswordEmail(user.name, url, lang);
+        await sendEmail(env, user.email, subject, html);
+      },
+    },
+    // límite de intentos guardado en D1 (la memoria no se comparte entre instancias del Worker)
+    rateLimit: {
+      enabled: true,
+      storage: "database",
+      window: 60,
+      max: 100,
+      customRules: {
+        "/sign-in/email": { window: 60, max: 5 },
+        "/sign-up/email": { window: 300, max: 5 },
+        "/request-password-reset": { window: 300, max: 3 },
+        "/reset-password": { window: 300, max: 5 },
+      },
+    },
+    advanced: { ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] } },
     databaseHooks: {
       user: { update: { before: async (u) => (u.image != null && !isSafeAvatar(u.image) ? false : undefined) } },
     },

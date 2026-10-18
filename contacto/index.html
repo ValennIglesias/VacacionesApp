@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto · %BRAND%</title>
+    <meta name="description" content="Cómo contactar a %BRAND%: soporte de la app, privacidad y borrado de datos, problemas de seguridad, prensa y alianzas." />
+    <link rel="canonical" href="%SITE%/contacto/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/contacto/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/contact/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Contacto · %BRAND%" />
+    <meta property="og:description" content="Cómo contactar a %BRAND%: soporte de la app, privacidad y borrado de datos, problemas de seguridad, prensa y alianzas." />
+    <meta property="og:url" content="%SITE%/contacto/" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ContactPage", "name": "Contacto", "description": "Cómo contactar a %BRAND%: soporte de la app, privacidad y borrado de datos, problemas de seguridad, prensa y alianzas.", "inLanguage": "es", "url": "%SITE%/contacto/", "about": {"@type": "Organization", "name": "%BRAND%", "url": "%SITE%/", "logo": "%SITE%/icon-512.png", "email": "%CONTACT%", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "%CONTACT%", "availableLanguage": ["Spanish", "English"]}}}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+
+        <h1>Contacto</h1>
+        <p class="lead">Escribinos por email y te respondemos lo antes posible.</p>
+        <p><a href="mailto:%CONTACT%" class="!no-underline inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-white"><i class="ph-duotone ph-envelope-simple text-xl"></i> %CONTACT%</a></p>
+
+        <h2>Antes de escribir</h2>
+        <ul>
+          <li><strong>No podés entrar:</strong> en el login tocá "¿Olvidaste tu contraseña?" y te mandamos un link para elegir una nueva.</li>
+          <li><strong>Dudas sobre cómo funciona:</strong> mirá las <a href="/#faq">preguntas frecuentes</a> y las <a href="/guias/">guías</a>.</li>
+          <li><strong>Borrar tu cuenta:</strong> lo podés hacer vos mismo desde la app, en "Mis viajes", al final de la lista.</li>
+        </ul>
+
+        <h2>Para qué podés escribirnos</h2>
+        <ul>
+          <li><strong>Soporte:</strong> algo no funciona como esperabas. Contanos qué pasó y, si podés, desde qué dispositivo.</li>
+          <li><strong>Privacidad:</strong> pedir una copia de tus datos o hacer consultas sobre cómo los tratamos. Más detalles en la <a href="/privacy/">política de privacidad</a>.</li>
+          <li><strong>Seguridad:</strong> si encontraste una vulnerabilidad, escribinos antes de publicarla y la revisamos con prioridad.</li>
+          <li><strong>Prensa y alianzas:</strong> notas, colaboraciones o integraciones.</li>
+        </ul>
+      </article>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

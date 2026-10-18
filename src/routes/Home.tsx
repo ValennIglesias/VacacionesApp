@@ -1,11 +1,13 @@
 import { Link } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut } from "@phosphor-icons/react";
 import { api, auth, type Trip } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName } from "../lib/format";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { ConfirmSheet } from "../components/bits";
 
 import { Empty, Skeleton, Flag } from "../components/ui";
 
@@ -14,6 +16,11 @@ export function Home() {
   const locale = useLocale();
   const session = auth.useSession();
   const trips = useQuery({ queryKey: ["trips"], queryFn: () => api<Trip[]>("/trips") });
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const deleteAccount = useMutation({
+    mutationFn: () => api("/account", { method: "DELETE" }),
+    onSuccess: () => location.assign("/"),
+  });
 
   return (
     <main className="mx-auto min-h-[100dvh] max-w-lg px-5 pb-16 pt-[max(2rem,env(safe-area-inset-top))]">
@@ -73,6 +80,19 @@ export function Home() {
           </motion.div>
         ))}
       </section>
+      <button type="button" onClick={() => (deleteAccount.reset(), setConfirmDelete(true))} className="mx-auto mt-16 block text-sm text-muted underline-offset-4 hover:underline">
+        {t.deleteAccount}
+      </button>
+      <ConfirmSheet
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        title={t.deleteAccount}
+        body={t.deleteAccountBody}
+        confirmLabel={t.deleteAccountConfirm}
+        loading={deleteAccount.isPending}
+        error={deleteAccount.isError ? t.genericError : undefined}
+        onConfirm={() => deleteAccount.mutate()}
+      />
     </main>
   );
 }

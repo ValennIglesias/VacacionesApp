@@ -36,3 +36,69 @@ details > summary::-webkit-details-marker {
 details[open] .chev {
   transform: rotate(180deg);
 }
+
+/* artículos de las guías */
+.prose {
+  @apply mx-auto max-w-3xl px-5 text-[17px] leading-relaxed;
+}
+.prose h1 {
+  @apply mt-8 text-3xl font-semibold leading-tight tracking-tight md:text-5xl;
+}
+.prose .lead {
+  @apply mt-4 text-lg text-muted md:text-xl;
+}
+.prose .meta {
+  @apply mt-4 text-sm text-muted;
+}
+.prose h2 {
+  @apply mt-12 text-2xl font-semibold tracking-tight;
+}
+.prose h3 {
+  @apply mt-8 text-lg font-semibold;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose table {
+  @apply mt-4;
+}
+.prose ul {
+  @apply list-disc pl-6;
+}
+.prose ol {
+  @apply list-decimal pl-6;
+}
+.prose li {
+  @apply mt-2;
+}
+.prose a {
+  @apply font-medium text-accent-ink underline underline-offset-4;
+}
+.prose strong {
+  @apply font-semibold;
+}
+.prose table {
+  @apply w-full overflow-hidden rounded-2xl bg-surface text-left text-[15px];
+}
+.prose th,
+.prose td {
+  @apply border-b border-line px-4 py-3;
+}
+.prose th {
+  @apply font-semibold;
+}
+.prose .tip {
+  @apply mt-6 rounded-2xl bg-accent-soft p-5 text-accent-ink;
+}
+.prose .crumbs {
+  @apply text-sm text-muted;
+}
+.prose .crumbs a {
+  @apply font-normal text-muted no-underline hover:underline;
+}
+.prose .related {
+  @apply mt-12 rounded-3xl bg-surface p-6;
+}
+.prose .related ul {
+  @apply list-none pl-0;
+}

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "vaquita",
+  "name": "tribusplit",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -13,11 +13,16 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "vaquita-db",
-      // reemplazar con el id de `wrangler d1 create vaquita-db`
+      "database_name": "tribusplit-db",
+      // reemplazar con el id de `wrangler d1 create tribusplit-db`
       "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "migrations"
     }
+  ],
+  // límites por usuario (Workers Rate Limiting, incluido en el plan free)
+  "ratelimits": [
+    { "name": "JOIN_LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } },
+    { "name": "WRITE_LIMITER", "namespace_id": "1002", "simple": { "limit": 60, "period": 60 } }
   ],
   "vars": {
     "BETTER_AUTH_URL": "http://localhost:5173"

@@ -1,3 +1,7 @@
 BETTER_AUTH_SECRET=cambiar-por-un-string-largo-y-random
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+# Emails (recuperar contraseña). Sin API key, el link se imprime en la consola del Worker.
+RESEND_API_KEY=
+# ej: TribuSplit <hola@tribusplit.com> (el dominio tiene que estar verificado en Resend)
+EMAIL_FROM=

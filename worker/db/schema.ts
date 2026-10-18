@@ -47,6 +47,14 @@ export const verification = sqliteTable("verification", {
   updatedAt: text("updatedAt"),
 });
 
+// límite de intentos de better-auth (storage: "database")
+export const rateLimit = sqliteTable("rateLimit", {
+  id: text("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  count: integer("count").notNull(),
+  lastRequest: integer("lastRequest").notNull(),
+});
+
 // --- app ---
 export const trips = sqliteTable("trips", {
   id: text("id").primaryKey(),

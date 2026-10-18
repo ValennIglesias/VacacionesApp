@@ -12,5 +12,5 @@
     "resolveJsonModule": true,
     "types": ["vite/client", "./worker-configuration.d.ts"]
   },
-  "include": ["src", "worker", "shared", "vite.config.ts"]
+  "include": ["src", "worker", "shared"]
 }

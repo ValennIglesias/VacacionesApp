@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cómo saldar deudas de grupo con la menor cantidad de transferencias | %BRAND%</title>
+    <meta name="description" content="Explicación simple del método para simplificar las deudas de un grupo: saldo neto de cada persona y pagos directos de quienes deben a quienes cobran." />
+    <link rel="canonical" href="%SITE%/guias/minimizar-transferencias/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/guias/minimizar-transferencias/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/guides/settle-group-debts-fewer-transfers/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Cómo saldar deudas de grupo con la menor cantidad de transferencias" />
+    <meta property="og:description" content="Explicación simple del método para simplificar las deudas de un grupo: saldo neto de cada persona y pagos directos de quienes deben a quienes cobran." />
+    <meta property="og:url" content="%SITE%/guias/minimizar-transferencias/" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Cómo saldar deudas de grupo con la menor cantidad de transferencias", "description": "Explicación simple del método para simplificar las deudas de un grupo: saldo neto de cada persona y pagos directos de quienes deben a quienes cobran.", "inLanguage": "es", "datePublished": "2026-10-18", "dateModified": "2026-10-18", "image": "%SITE%/og.png", "mainEntityOfPage": "%SITE%/guias/minimizar-transferencias/", "author": {"@type": "Organization", "name": "%BRAND%"}, "publisher": {"@type": "Organization", "name": "%BRAND%", "logo": {"@type": "ImageObject", "url": "%SITE%/icon-512.png"}}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "%SITE%/"}, {"@type": "ListItem", "position": 2, "name": "Guías", "item": "%SITE%/guias/"}, {"@type": "ListItem", "position": 3, "name": "Cómo saldar deudas de grupo con la menor cantidad de transferencias", "item": "%SITE%/guias/minimizar-transferencias/"}]}]}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+        <nav class="crumbs" aria-label="breadcrumb"><a href="/">Inicio</a> / <a href="/guias/">Guías</a></nav>
+        <h1>Cómo saldar deudas de grupo con la menor cantidad de transferencias</h1>
+        <p class="lead">Cuando seis personas comparten gastos durante una semana, las deudas cruzadas parecen un laberinto. Con un método simple, se resuelven en pocos pagos.</p>
+        <p class="meta">Actualizado el 18 de octubre de 2026 · 2 min de lectura</p>
+
+<h2>El problema de las deudas cruzadas</h2>
+<p>Si cada vez que alguien pagó algo los demás le devuelven su parte, cada gasto genera varias transferencias. En una semana de viaje eso puede terminar en decenas de pagos chicos, muchos de ellos en direcciones opuestas: Ana le debe a Bruno, pero Bruno también le debe a Ana.</p>
+<p>La buena noticia es que no hace falta hacer cada uno de esos pagos. Lo que importa es cuánto puso cada persona en total y cuánto le tocaba en total.</p>
+
+<h2>Paso 1: calcular el saldo neto de cada persona</h2>
+<p>Para cada integrante:</p>
+<p><strong>Saldo = lo que pagó − lo que le tocaba</strong></p>
+<ul>
+<li>Si el saldo es <strong>positivo</strong>, le deben dinero.</li>
+<li>Si es <strong>negativo</strong>, debe dinero.</li>
+<li>La suma de todos los saldos siempre da cero: lo que unos deben es exactamente lo que otros tienen que cobrar.</li>
+</ul>
+
+<h2>Paso 2: emparejar deudores y acreedores</h2>
+<p>Se toma a la persona que más debe y a la que más tiene que cobrar. La primera le paga a la segunda el menor de los dos montos. Una de las dos queda en cero; se repite con las que quedan.</p>
+
+<h3>Ejemplo</h3>
+<table>
+<thead><tr><th>Persona</th><th>Pagó</th><th>Le tocaba</th><th>Saldo</th></tr></thead>
+<tbody>
+<tr><td>Ana</td><td>500</td><td>250</td><td>+250</td></tr>
+<tr><td>Bruno</td><td>200</td><td>250</td><td>−50</td></tr>
+<tr><td>Carla</td><td>300</td><td>250</td><td>+50</td></tr>
+<tr><td>Diego</td><td>0</td><td>250</td><td>−250</td></tr>
+</tbody>
+</table>
+<ol>
+<li>Diego (debe 250) le paga 250 a Ana (cobra 250). Ambos quedan en cero.</li>
+<li>Bruno (debe 50) le paga 50 a Carla (cobra 50). Listo.</li>
+</ol>
+<p>Dos transferencias en lugar de las seis o más que habría si cada uno devolviera cada gasto por separado.</p>
+
+<h2>¿Cuántas transferencias hacen falta como máximo?</h2>
+<p>Con este método, en un grupo de <em>N</em> personas alcanza con <strong>N − 1 transferencias como máximo</strong>, y muchas veces menos. Para seis personas, cinco pagos como mucho.</p>
+
+<h2>Detalles que conviene cuidar</h2>
+<ul>
+<li><strong>Redondeos</strong>: al dividir montos en partes iguales pueden sobrar centavos. Lo correcto es asignarlos a alguien de forma consistente para que la suma cierre exacta.</li>
+<li><strong>Repartidas parciales</strong>: si hacen cuentas a mitad del viaje, los gastos ya saldados no deben volver a contarse al final.</li>
+<li><strong>Confirmación</strong>: cada pago debería confirmarlo quien recibe, para saber qué deudas quedan pendientes.</li>
+</ul>
+
+<div class="tip"><strong>En la práctica:</strong> no hace falta hacer este cálculo a mano. La app calcula los saldos y propone automáticamente la menor cantidad de transferencias, en la moneda que elijan.</div>
+
+        <div id="ad-landing" class="mt-10" hidden></div>
+        <section class="related"><h2 class="!mt-0 text-lg">Seguí leyendo</h2><ul><li><a href="/guias/como-dividir-gastos-de-un-viaje/">Cómo dividir los gastos de un viaje entre amigos sin peleas</a></li><li><a href="/guias/hablar-de-plata-con-amigos/">Cómo hablar de plata con amigos (y cobrar sin incomodar)</a></li><li><a href="/guias/gastos-en-distintas-monedas/">Cómo manejar gastos en distintas monedas durante un viaje</a></li></ul></section>
+      </article>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

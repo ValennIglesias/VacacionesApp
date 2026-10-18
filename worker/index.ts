@@ -1,11 +1,14 @@
 import { Hono, type Context } from "hono";
+import { secureHeaders } from "hono/secure-headers";
 import { drizzle } from "drizzle-orm/d1";
-import { and, asc, eq, inArray, isNull } from "drizzle-orm";
+import { and, asc, eq, inArray, isNotNull, isNull, ne } from "drizzle-orm";
+import type { BatchItem } from "drizzle-orm/batch";
 import { z } from "zod";
 import { getAuth } from "./auth";
 import * as s from "./db/schema";
 import { CATEGORIES, COUNTRY_CURRENCY, CURRENCIES, MEMBER_COLORS } from "../shared/data";
 import { computeBalances, convertCents, minTransfers, splitEqual } from "../shared/settle";
+import { BRAND } from "../shared/brand";
 
 type AppEnv = { Bindings: Env; Variables: { userId: string; userName: string } };
 const app = new Hono<AppEnv>();
@@ -28,6 +31,8 @@ app.onError((err, c) => {
   return c.json({ error: "server_error" }, 500);
 });
 
+app.use("/api/*", secureHeaders());
+
 // --- auth ---
 app.on(["GET", "POST"], "/api/auth/*", (c) => getAuth(c.env).handler(c.req.raw));
 // country: país del visitante según Cloudflare, para sugerir su moneda
@@ -41,6 +46,15 @@ app.use("/api/*", async (c, next) => {
   c.set("userName", session.user.name);
   await next();
 });
+
+// límites por usuario: unirse con código (contra adivinar códigos) y cualquier escritura (contra spam)
+app.use("/api/*", async (c, next) => {
+  const limiter = c.req.path.startsWith("/api/join/") ? c.env.JOIN_LIMITER : c.req.method !== "GET" ? c.env.WRITE_LIMITER : null;
+  if (limiter && !(await limiter.limit({ key: c.get("userId") })).success) return c.json({ error: "too_many_requests" }, 429);
+  await next();
+});
+
+const MAX_MEMBERS = 50;
 
 async function requireMember(c: Context<AppEnv>, tripId: string) {
   const m = await db(c).query.members.findFirst({ where: and(eq(s.members.tripId, tripId), eq(s.members.userId, c.get("userId"))) });
@@ -131,11 +145,43 @@ app.patch("/api/trips/:id", async (c) => {
   return c.json({ ok: true });
 });
 
+/** Sentencias para borrar un viaje entero, hijos primero (las FKs a integrantes no tienen cascade). */
+function deleteTripStatements(c: Context<AppEnv>, tripId: string) {
+  const d = db(c);
+  const settlementIds = d.select({ id: s.settlements.id }).from(s.settlements).where(eq(s.settlements.tripId, tripId));
+  const expenseIds = d.select({ id: s.expenses.id }).from(s.expenses).where(eq(s.expenses.tripId, tripId));
+  return [
+    d.delete(s.transfers).where(inArray(s.transfers.settlementId, settlementIds)),
+    d.delete(s.expenseShares).where(inArray(s.expenseShares.expenseId, expenseIds)),
+    d.delete(s.expenses).where(eq(s.expenses.tripId, tripId)),
+    d.delete(s.settlements).where(eq(s.settlements.tripId, tripId)),
+    d.delete(s.members).where(eq(s.members.tripId, tripId)),
+    d.delete(s.trips).where(eq(s.trips.id, tripId)),
+  ] as const;
+}
+
+// borrar viaje: solo quien lo creó (se borra para todos)
+app.delete("/api/trips/:id", async (c) => {
+  const { trip } = await requireMember(c, c.req.param("id"));
+  if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
+  await db(c).batch(deleteTripStatements(c, trip.id));
+  return c.json({ ok: true });
+});
+
+// salir del viaje: el nombre queda (con sus gastos), desvinculado de la cuenta
+app.post("/api/trips/:id/leave", async (c) => {
+  const { trip, me } = await requireMember(c, c.req.param("id"));
+  if (trip.createdBy === c.get("userId")) throw new HttpError(409, "owner_cannot_leave");
+  await db(c).update(s.members).set({ userId: null, alias: null }).where(eq(s.members.id, me.id));
+  return c.json({ ok: true });
+});
+
 // --- integrantes ---
 app.post("/api/trips/:id/members", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
   const { name } = z.object({ name: z.string().trim().min(1).max(30) }).parse(await c.req.json());
   const count = (await db(c).query.members.findMany({ where: eq(s.members.tripId, trip.id) })).length;
+  if (count >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
   await db(c).insert(s.members).values({ id: uid(), tripId: trip.id, name, color: count % MEMBER_COLORS, createdAt: now() });
   return c.json({ ok: true }, 201);
 });
@@ -151,6 +197,25 @@ app.patch("/api/trips/:id/members/:mid", async (c) => {
   // el alias de cobro lo carga solo su dueño, para evitar errores al transferir
   if (body.alias !== undefined && m.userId !== c.get("userId")) throw new HttpError(403, "only_owner_alias");
   await db(c).update(s.members).set(body).where(eq(s.members.id, m.id));
+  return c.json({ ok: true });
+});
+
+// quitar integrante: solo si no tiene gastos ni pagos; a alguien vinculado solo lo quita quien creó el viaje
+app.delete("/api/trips/:id/members/:mid", async (c) => {
+  const { trip, me } = await requireMember(c, c.req.param("id"));
+  const d = db(c);
+  const m = await d.query.members.findFirst({ where: and(eq(s.members.id, c.req.param("mid")), eq(s.members.tripId, trip.id)) });
+  if (!m) throw new HttpError(404, "member_not_found");
+  if (m.id === me.id) throw new HttpError(409, "use_leave");
+  if (m.userId && trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
+  const [paid, share, sent, received] = await Promise.all([
+    d.query.expenses.findFirst({ where: eq(s.expenses.paidBy, m.id) }),
+    d.query.expenseShares.findFirst({ where: eq(s.expenseShares.memberId, m.id) }),
+    d.query.transfers.findFirst({ where: eq(s.transfers.fromMember, m.id) }),
+    d.query.transfers.findFirst({ where: eq(s.transfers.toMember, m.id) }),
+  ]);
+  if (paid || share || sent || received) throw new HttpError(409, "member_has_movements");
+  await d.delete(s.members).where(eq(s.members.id, m.id));
   return c.json({ ok: true });
 });
 
@@ -184,6 +249,7 @@ app.post("/api/join/:code", async (c) => {
       .where(and(eq(s.members.id, body.memberId), eq(s.members.tripId, trip.id), isNull(s.members.userId)));
     if (!res.meta.changes) throw new HttpError(409, "member_taken");
   } else {
+    if (members.length >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
     await d.insert(s.members).values({
       id: uid(),
       tripId: trip.id,
@@ -335,6 +401,32 @@ app.post("/api/trips/:id/transfers/:tid/confirm", async (c) => {
   return c.json({ ok: true });
 });
 
+// --- borrar cuenta ---
+// Se anonimiza el usuario en vez de borrar la fila: los gastos que cargó siguen apuntando a él y el resto del grupo no pierde historia.
+app.delete("/api/account", async (c) => {
+  const userId = c.get("userId");
+  const d = db(c);
+  const owned = await d.query.trips.findMany({ where: eq(s.trips.createdBy, userId) });
+  const stmts: BatchItem<"sqlite">[] = [];
+  for (const trip of owned) {
+    const heir = await d.query.members.findFirst({ where: and(eq(s.members.tripId, trip.id), isNotNull(s.members.userId), ne(s.members.userId, userId)) });
+    // el viaje pasa a otro integrante con cuenta; si no queda nadie, se borra
+    if (heir) stmts.push(d.update(s.trips).set({ createdBy: heir.userId! }).where(eq(s.trips.id, trip.id)));
+    else stmts.push(...deleteTripStatements(c, trip.id));
+  }
+  stmts.push(
+    d.update(s.members).set({ userId: null, alias: null }).where(eq(s.members.userId, userId)),
+    d.delete(s.session).where(eq(s.session.userId, userId)),
+    d.delete(s.account).where(eq(s.account.userId, userId)),
+    d
+      .update(s.user)
+      .set({ name: "—", email: `deleted-${userId}@deleted.invalid`, image: null, emailVerified: 0, updatedAt: new Date().toISOString() })
+      .where(eq(s.user.id, userId)),
+  );
+  await d.batch(stmts as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]]);
+  return c.json({ ok: true });
+});
+
 // --- cotizaciones (base USD, cache diario en D1) ---
 app.get("/api/rates", async (c) => {
   const day = new Date().toISOString().slice(0, 10);
@@ -377,7 +469,25 @@ app.get("/api/rates/ars", async (c) => {
 app.all("/api/*", (c) => c.json({ error: "not_found" }, 404));
 
 // --- SPA: cualquier /app/* devuelve el shell de la app ---
-app.get("/app/*", (c) => c.env.ASSETS.fetch(new URL("/app/", c.req.url)));
+app.get("/app/*", async (c) => {
+  const shell = await c.env.ASSETS.fetch(new URL("/app/", c.req.url));
+  // link de invitación: la vista previa al compartir muestra el nombre del viaje
+  const code = c.req.path.match(/^\/app\/join\/([A-Za-z0-9]{6})$/)?.[1]?.toUpperCase();
+  const trip = code && (await db(c).query.trips.findFirst({ where: eq(s.trips.inviteCode, code) }));
+  if (!trip) return shell;
+  const es = c.req.header("accept-language")?.startsWith("es") ?? true;
+  const title = es ? `Sumate a "${trip.name}" en ${BRAND}` : `Join "${trip.name}" on ${BRAND}`;
+  const desc = es ? "Te invitaron a repartir los gastos del viaje. Tocá para unirte." : "You've been invited to split the trip expenses. Tap to join.";
+  const origin = new URL(c.req.url).origin;
+  const set = (content: string) => ({ element: (e: Element) => void e.setAttribute("content", content) });
+  return new HTMLRewriter()
+    .on("title", { element: (e) => void e.setInnerContent(title) })
+    .on('meta[property="og:title"]', set(title))
+    .on('meta[property="og:description"]', set(desc))
+    .on('meta[name="description"]', set(desc))
+    .on('meta[property="og:image"]', set(`${origin}/og.png`))
+    .transform(shell);
+});
 app.get("/app", (c) => c.env.ASSETS.fetch(new URL("/app/", c.req.url)));
 
 export default app;

@@ -1,19 +1,70 @@
-import { defineConfig } from "vite";
+import { globSync } from "node:fs";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
+import { BRAND, CONTACT } from "./shared/brand.ts";
+import { cta, footer, header } from "./site/partials.ts";
+
+// URL pública del sitio para canonical/hreflang/og (absolutas). Se define al compilar: SITE_URL=https://dominio npm run build
+const SITE = (process.env.SITE_URL ?? "http://localhost:5173").replace(/\/$/, "");
+
+// %BRAND% y %SITE% en las páginas estáticas
+const brand = (): Plugin => ({
+  name: "brand",
+  transformIndexHtml: (html) => {
+    const lang = html.includes('<html lang="en"') ? "en" : "es";
+    return html
+      .replace("%GUIDE_HEADER%", header(lang))
+      .replace("%GUIDE_CTA%", cta(lang))
+      .replace("%GUIDE_FOOTER%", footer(lang))
+      .replaceAll("%BRAND%", BRAND)
+      .replaceAll("%CONTACT%", CONTACT)
+      .replaceAll("%SITE%", SITE);
+  },
+  // robots.txt y sitemap.xml con las páginas públicas (la app y los legales no suman para buscadores)
+  generateBundle() {
+    if (this.environment.name !== "client") return;
+    const urls = Object.keys(pages).filter((k) => k !== "app").map((k) => `${SITE}/${k === "landing" ? "" : k + "/"}`);
+    this.emitFile({ type: "asset", fileName: "robots.txt", source: `User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /api/
+
+Sitemap: ${SITE}/sitemap.xml
+` });
+    this.emitFile({
+      type: "asset",
+      fileName: "sitemap.xml",
+      source: `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
+</urlset>
+`,
+    });
+  },
+});
+
+// todas las páginas del sitio: landing, legales, app y guías (cada carpeta con su index.html)
+const pages = Object.fromEntries(
+  ["index.html", "app/index.html", ...globSync("{en,privacy,terms,guias,nosotros,contacto}/**/index.html")].map((f) => [
+    f.replace(/\\/g, "/").replace(/\/?index\.html$/, "") || "landing",
+    f,
+  ]),
+);
 
 export default defineConfig({
   plugins: [
+    brand(),
     react(),
     tailwindcss(),
     cloudflare(),
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Vaquita: gastos de viaje compartidos",
-        short_name: "Vaquita",
+        name: BRAND,
+        short_name: BRAND,
         description: "Anotá y repartí los gastos del viaje con tu grupo.",
         start_url: "/app/",
         scope: "/app/",
@@ -31,18 +82,10 @@ export default defineConfig({
         navigateFallbackAllowlist: [/^\/app/],
         navigateFallbackDenylist: [/^\/api/],
         globPatterns: ["app/**/*.html", "assets/app-*.{js,css}", "assets/*.woff2", "*.{png,svg}"],
-        globIgnores: ["**/Phosphor-*"],
+        globIgnores: ["**/Phosphor-*", "og.png"],
       },
     }),
   ],
   // páginas del sitio: solo para el entorno cliente (el worker tiene su propio entry)
-  environments: {
-    client: {
-      build: {
-        rollupOptions: {
-          input: { landing: "index.html", en: "en/index.html", app: "app/index.html", privacy: "privacy/index.html", terms: "terms/index.html" },
-        },
-      },
-    },
-  },
+  environments: { client: { build: { rollupOptions: { input: pages } } } },
 });

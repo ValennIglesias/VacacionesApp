@@ -15,6 +15,7 @@ export type Trip = {
   startDate: string | null;
   endDate: string | null;
   status: "active" | "closed";
+  createdBy: string;
   createdAt: number;
 };
 export type Member = { id: string; name: string; userId: string | null; alias: string | null; color: number; image: string | null };

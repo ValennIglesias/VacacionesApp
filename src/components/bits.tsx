@@ -4,7 +4,7 @@ import { Check, Copy, ShareNetwork, MagnifyingGlass } from "@phosphor-icons/reac
 import { COUNTRY_CURRENCY, CURRENCIES } from "../../shared/data";
 import { countryName, currencyName } from "../lib/format";
 import { useLocale, useT } from "../lib/i18n";
-import { Button, Flag } from "./ui";
+import { Button, Flag, Sheet } from "./ui";
 
 export function useCopy() {
   const [copied, setCopied] = useState(false);
@@ -157,5 +157,37 @@ export function CountryPicker({ value, onChange }: { value: string; onChange: (c
         ))}
       </div>
     </div>
+  );
+}
+
+/** Confirmación para acciones que no se pueden deshacer. */
+export function ConfirmSheet({ open, onClose, title, body, confirmLabel, onConfirm, loading, error }: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  body: string;
+  confirmLabel: string;
+  onConfirm: () => void;
+  loading?: boolean;
+  error?: string;
+}) {
+  const t = useT();
+  return (
+    <Sheet open={open} onClose={onClose} title={title}>
+      <p className="text-muted">{body}</p>
+      {error && (
+        <p role="alert" className="mt-3 text-sm text-neg">
+          {error}
+        </p>
+      )}
+      <div className="mt-6 flex gap-2">
+        <Button variant="ghost" className="flex-1" onClick={onClose}>
+          {t.cancel}
+        </Button>
+        <Button className="flex-1 !bg-neg !shadow-none" loading={loading} onClick={onConfirm}>
+          {confirmLabel}
+        </Button>
+      </div>
+    </Sheet>
   );
 }

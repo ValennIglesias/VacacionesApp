@@ -63,7 +63,7 @@ export function Join() {
           />
           {preview.isError && (
             <p role="alert" className="text-center text-sm text-neg">
-              {(preview.error as ApiError).code === "invalid_code" ? t.invalidCode : t.genericError}
+              {(preview.error as ApiError).code === "invalid_code" ? t.invalidCode : (preview.error as ApiError).code === "too_many_requests" ? t.tooManyAttempts : t.genericError}
             </p>
           )}
           <Button type="submit" disabled={input.length < 6}>

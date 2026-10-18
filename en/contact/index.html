@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact · %BRAND%</title>
+    <meta name="description" content="How to reach %BRAND%: app support, privacy and data deletion, security issues, press and partnerships." />
+    <link rel="canonical" href="%SITE%/en/contact/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/contact/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/contacto/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Contact · %BRAND%" />
+    <meta property="og:description" content="How to reach %BRAND%: app support, privacy and data deletion, security issues, press and partnerships." />
+    <meta property="og:url" content="%SITE%/en/contact/" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ContactPage", "name": "Contact", "description": "How to reach %BRAND%: app support, privacy and data deletion, security issues, press and partnerships.", "inLanguage": "en", "url": "%SITE%/en/contact/", "about": {"@type": "Organization", "name": "%BRAND%", "url": "%SITE%/", "logo": "%SITE%/icon-512.png", "email": "%CONTACT%", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "%CONTACT%", "availableLanguage": ["Spanish", "English"]}}}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+
+        <h1>Contact</h1>
+        <p class="lead">Email us and we'll get back to you as soon as we can.</p>
+        <p><a href="mailto:%CONTACT%" class="!no-underline inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-white"><i class="ph-duotone ph-envelope-simple text-xl"></i> %CONTACT%</a></p>
+
+        <h2>Before you write</h2>
+        <ul>
+          <li><strong>Can't sign in:</strong> tap "Forgot your password?" on the sign-in screen and we'll email you a link to choose a new one.</li>
+          <li><strong>Questions about how it works:</strong> see the <a href="/en/#faq">FAQ</a> and the <a href="/en/guides/">guides</a>.</li>
+          <li><strong>Deleting your account:</strong> you can do it yourself in the app, under "My trips", at the bottom of the list.</li>
+        </ul>
+
+        <h2>What you can write to us about</h2>
+        <ul>
+          <li><strong>Support:</strong> something isn't working as expected. Tell us what happened and, if you can, on which device.</li>
+          <li><strong>Privacy:</strong> request a copy of your data or ask how we handle it. See the <a href="/privacy/#en">privacy policy</a>.</li>
+          <li><strong>Security:</strong> if you found a vulnerability, please email us before disclosing it and we'll review it as a priority.</li>
+          <li><strong>Press and partnerships:</strong> articles, collaborations or integrations.</li>
+        </ul>
+      </article>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

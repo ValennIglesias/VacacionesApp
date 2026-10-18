@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { Check, Plus, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette } from "@phosphor-icons/react";
+import { Check, Plus, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette, Trash, DoorOpen } from "@phosphor-icons/react";
+import { useNavigate } from "react-router";
 import { useTripCtx } from "./TripLayout";
 import { api, auth, type Member } from "../lib/api";
 import { useI18n, useT } from "../lib/i18n";
 import { useTheme } from "../lib/theme";
 import { AvatarPicker } from "../components/AvatarPicker";
 import { Avatar, Button, Field, Segmented } from "../components/ui";
-import { CurrencySelect, ShareCode } from "../components/bits";
+import { ConfirmSheet, CurrencySelect, ShareCode } from "../components/bits";
 
 export function Group() {
   const t = useT();
@@ -18,6 +19,28 @@ export function Group() {
   const { data } = useTripCtx();
   const { trip, members, meId } = data;
   const refresh = () => qc.invalidateQueries({ queryKey: ["trip", trip.id] });
+  const nav = useNavigate();
+  const session = auth.useSession();
+  const isOwner = trip.createdBy === session.data?.user.id;
+  const [confirm, setConfirm] = useState<"leave" | "delete" | Member | null>(null);
+  // se puede quitar a alguien sin gastos ni pagos (para no romper las cuentas)
+  const hasMovements = (id: string) =>
+    data.expenses.some((e) => e.paidBy === id || e.shares.some((x) => x.memberId === id)) ||
+    data.settlements.some((st) => st.transfers.some((x) => x.fromMember === id || x.toMember === id));
+  const act = useMutation({
+    mutationFn: (what: "leave" | "delete" | Member) =>
+      what === "leave"
+        ? api(`/trips/${trip.id}/leave`, { method: "POST" })
+        : what === "delete"
+          ? api(`/trips/${trip.id}`, { method: "DELETE" })
+          : api(`/trips/${trip.id}/members/${what.id}`, { method: "DELETE" }),
+    onSuccess: (_, what) => {
+      setConfirm(null);
+      if (typeof what === "object") return refresh();
+      qc.invalidateQueries({ queryKey: ["trips"] });
+      nav("/", { replace: true });
+    },
+  });
   const [newName, setNewName] = useState("");
   const [tripName, setTripName] = useState(trip.name);
 
@@ -44,7 +67,13 @@ export function Group() {
         <p className="mb-3 text-sm text-muted">{t.aliasOwnerOnly}</p>
         <ul className="flex flex-col gap-2">
           {members.map((m) => (
-            <MemberRow key={m.id} m={m} isMe={m.id === meId} tripId={trip.id} />
+            <MemberRow
+              key={m.id}
+              m={m}
+              isMe={m.id === meId}
+              tripId={trip.id}
+              onRemove={m.id !== meId && !hasMovements(m.id) && (!m.userId || isOwner) ? () => (act.reset(), setConfirm(m)) : undefined}
+            />
           ))}
         </ul>
         {trip.status === "active" && (
@@ -104,6 +133,19 @@ export function Group() {
         </div>
       </section>
 
+      <Button variant="danger" onClick={() => (act.reset(), setConfirm(isOwner ? "delete" : "leave"))}>
+        {isOwner ? <Trash size={20} /> : <DoorOpen size={20} />} {isOwner ? t.deleteTrip : t.leaveTrip}
+      </Button>
+      <ConfirmSheet
+        open={!!confirm}
+        onClose={() => setConfirm(null)}
+        title={confirm === "delete" ? t.deleteTrip : confirm === "leave" ? t.leaveTrip : t.removeMember}
+        body={confirm === "delete" ? t.deleteTripBody : confirm === "leave" ? t.leaveTripBody : t.removeMemberBody.replace("{name}", (confirm as Member | null)?.name ?? "")}
+        confirmLabel={confirm === "delete" ? t.delete : confirm === "leave" ? t.leave : t.remove}
+        loading={act.isPending}
+        error={act.isError ? t.genericError : undefined}
+        onConfirm={() => confirm && act.mutate(confirm)}
+      />
       <Button variant="ghost" onClick={() => auth.signOut().then(() => location.assign("/app/login"))}>
         <SignOut size={20} /> {t.logout}
       </Button>
@@ -111,7 +153,7 @@ export function Group() {
   );
 }
 
-function MemberRow({ m, isMe, tripId }: { m: Member; isMe: boolean; tripId: string }) {
+function MemberRow({ m, isMe, tripId, onRemove }: { m: Member; isMe: boolean; tripId: string; onRemove?: () => void }) {
   const t = useT();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
@@ -150,6 +192,11 @@ function MemberRow({ m, isMe, tripId }: { m: Member; isMe: boolean; tripId: stri
               ))}
           </p>
         </div>
+        {onRemove && (
+          <button onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.remove} ${m.name}`}>
+            <Trash size={18} />
+          </button>
+        )}
         {isMe && !editing && (
           <button onClick={() => setEditing(true)} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.myAlias} ${m.name}`}>
             <PencilSimple size={18} />

@@ -7,6 +7,7 @@ import "./styles.css";
 import { I18nProvider } from "./lib/i18n";
 import { auth } from "./lib/api";
 import { Login } from "./routes/Login";
+import { ResetPassword } from "./routes/ResetPassword";
 import { Home } from "./routes/Home";
 import { NewTrip } from "./routes/NewTrip";
 import { Join } from "./routes/Join";
@@ -29,6 +30,7 @@ function RequireAuth() {
 const router = createBrowserRouter(
   [
     { path: "/login", element: <Login /> },
+    { path: "/reset", element: <ResetPassword /> },
     {
       element: <RequireAuth />,
       children: [

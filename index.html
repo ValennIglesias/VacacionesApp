@@ -4,27 +4,38 @@
     <meta charset="UTF-8" />
     <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vaquita · Repartí los gastos del viaje con tu grupo</title>
-    <meta name="description" content="Anotá los gastos del viaje en la moneda del destino y Vaquita calcula quién le paga a quién, con repartidas por día, alias para copiar y confirmación de pago. Gratis." />
-    <meta property="og:title" content="Vaquita · Gastos de viaje compartidos" />
+    <title>%BRAND% · Repartí los gastos del viaje con tu grupo</title>
+    <meta name="description" content="Anotá los gastos del viaje en la moneda del destino y %BRAND% calcula quién le paga a quién, con repartidas por día, alias para copiar y confirmación de pago. Gratis." />
+    <meta property="og:title" content="%BRAND% · Gastos de viaje compartidos" />
     <meta property="og:description" content="Anotá los gastos del viaje y repartilos con tu grupo en segundos." />
     <meta property="og:type" content="website" />
-    <link vite-ignore rel="alternate" hreflang="en" href="/en/" />
-    <link vite-ignore rel="alternate" hreflang="es" href="/" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:url" content="%SITE%/" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="%SITE%/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/" />
+    <link rel="alternate" hreflang="x-default" href="%SITE%/" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0e1015" media="(prefers-color-scheme: dark)" />
     <link rel="stylesheet" href="/src/site.css" />
     <script type="module" src="/src/landing.ts"></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "%BRAND%", "url": "%SITE%/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "es", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tiene costo?", "acceptedAnswer": {"@type": "Answer", "text": "No. %BRAND% es gratis y se sostiene con publicidad discreta."}}, {"@type": "Question", "name": "¿Todos tienen que crearse una cuenta?", "acceptedAnswer": {"@type": "Answer", "text": "No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código."}}, {"@type": "Question", "name": "¿En qué moneda se pagan las deudas?", "acceptedAnswer": {"@type": "Answer", "text": "Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar."}}, {"@type": "Question", "name": "¿Qué es una repartida parcial?", "acceptedAnswer": {"@type": "Answer", "text": "Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total."}}, {"@type": "Question", "name": "¿%BRAND% mueve dinero?", "acceptedAnswer": {"@type": "Answer", "text": "No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app."}}]}]}</script>
   </head>
   <body>
     <header class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
       <a href="/" class="flex items-center gap-2 text-lg font-semibold">
-        <span class="inline-flex size-9 items-center justify-center rounded-xl bg-accent text-white"><i class="ph-duotone ph-airplane-tilt text-xl"></i></span>
-        Vaquita
+        <img src="/favicon.svg" alt="" width="36" height="36" class="size-9 rounded-xl" />
+        %BRAND%
       </a>
       <nav class="flex items-center gap-1 text-sm font-medium">
         <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted hover:text-ink" aria-label="Cambiar tema"><i class="ph-duotone ph-circle-half text-xl"></i></button>
+        <a href="/guias/" class="hidden rounded-full px-3 py-2 text-muted hover:text-ink sm:inline">Guías</a>
         <a href="/en/" class="rounded-full px-3 py-2 text-muted hover:text-ink" hreflang="en">English</a>
         <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2">Entrar</a>
       </nav>
@@ -34,7 +45,7 @@
       <section class="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-10 md:grid-cols-[1.1fr_0.9fr] md:pt-16">
         <div>
           <h1 class="reveal text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl" style="--i: 0">Viajen juntos.<br />Las cuentas, claras.</h1>
-          <p class="reveal mt-5 max-w-[46ch] text-lg text-muted" style="--i: 1">Anoten cada gasto en la moneda del destino y Vaquita les dice quién le paga a quién, con la menor cantidad de transferencias.</p>
+          <p class="reveal mt-5 max-w-[46ch] text-lg text-muted" style="--i: 1">Anoten cada gasto en la moneda del destino y %BRAND% les dice quién le paga a quién, con la menor cantidad de transferencias.</p>
           <div class="reveal mt-8 flex flex-wrap gap-3" style="--i: 2">
             <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] transition-transform active:scale-[0.97]">Crear viaje gratis <i class="ph-duotone ph-arrow-right"></i></a>
             <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium transition-transform active:scale-[0.97]"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> Tengo un código</a>
@@ -109,16 +120,35 @@
         </div>
       </section>
 
+      <section class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Guías para que la plata no sea un tema</h2>
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          <a href="/guias/como-dividir-gastos-de-un-viaje/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+            <span class="text-lg font-semibold leading-snug">Cómo dividir los gastos de un viaje entre amigos sin peleas</span>
+            <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
+          </a>
+          <a href="/guias/gastos-en-distintas-monedas/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+            <span class="text-lg font-semibold leading-snug">Cómo manejar gastos en distintas monedas</span>
+            <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
+          </a>
+          <a href="/guias/dolar-tarjeta-mep-blue-viajar/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+            <span class="text-lg font-semibold leading-snug">Dólar oficial, MEP, blue o tarjeta: cuál usar para repartir</span>
+            <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
+          </a>
+        </div>
+        <a href="/guias/" class="mt-6 inline-flex font-medium text-accent-ink">Ver todas las guías →</a>
+      </section>
+
       <div id="ad-landing" class="mx-auto max-w-6xl px-5" hidden></div>
 
       <section class="mx-auto max-w-3xl px-5 py-16">
-        <h2 class="text-3xl font-semibold tracking-tight">Preguntas frecuentes</h2>
+        <h2 id="faq" class="scroll-mt-6 text-3xl font-semibold tracking-tight">Preguntas frecuentes</h2>
         <div class="mt-8 flex flex-col gap-3">
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Tiene costo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Vaquita es gratis y se sostiene con publicidad discreta.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Todos tienen que crearse una cuenta?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota por ellos.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Tiene costo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. %BRAND% es gratis y se sostiene con publicidad discreta.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Todos tienen que crearse una cuenta?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿En qué moneda se pagan las deudas?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Qué es una repartida parcial?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Vaquita mueve dinero?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿%BRAND% mueve dinero?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app.</p></details>
         </div>
       </section>
 
@@ -132,8 +162,8 @@
 
     <footer class="border-t border-line">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-muted">
-        <p>Vaquita</p>
-        <nav class="flex gap-5"><a href="/privacy/">Privacidad</a><a href="/terms/">Términos</a><a href="mailto:contacto@example.com">Contacto</a><a href="/en/" hreflang="en">English</a></nav>
+        <p>%BRAND%</p>
+        <nav class="flex flex-wrap gap-5"><a href="/guias/">Guías</a><a href="/privacy/">Privacidad</a><a href="/terms/">Términos</a><a href="/nosotros/">Sobre nosotros</a><a href="/contacto/">Contacto</a><a href="/en/" hreflang="en">English</a></nav>
       </div>
     </footer>
   </body>
