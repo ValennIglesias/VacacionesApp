@@ -1,0 +1,227 @@
+import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, useEffect, useId } from "react";
+import { AnimatePresence, motion, useDragControls, useReducedMotion } from "motion/react";
+import {
+  Bed,
+  ForkKnife,
+  ShoppingCart,
+  Bus,
+  Ticket,
+  Martini,
+  ShoppingBag,
+  DotsThreeCircle,
+  type Icon,
+} from "@phosphor-icons/react";
+import type { Category } from "../../shared/data";
+import { isGalleryAvatar, isSafeAvatar } from "../../shared/avatars";
+
+export const spring = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
+
+type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "soft" | "danger"; loading?: boolean };
+export function Button({ variant = "primary", loading, className = "", children, disabled, ...rest }: BtnProps) {
+  const styles = {
+    primary: "bg-accent text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)]",
+    soft: "bg-accent-soft text-accent-ink",
+    ghost: "bg-transparent text-ink border border-line",
+    danger: "bg-transparent text-neg border border-line",
+  }[variant];
+  return (
+    <button
+      className={`inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 font-medium transition-[transform,opacity] duration-150 ease-out active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 ${styles} ${className}`}
+      disabled={disabled || loading}
+      {...rest}
+    >
+      {loading ? <span className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" /> : children}
+    </button>
+  );
+}
+
+type FieldProps = InputHTMLAttributes<HTMLInputElement> & { label: string; help?: string; error?: string };
+export function Field({ label, help, error, className = "", ...rest }: FieldProps) {
+  const id = useId();
+  return (
+    <div className={`flex flex-col gap-2 ${className}`}>
+      <label htmlFor={id} className="text-sm font-medium text-muted">
+        {label}
+      </label>
+      <input
+        id={id}
+        className="h-12 rounded-2xl border border-line bg-surface px-4 text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-accent"
+        aria-invalid={!!error}
+        {...rest}
+      />
+      {help && !error && <p className="text-xs text-muted">{help}</p>}
+      {error && <p className="text-xs text-neg">{error}</p>}
+    </div>
+  );
+}
+
+/** Bottom sheet con backdrop; se cierra con Escape, tocando afuera o arrastrando hacia abajo. */
+export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+  const reduce = useReducedMotion();
+  const controls = useDragControls();
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+  return (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-40 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
+          <motion.div
+            className="absolute inset-0 bg-black/40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[28px] bg-surface px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3"
+            initial={reduce ? { opacity: 0 } : { y: "100%" }}
+            animate={reduce ? { opacity: 1 } : { y: 0 }}
+            exit={reduce ? { opacity: 0 } : { y: "100%" }}
+            transition={spring}
+            drag={reduce ? false : "y"}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.6 }}
+            dragListener={false}
+            dragControls={controls}
+            onDragEnd={(_, i) => (i.offset.y > 120 || i.velocity.y > 600) && onClose()}
+          >
+            {/* arrastrar solo desde la manija para no pelear con el scroll interno */}
+            <div className="mx-auto mb-3 h-1.5 w-10 cursor-grab touch-none rounded-full bg-line" onPointerDown={(e) => controls.start(e)} />
+            <h2 className="mb-4 text-xl font-semibold">{title}</h2>
+            {children}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+const MEMBER_PALETTE = ["#2f5bff", "#e2563d", "#0b8a5e", "#b4447f", "#c98a12", "#6a4fd8", "#0e8aa8", "#7a8291"];
+export const memberColor = (i: number) => MEMBER_PALETTE[i % MEMBER_PALETTE.length];
+
+export function Avatar({ name, color, size = 40, ring, image }: { name: string; color: number; size?: number; ring?: boolean; image?: string | null }) {
+  if (isSafeAvatar(image) && isGalleryAvatar(image))
+    // animal sobre un círculo suave con el color del integrante
+    return (
+      <span
+        className={`inline-flex shrink-0 items-center justify-center rounded-full ${ring ? "ring-2 ring-surface" : ""}`}
+        style={{ width: size, height: size, background: `color-mix(in srgb, ${memberColor(color)} 22%, var(--surface))` }}
+        aria-hidden
+      >
+        <img src={image} alt="" draggable={false} style={{ width: size * 0.74, height: size * 0.74 }} />
+      </span>
+    );
+  if (isSafeAvatar(image))
+    return (
+      <img
+        src={image}
+        alt=""
+        aria-hidden
+        referrerPolicy="no-referrer"
+        className={`inline-block shrink-0 rounded-full bg-surface-2 object-cover ${ring ? "ring-2 ring-surface" : ""}`}
+        style={{ width: size, height: size }}
+      />
+    );
+  const initials = name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+  return (
+    <span
+      className={`inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white ${ring ? "ring-2 ring-surface" : ""}`}
+      style={{ width: size, height: size, background: memberColor(color), fontSize: size * 0.38 }}
+      aria-hidden
+    >
+      {initials}
+    </span>
+  );
+}
+
+// Colores de la paleta categórica validada (orden fijo = orden de CATEGORIES); valores en styles.css (light/dark).
+const cat = (c: Category, icon: Icon) => ({ icon, color: `var(--cat-${c})`, bg: `color-mix(in srgb, var(--cat-${c}) 15%, transparent)` });
+export const CATEGORY_META: Record<Category, { icon: Icon; color: string; bg: string }> = {
+  lodging: cat("lodging", Bed),
+  food: cat("food", ForkKnife),
+  groceries: cat("groceries", ShoppingCart),
+  shopping: cat("shopping", ShoppingBag),
+  activities: cat("activities", Ticket),
+  transport: cat("transport", Bus),
+  nightlife: cat("nightlife", Martini),
+  other: cat("other", DotsThreeCircle),
+};
+
+export function CategoryIcon({ category, size = 44 }: { category: Category; size?: number }) {
+  const { icon: I, color, bg } = CATEGORY_META[category];
+  return (
+    <span className="inline-flex shrink-0 items-center justify-center rounded-2xl" style={{ width: size, height: size, background: bg, color }}>
+      <I size={size * 0.55} weight="duotone" />
+    </span>
+  );
+}
+
+export function Empty({ icon: I, title, body, children }: { icon: Icon; title: string; body: string; children?: ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col items-center px-6 py-14 text-center"
+    >
+      <span className="mb-4 inline-flex size-20 items-center justify-center rounded-[28px] bg-accent-soft text-accent-ink">
+        <I size={40} weight="duotone" />
+      </span>
+      <h3 className="text-lg font-semibold">{title}</h3>
+      <p className="mt-1 max-w-[32ch] text-sm text-muted">{body}</p>
+      {children && <div className="mt-6 flex flex-col gap-3">{children}</div>}
+    </motion.div>
+  );
+}
+
+export function Skeleton({ className = "" }: { className?: string }) {
+  return <div className={`animate-pulse rounded-3xl bg-surface-2 ${className}`} />;
+}
+
+export function Segmented<T extends string>({ value, onChange, options, full }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[]; full?: boolean }) {
+  return (
+    <div className={`rounded-full bg-surface-2 p-1 ${full ? "grid w-full auto-cols-fr grid-flow-col" : "inline-flex"}`}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={`relative h-9 whitespace-nowrap rounded-full text-sm font-medium transition-colors ${full ? "px-2" : "px-4"} ${value === o.value ? "text-ink" : "text-muted"}`}
+        >
+          {value === o.value && <motion.span layoutId={`seg-${options.map((x) => x.value).join()}`} className="absolute inset-0 rounded-full bg-surface shadow-sm" transition={spring} />}
+          <span className="relative">{o.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Banderas de flag-icons (MIT), servidas desde nuestro dominio; dibujadas para 4:3, así no se recortan.
+const FLAG_URLS = import.meta.glob("/node_modules/flag-icons/flags/4x3/*.svg", { query: "?url&no-inline", import: "default", eager: true }) as Record<string, string>;
+
+/** Bandera como imagen: los emojis de bandera no se ven en Windows. */
+export function Flag({ cc, size = 28 }: { cc: string; size?: number }) {
+  return (
+    <img
+      src={FLAG_URLS[`/node_modules/flag-icons/flags/4x3/${cc.toLowerCase()}.svg`]}
+      alt=""
+      width={size}
+      height={Math.round(size * 0.75)}
+      className="shrink-0 rounded-[4px] shadow-[0_0_0_1px_var(--line)]"
+      style={{ width: size, height: Math.round(size * 0.75) }}
+    />
+  );
+}

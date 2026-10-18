@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "@fontsource-variable/outfit";
+
+/* Sistema de formas: botones pill, tarjetas 24px (rounded-3xl), inputs 16px (rounded-2xl). */
+@theme {
+  --font-sans: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: #2f5bff;
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-pos: var(--pos);
+  --color-neg: var(--neg);
+  --color-strong: var(--strong);
+  --color-strong-ink: var(--strong-ink);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceef2;
+  --ink: #14161b;
+  --muted: #5b6270;
+  --line: #e1e4ea;
+  --accent-ink: #2449d8;
+  --accent-soft: #e6ecff;
+  --pos: #0b8a5e;
+  --neg: #d6343a;
+  --strong: #14161b;
+  --strong-ink: #f4f5f7;
+  --cat-lodging: #2a78d6;
+  --cat-food: #eb6834;
+  --cat-groceries: #1baf7a;
+  --cat-shopping: #eda100;
+  --cat-activities: #e87ba4;
+  --cat-transport: #008300;
+  --cat-nightlife: #6250d6;
+  --cat-other: #e34948;
+  color-scheme: light;
+}
+
+/* oscuro: automático según el sistema, salvo que el usuario elija claro; o forzado con data-theme="dark" */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1015;
+    --surface: #171a21;
+    --surface-2: #20242d;
+    --ink: #f1f3f7;
+    --muted: #9aa1ae;
+    --line: #2a2f39;
+    --accent-ink: #9db0ff;
+    --accent-soft: #1d2747;
+    --pos: #34c58f;
+    --neg: #ff6b6f;
+    --strong: #262c3a;
+    --strong-ink: #f1f3f7;
+    --cat-lodging: #3987e5;
+    --cat-food: #d95926;
+    --cat-groceries: #199e70;
+    --cat-shopping: #c98500;
+    --cat-activities: #d55181;
+    --cat-transport: #008300;
+    --cat-nightlife: #9085e9;
+    --cat-other: #e66767;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1015;
+  --surface: #171a21;
+  --surface-2: #20242d;
+  --ink: #f1f3f7;
+  --muted: #9aa1ae;
+  --line: #2a2f39;
+  --accent-ink: #9db0ff;
+  --accent-soft: #1d2747;
+  --pos: #34c58f;
+  --neg: #ff6b6f;
+  --strong: #262c3a;
+  --strong-ink: #f1f3f7;
+  --cat-lodging: #3987e5;
+  --cat-food: #d95926;
+  --cat-groceries: #199e70;
+  --cat-shopping: #c98500;
+  --cat-activities: #d55181;
+  --cat-transport: #008300;
+  --cat-nightlife: #9085e9;
+  --cat-other: #e66767;
+  color-scheme: dark;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  min-height: 100dvh;
+}
+
+/* números alineados en montos */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

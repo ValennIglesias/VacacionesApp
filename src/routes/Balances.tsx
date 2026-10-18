@@ -1,0 +1,250 @@
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "motion/react";
+import { ArrowRight, CalendarCheck, FlagCheckered, CaretRight, CheckCircle } from "@phosphor-icons/react";
+import { useTripCtx } from "./TripLayout";
+import { pendingBalances } from "./Expenses";
+import { api, arsCrossRate, crossRate, useArsRates, useRates, type ArsType } from "../lib/api";
+import { useLocale, useT } from "../lib/i18n";
+import { money } from "../lib/format";
+import { convertCents, minTransfers } from "../../shared/settle";
+import { Avatar, Button, Sheet, spring } from "../components/ui";
+import { CurrencySelect } from "../components/bits";
+
+export function Balances() {
+  const t = useT();
+  const locale = useLocale();
+  const { data } = useTripCtx();
+  const { trip, members, meId, settlements, expenses } = data;
+  const balances = useMemo(() => pendingBalances(data), [data]);
+  const hasPending = expenses.some((e) => !e.settlementId);
+  const [kind, setKind] = useState<"partial" | "final" | null>(null);
+  const max = Math.max(1, ...[...balances.values()].map(Math.abs));
+  const rates = useRates();
+  const settleK = crossRate(rates.data, trip.currency, trip.settleCurrency) ?? 1;
+
+  return (
+    <div className="flex flex-col gap-6 pt-2">
+      <section>
+        <h2 className="text-xl font-semibold">{t.pendingBalances}</h2>
+        <p className="text-sm text-muted">{t.pendingHelp}</p>
+        <ul className="mt-4 flex flex-col gap-2">
+          {members.map((m, i) => {
+            const v = balances.get(m.id) ?? 0;
+            return (
+              <motion.li
+                key={m.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.3 }}
+                className="relative flex items-center gap-3 overflow-hidden rounded-3xl bg-surface p-3"
+              >
+                {/* barra proporcional al saldo, sin pista de fondo */}
+                <motion.span
+                  className="absolute inset-y-0 left-0 opacity-[0.08]"
+                  style={{ background: v >= 0 ? "var(--pos)" : "var(--neg)" }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(Math.abs(v) / max) * 100}%` }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 + i * 0.04 }}
+                />
+                <Avatar name={m.name} color={m.color} image={m.image} />
+                <span className="relative flex-1 font-medium">{m.id === meId ? `${m.name} (${t.you})` : m.name}</span>
+                <span className="relative text-right tabular">
+                  <span className={`block font-semibold ${v > 0 ? "text-pos" : v < 0 ? "text-neg" : "text-muted"}`}>
+                    {v > 0 ? "+" : v < 0 ? "−" : ""}
+                    {money(Math.abs(v), trip.currency, locale)}
+                  </span>
+                  {settleK !== 1 && v !== 0 && <span className="block text-xs text-muted">≈ {money(Math.round(Math.abs(v) * settleK), trip.settleCurrency, locale)}</span>}
+                </span>
+              </motion.li>
+            );
+          })}
+        </ul>
+      </section>
+
+      {trip.status === "active" && (
+        <section className="grid grid-cols-2 gap-3">
+          <button
+            disabled={!hasPending}
+            onClick={() => setKind("partial")}
+            className="flex flex-col gap-5 rounded-3xl bg-surface p-4 text-left transition-transform active:scale-[0.98] disabled:opacity-50"
+          >
+            <CalendarCheck size={28} weight="duotone" className="text-accent-ink" />
+            <span className="font-medium">{t.settlePartial}</span>
+          </button>
+          <button onClick={() => setKind("final")} className="flex flex-col gap-5 rounded-3xl bg-strong p-4 text-left text-strong-ink transition-transform active:scale-[0.98]">
+            <FlagCheckered size={28} weight="duotone" />
+            <span className="font-medium">{t.settleFinal}</span>
+          </button>
+          {!hasPending && <p className="col-span-2 text-center text-sm text-muted">{t.nothingPending}</p>}
+        </section>
+      )}
+
+      {settlements.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-xl font-semibold">{t.history}</h2>
+          <ul className="flex flex-col gap-2">
+            {[...settlements].reverse().map((s) => {
+              const done = s.transfers.every((x) => x.status === "confirmed");
+              return (
+                <li key={s.id}>
+                  <Link to={`/t/${trip.id}/s/${s.id}`} className="flex items-center gap-3 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+                    <span className={`inline-flex size-11 items-center justify-center rounded-2xl ${done ? "bg-[rgba(11,138,94,0.12)] text-pos" : "bg-accent-soft text-accent-ink"}`}>
+                      {done ? <CheckCircle size={24} weight="duotone" /> : s.kind === "final" ? <FlagCheckered size={24} weight="duotone" /> : <CalendarCheck size={24} weight="duotone" />}
+                    </span>
+                    <div className="flex-1">
+                      <p className="font-medium">
+                        {s.kind === "final" ? t.final : t.partial} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(s.createdAt)}
+                      </p>
+                      <p className="text-sm text-muted">
+                        {s.transfers.filter((x) => x.status === "confirmed").length}/{s.transfers.length} · {s.currency}
+                      </p>
+                    </div>
+                    <CaretRight size={18} className="text-muted" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      <SettleSheet kind={kind} onClose={() => setKind(null)} balances={balances} />
+    </div>
+  );
+}
+
+function SettleSheet({ kind, onClose, balances }: { kind: "partial" | "final" | null; onClose: () => void; balances: Map<string, number> }) {
+  const t = useT();
+  return (
+    <Sheet open={!!kind} onClose={onClose} title={kind === "final" ? t.settleFinal : t.settlePartial}>
+      {kind && <SettleForm kind={kind} balances={balances} onClose={onClose} />}
+    </Sheet>
+  );
+}
+
+function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; balances: Map<string, number>; onClose: () => void }) {
+  const t = useT();
+  const locale = useLocale();
+  const nav = useNavigate();
+  const qc = useQueryClient();
+  const { data } = useTripCtx();
+  const { trip, members } = data;
+  const rates = useRates();
+  const [currency, setCurrency] = useState(trip.settleCurrency);
+  const [manualRate, setManualRate] = useState("");
+  const [arsType, setArsType] = useState<ArsType | null>(null);
+  const involvesArs = currency !== trip.currency && (currency === "ARS" || trip.currency === "ARS");
+  const ars = useArsRates(involvesArs);
+  const autoRate = crossRate(rates.data, trip.currency, currency);
+  const rate = currency === trip.currency ? 1 : Number(manualRate.replace(",", ".")) || autoRate;
+  const name = (id: string) => members.find((m) => m.id === id)!;
+  const pendingTotal = data.expenses.filter((e) => !e.settlementId).reduce((a, e) => a + e.amountTripCents, 0);
+  const preview = rate ? minTransfers(balances).map((x) => ({ ...x, amount: convertCents(x.cents, rate, currency) })).filter((x) => x.amount > 0) : [];
+
+  const settle = useMutation({
+    mutationFn: () => api<{ id: string }>(`/trips/${trip.id}/settle`, { body: { kind, currency, rate } }),
+    onSuccess: async ({ id }) => {
+      await qc.invalidateQueries({ queryKey: ["trip", trip.id] });
+      onClose();
+      nav(`/t/${trip.id}/s/${id}`);
+    },
+  });
+
+  return (
+    <div className="flex flex-col gap-5">
+      <p className="text-sm text-muted">{kind === "final" ? t.settleFinalBody : t.settlePartialBody}</p>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="pay-cur" className="text-sm font-medium text-muted">
+          {t.payIn}
+        </label>
+        <CurrencySelect id="pay-cur" value={currency} onChange={(c) => (setCurrency(c), setManualRate(""), setArsType(null))} />
+        {involvesArs && ars.data && (
+          <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5" role="radiogroup" aria-label={t.dollarType}>
+            {([null, "oficial", "bolsa", "blue", "tarjeta"] as const).map((k) => {
+              const venta = k && ars.data[k]?.venta;
+              if (k && !venta) return null;
+              const on = arsType === k;
+              return (
+                <motion.button
+                  key={k ?? "market"}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={() => {
+                    setArsType(k);
+                    const r = venta ? arsCrossRate(rates.data, venta, trip.currency, currency) : undefined;
+                    setManualRate(r ? r.toPrecision(5) : "");
+                  }}
+                  className={`relative flex shrink-0 flex-col items-start rounded-2xl bg-surface-2 px-3 py-2 text-left transition-colors duration-200 ${on ? "text-white" : ""}`}
+                >
+                  {on && <motion.span layoutId="ars-pill" className="absolute inset-0 rounded-2xl bg-accent" transition={spring} />}
+                  <span className="relative text-xs font-semibold">{k ? t.dollarTypes[k] : t.dollarTypes.market}</span>
+                  <span className={`relative text-[11px] tabular ${on ? "text-white/80" : "text-muted"}`}>{venta ? `US$1 = ${money(venta * 100, "ARS", locale)}` : t.marketRateShort}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        )}
+        {currency !== trip.currency && (
+          <div className="flex items-center gap-2 text-sm text-muted">
+            <span>1 {trip.currency} =</span>
+            <input
+              inputMode="decimal"
+              aria-label={t.rate}
+              value={manualRate || (autoRate ? autoRate.toPrecision(5) : "")}
+              onChange={(e) => (setManualRate(e.target.value.replace(/[^\d.,]/g, "")), setArsType(null))}
+              className="h-9 w-28 rounded-xl border border-line bg-surface text-center tabular text-ink outline-none focus:border-accent"
+            />
+            <span>{currency}</span>
+          </div>
+        )}
+        {currency !== trip.currency && <p className="text-xs text-muted">{t.rateHelp}</p>}
+      </div>
+
+      <div className="flex items-center justify-between rounded-2xl bg-accent-soft px-4 py-3 text-accent-ink">
+        <span className="text-sm font-medium">{t.totalToSplit}</span>
+        <span className="text-right tabular">
+          <span className="block font-semibold">{money(pendingTotal, trip.currency, locale)}</span>
+          {rate && currency !== trip.currency && <span className="block text-xs">{money(convertCents(pendingTotal, rate, currency), currency, locale)}</span>}
+        </span>
+      </div>
+
+      <div>
+        <h3 className="mb-2 text-sm font-medium text-muted">{t.transfersPreview}</h3>
+        {preview.length === 0 ? (
+          <p className="rounded-2xl bg-surface-2 p-4 text-center text-sm">{t.noTransfers}</p>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {preview.map((x, i) => (
+              <motion.li key={x.from + x.to} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="flex items-center gap-2 rounded-2xl bg-surface-2 p-3">
+                <Avatar name={name(x.from).name} color={name(x.from).color} image={name(x.from).image} size={32} />
+                <ArrowRight size={16} className="text-muted" />
+                <Avatar name={name(x.to).name} color={name(x.to).color} image={name(x.to).image} size={32} />
+                <span className="flex-1 truncate text-sm">
+                  {name(x.from).name} → {name(x.to).name}
+                </span>
+                <span className="text-right tabular">
+                  <span className="block font-semibold">{money(x.amount, currency, locale)}</span>
+                  {currency !== trip.currency && <span className="block text-xs text-muted">{money(x.cents, trip.currency, locale)}</span>}
+                </span>
+              </motion.li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {settle.isError && <p className="text-center text-sm text-neg">{t.genericError}</p>}
+      <div className="flex gap-2">
+        <Button variant="ghost" onClick={onClose} className="flex-1">
+          {t.cancel}
+        </Button>
+        <Button className="flex-1" disabled={!rate} loading={settle.isPending} onClick={() => settle.mutate()}>
+          {t.confirm}
+        </Button>
+      </div>
+    </div>
+  );
+}

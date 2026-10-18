@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaquita · Split trip expenses with your group</title>
+    <meta name="description" content="Log trip expenses in the local currency and Vaquita works out who pays whom, with mid-trip splits, copyable payment aliases and payment confirmation. Free." />
+    <meta property="og:title" content="Vaquita · Shared trip expenses" />
+    <meta property="og:description" content="Log trip expenses and split them with your group in seconds." />
+    <meta property="og:type" content="website" />
+    <link vite-ignore rel="alternate" hreflang="es" href="/" />
+    <link vite-ignore rel="alternate" hreflang="en" href="/en/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1015" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+  </head>
+  <body>
+    <header class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <a href="/en/" class="flex items-center gap-2 text-lg font-semibold">
+        <span class="inline-flex size-9 items-center justify-center rounded-xl bg-accent text-white"><i class="ph-duotone ph-airplane-tilt text-xl"></i></span>
+        Vaquita
+      </a>
+      <nav class="flex items-center gap-1 text-sm font-medium">
+        <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted hover:text-ink" aria-label="Toggle theme"><i class="ph-duotone ph-circle-half text-xl"></i></button>
+        <a href="/" class="rounded-full px-3 py-2 text-muted hover:text-ink" hreflang="es">Español</a>
+        <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2">Sign in</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-10 md:grid-cols-[1.1fr_0.9fr] md:pt-16">
+        <div>
+          <h1 class="reveal text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl" style="--i: 0">Travel together.<br />Keep the money clear.</h1>
+          <p class="reveal mt-5 max-w-[46ch] text-lg text-muted" style="--i: 1">Log every expense in the local currency and Vaquita tells you who pays whom, with as few transfers as possible.</p>
+          <div class="reveal mt-8 flex flex-wrap gap-3" style="--i: 2">
+            <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] transition-transform active:scale-[0.97]">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
+            <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium transition-transform active:scale-[0.97]"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> I have a code</a>
+          </div>
+        </div>
+
+        <div class="reveal relative mx-auto w-full max-w-sm" style="--i: 3" aria-hidden="true">
+          <div class="float rounded-[36px] border border-line bg-bg p-4 shadow-[0_30px_80px_-30px_rgba(20,22,27,0.35)]">
+            <div class="flex items-center gap-3 px-1 pb-4"><img src="/node_modules/flag-icons/flags/4x3/pt.svg" alt="" width="36" height="27" class="h-[27px] w-9 rounded" /><div><p class="font-semibold leading-tight">Lisbon weekend</p><p class="text-xs text-muted">Lisbon, Portugal</p></div></div>
+            <div class="relative overflow-hidden rounded-3xl bg-accent p-5 text-white">
+              <div class="absolute -right-10 -top-16 size-48 rounded-full bg-white/10"></div>
+              <p class="text-sm text-white/75">Trip total</p>
+              <p class="tabular mt-1 text-3xl font-semibold tracking-tight">€1,284.60</p>
+              <div class="mt-4 flex items-center justify-between rounded-2xl bg-white/15 px-4 py-3 text-sm"><span class="text-white/80">You're owed</span><span class="tabular font-semibold">€86.15</span></div>
+            </div>
+            <ul class="mt-3 flex flex-col gap-2">
+              <li class="flex items-center gap-3 rounded-3xl bg-surface p-3"><span class="inline-flex size-11 items-center justify-center rounded-2xl" style="background: color-mix(in srgb, var(--cat-food) 15%, transparent); color: var(--cat-food)"><i class="ph-duotone ph-fork-knife text-2xl"></i></span><div class="flex-1"><p class="font-medium">Dinner in Alfama</p><p class="text-xs text-muted">Paid by Maya · all</p></div><p class="tabular font-semibold">€96.40</p></li>
+              <li class="flex items-center gap-3 rounded-3xl bg-surface p-3"><span class="inline-flex size-11 items-center justify-center rounded-2xl" style="background: color-mix(in srgb, var(--cat-transport) 15%, transparent); color: var(--cat-transport)"><i class="ph-duotone ph-bus text-2xl"></i></span><div class="flex-1"><p class="font-medium">Tram day passes</p><p class="text-xs text-muted">Paid by Owen · 3 people</p></div><p class="tabular font-semibold">€30.90</p></li>
+              <li class="flex items-center gap-3 rounded-3xl bg-surface p-3"><span class="inline-flex size-11 items-center justify-center rounded-2xl" style="background: color-mix(in srgb, var(--cat-activities) 15%, transparent); color: var(--cat-activities)"><i class="ph-duotone ph-ticket text-2xl"></i></span><div class="flex-1"><p class="font-medium">Sintra tickets</p><p class="text-xs text-muted">Paid by You · all</p></div><p class="tabular font-semibold">€78.00</p></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="reveal-scroll max-w-[20ch] text-3xl font-semibold tracking-tight md:text-4xl">From the first coffee to the last taxi, in three moves.</h2>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="reveal-scroll flex gap-4 md:flex-col">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-users-three text-3xl"></i></span>
+            <div><h3 class="text-lg font-semibold">Set up the group</h3><p class="mt-1 text-muted">Pick the destination, add everyone's name and share a 6-letter code. Each person joins and picks who they are.</p></div>
+          </li>
+          <li class="reveal-scroll flex gap-4 md:flex-col md:pt-10">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-receipt text-3xl"></i></span>
+            <div><h3 class="text-lg font-semibold">Log expenses</h3><p class="mt-1 text-muted">Amount, category, who paid and who it's split between. You can log for someone who doesn't have the app handy.</p></div>
+          </li>
+          <li class="reveal-scroll flex gap-4 md:flex-col md:pt-20">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-hand-coins text-3xl"></i></span>
+            <div><h3 class="text-lg font-semibold">Split and settle</h3><p class="mt-1 text-muted">One tap shows who pays whom. Copy the payment alias, pay, and the other person confirms they got it.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="mx-auto max-w-6xl px-5 py-16">
+        <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Built for traveling, not for doing math.</h2>
+        <div class="mt-10 grid gap-4 md:grid-cols-6">
+          <article class="reveal-scroll relative overflow-hidden rounded-3xl bg-accent p-6 text-white md:col-span-4">
+            <i class="ph-duotone ph-globe-hemisphere-west absolute -bottom-10 -right-6 text-[180px] text-white/15"></i>
+            <h3 class="text-xl font-semibold">Local currency, automatically</h3>
+            <p class="mt-2 max-w-[40ch] text-white/80">Pick the country and expenses are logged in its currency. Paid something in dollars? It's converted at the day's rate, which you can adjust.</p>
+          </article>
+          <article class="reveal-scroll rounded-3xl bg-surface p-6 md:col-span-2">
+            <i class="ph-duotone ph-calendar-check text-4xl text-accent-ink"></i>
+            <h3 class="mt-4 text-lg font-semibold">Mid-trip splits</h3>
+            <p class="mt-1 text-muted">Settle up halfway without anything counting twice at the end.</p>
+          </article>
+          <article class="reveal-scroll rounded-3xl p-6 md:col-span-2" style="background: color-mix(in srgb, var(--cat-groceries) 14%, var(--surface))">
+            <i class="ph-duotone ph-arrows-left-right text-4xl" style="color: var(--cat-groceries)"></i>
+            <h3 class="mt-4 text-lg font-semibold">Fewer transfers</h3>
+            <p class="mt-1 text-muted">We net everything out so there are as few payments as possible.</p>
+          </article>
+          <article class="reveal-scroll rounded-3xl bg-surface p-6 md:col-span-2">
+            <i class="ph-duotone ph-copy text-4xl text-accent-ink"></i>
+            <h3 class="mt-4 text-lg font-semibold">Payment alias, ready to copy</h3>
+            <p class="mt-1 text-muted">Everyone adds their alias and whoever pays copies it in one tap. The receiver confirms.</p>
+          </article>
+          <article class="reveal-scroll rounded-3xl p-6 md:col-span-2" style="background: color-mix(in srgb, var(--cat-food) 14%, var(--surface))">
+            <i class="ph-duotone ph-chart-pie-slice text-4xl" style="color: var(--cat-food)"></i>
+            <h3 class="mt-4 text-lg font-semibold">Trip summary</h3>
+            <p class="mt-1 text-muted">How much went on food, lodging and each day, in your currency.</p>
+          </article>
+        </div>
+      </section>
+
+      <div id="ad-landing" class="mx-auto max-w-6xl px-5" hidden></div>
+
+      <section class="mx-auto max-w-3xl px-5 py-16">
+        <h2 class="text-3xl font-semibold tracking-tight">Frequently asked questions</h2>
+        <div class="mt-8 flex flex-col gap-3">
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it cost anything?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Vaquita is free and supported by unobtrusive ads.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does everyone need an account?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Whoever creates the trip adds everyone's names. People who join with the code pick their name; the rest stay in the group and someone logs for them.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Which currency are debts paid in?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">What is a partial split?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does Vaquita move money?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app.</p></details>
+        </div>
+      </section>
+
+      <section class="mx-auto max-w-6xl px-5 pb-20">
+        <div class="flex flex-col items-start justify-between gap-6 rounded-3xl bg-strong p-8 text-strong-ink md:flex-row md:items-center">
+          <h2 class="max-w-[24ch] text-2xl font-semibold tracking-tight md:text-3xl">Got dates? Set up the group today.</h2>
+          <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-line">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-muted">
+        <p>Vaquita</p>
+        <nav class="flex gap-5"><a href="/privacy/#en">Privacy</a><a href="/terms/#en">Terms</a><a href="mailto:contacto@example.com">Contact</a><a href="/" hreflang="es">Español</a></nav>
+      </div>
+    </footer>
+  </body>
+</html>
