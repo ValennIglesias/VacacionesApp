@@ -6,7 +6,7 @@ import type { BatchItem } from "drizzle-orm/batch";
 import { z } from "zod";
 import { getAuth } from "./auth";
 import * as s from "./db/schema";
-import { CATEGORIES, COUNTRY_CURRENCY, CURRENCIES, MEMBER_COLORS } from "../shared/data";
+import { CATEGORIES, COUNTRY_CURRENCY, CURRENCIES, GUEST_TRIP_LIMIT, MEMBER_COLORS } from "../shared/data";
 import { computeBalances, convertCents, minTransfers, splitEqual } from "../shared/settle";
 import { BRAND } from "../shared/brand";
 import { retentionPlan, type Notice } from "../shared/retention";
@@ -89,6 +89,12 @@ app.use("/api/*", async (c, next) => {
 
 const MAX_MEMBERS = 50;
 
+/** Invitados: pocos viajes propios (incluido el de ejemplo); para más, que creen su cuenta. */
+async function checkGuestLimit(c: Context<AppEnv>) {
+  if (!c.get("isGuest")) return;
+  if ((await db(c).$count(s.trips, eq(s.trips.createdBy, c.get("userId")))) >= GUEST_TRIP_LIMIT) throw new HttpError(403, "guest_limit");
+}
+
 async function requireMember(c: Context<AppEnv>, tripId: string) {
   const m = await db(c).query.members.findFirst({ where: and(eq(s.members.tripId, tripId), eq(s.members.userId, c.get("userId"))) });
   if (!m) throw new HttpError(404, "trip_not_found");
@@ -129,6 +135,7 @@ const tripInput = z.object({
 app.post("/api/trips", async (c) => {
   const body = tripInput.parse(await c.req.json());
   if (body.endDate && body.endDate < body.startDate) throw new HttpError(400, "invalid_dates");
+  await checkGuestLimit(c);
   const tripId = uid();
   const inviteCode = newCode();
   const t = now();
@@ -146,6 +153,8 @@ app.post("/api/trips", async (c) => {
       })),
     ),
   ]);
+  // invitado: su cuenta toma el nombre con el que se puso en el viaje
+  if (c.get("isGuest")) await nameGuest(c, body.members[0]);
   return c.json({ id: tripId, inviteCode }, 201);
 });
 
@@ -154,12 +163,14 @@ app.post("/api/demo", async (c) => {
   // today: fecha local del usuario (en UTC puede ser otro día)
   const { lang, today } = z.object({ lang: z.enum(["es", "en"]), today: z.iso.date() }).parse(await c.req.json());
   const es = lang === "es";
+  await checkGuestLimit(c);
   const d = db(c);
   const t = now();
   const iso = (days: number) => new Date(Date.parse(today) + days * 86_400_000).toISOString().slice(0, 10);
   const tripId = uid();
   const inviteCode = newCode();
-  const names = [c.get("userName"), "Lucía", "Tomás", "Valen"];
+  const me = c.get("isGuest") && c.get("userName") === "Invitado" ? (es ? "Yo" : "Me") : c.get("userName");
+  const names = [me, "Lucía", "Tomás", "Valen"];
   const mIds = names.map(() => uid());
   const all = [0, 1, 2, 3];
   // [descripción es, en, categoría, día relativo a hoy, BRL x100, quién pagó, entre quiénes]

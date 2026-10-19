@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Navigate, useSearchParams } from "react-router";
+import { Navigate, useNavigate, useSearchParams } from "react-router";
 import { motion } from "motion/react";
-import { GoogleLogo } from "@phosphor-icons/react";
+import { GoogleLogo, Lightning } from "@phosphor-icons/react";
 import { auth, useConfig, useIsGuest } from "../lib/api";
+import { GUEST_TRIP_LIMIT } from "../../shared/data";
 import { useT } from "../lib/i18n";
 import { Button, Field } from "../components/ui";
 
@@ -40,13 +41,28 @@ export function Login() {
   };
 
   const google = () => auth.signIn.social({ provider: "google", callbackURL: `/app${next}` });
+  const nav = useNavigate();
+  // sin cuenta: entra como invitado (límite de viajes propios) y va directo a armar el viaje
+  const guest = async () => {
+    setError("");
+    setLoading(true);
+    const res = await auth.signIn.anonymous();
+    if (res.error) {
+      setLoading(false);
+      return setError(res.error.status === 429 ? t.tooManyAttempts : t.genericError);
+    }
+    // esperar la sesión nueva: si no, RequireAuth todavía no la ve y rebota al login
+    await session.refetch();
+    setLoading(false);
+    nav(next === "/" ? "/new" : next, { replace: true });
+  };
 
   return (
     <main className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-10 pt-[max(3rem,env(safe-area-inset-top))]">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
         <img src="/favicon.svg" alt="" width="64" height="64" className="size-16 rounded-[22px] shadow-[0_12px_32px_-12px_rgba(47,91,255,0.8)]" />
         <h1 className="mt-6 text-4xl font-semibold tracking-tight">{isGuest ? t.saveAccessTitle : t.appName}</h1>
-        <p className="mt-2 text-lg text-muted">{isGuest ? t.saveAccessBody : t.tagline}</p>
+        <p className="mt-2 text-lg text-muted">{isGuest ? (params.get("reason") === "limit" ? t.guestLimitBody.replace("{n}", String(GUEST_TRIP_LIMIT)) : t.saveAccessBody) : t.tagline}</p>
       </motion.div>
 
       <motion.div
@@ -102,6 +118,14 @@ export function Login() {
         <button type="button" className="py-2 text-sm font-medium text-accent-ink" onClick={() => (setMode(mode === "in" ? "up" : "in"), setError(""), setNotice(""))}>
           {mode === "in" ? t.noAccount : t.haveAccount}
         </button>
+        {!session.data && (
+          <div className="mt-2 flex flex-col items-center gap-2 border-t border-line pt-6">
+            <Button variant="ghost" className="w-full bg-surface" loading={loading} onClick={guest}>
+              <Lightning size={20} weight="duotone" /> {t.guestStart}
+            </Button>
+            <p className="text-center text-xs text-muted">{t.guestStartHelp}</p>
+          </div>
+        )}
       </motion.div>
     </main>
   );

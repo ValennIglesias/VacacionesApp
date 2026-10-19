@@ -6,6 +6,7 @@ import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle
 import { api, auth, useIsGuest, type Trip } from "../lib/api";
 import { useI18n, useLocale, useT } from "../lib/i18n";
 import { countryName, today, tripTiming } from "../lib/format";
+import { GUEST_TRIP_LIMIT } from "../../shared/data";
 import { timingLabel } from "../components/TripTiming";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ConfirmSheet } from "../components/bits";
@@ -18,6 +19,8 @@ export function Home() {
   const session = auth.useSession();
   const trips = useQuery({ queryKey: ["trips"], queryFn: () => api<Trip[]>("/trips") });
   const isGuest = useIsGuest();
+  // invitado con el máximo de viajes propios: "Nuevo viaje" lleva a crear la cuenta
+  const atGuestLimit = isGuest && (trips.data?.filter((x) => x.createdBy === session.data?.user.id).length ?? 0) >= GUEST_TRIP_LIMIT;
   const timingOf = (trip: Trip) => {
     const x = tripTiming(trip.startDate, trip.endDate);
     return x && timingLabel(t, x);
@@ -46,6 +49,11 @@ export function Home() {
           <h1 className="text-3xl font-semibold tracking-tight">{t.myTrips}</h1>
         </div>
         <div className="flex items-center gap-1">
+        {isGuest && (
+          <Link to="/login?save=1" className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-sm font-medium text-white transition-transform active:scale-95">
+            {t.createAccount}
+          </Link>
+        )}
         <ThemeToggle />
         {/* un invitado que cierra sesión pierde el acceso: para él está "Guardar mi acceso" */}
         {!isGuest && <button
@@ -59,7 +67,7 @@ export function Home() {
       </header>
 
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <Link to="/new" className="flex flex-col gap-6 rounded-3xl bg-accent p-4 text-white transition-transform active:scale-[0.98]">
+        <Link to={atGuestLimit ? "/login?save=1&reason=limit" : "/new"} className="flex flex-col gap-6 rounded-3xl bg-accent p-4 text-white transition-transform active:scale-[0.98]">
           <Plus size={28} weight="bold" />
           <span className="font-medium">{t.newTrip}</span>
         </Link>
@@ -68,7 +76,7 @@ export function Home() {
           <span className="font-medium">{t.joinTrip}</span>
         </Link>
       </div>
-      {!!trips.data?.length && (
+      {!!trips.data?.length && !atGuestLimit && (
         <button type="button" onClick={() => demo.mutate()} disabled={demo.isPending} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink disabled:opacity-50">
           <Sparkle size={16} weight="duotone" /> {t.tryDemo}
         </button>

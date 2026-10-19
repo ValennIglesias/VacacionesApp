@@ -19,3 +19,4 @@ export const CURRENCIES = [...new Set(Object.values(COUNTRY_CURRENCY))].sort();
 
 
 export const MEMBER_COLORS = 8; // paleta en el front (índice)
+export const GUEST_TRIP_LIMIT = 2; // viajes propios sin cuenta (incluido el de ejemplo)

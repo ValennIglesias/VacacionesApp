@@ -3,10 +3,10 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, Plus, X, Confetti, UsersThree, PencilSimple } from "@phosphor-icons/react";
-import { api, auth, useConfig, type TripData } from "../lib/api";
+import { api, ApiError, auth, useConfig, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName, currencyName, guessHomeCurrency } from "../lib/format";
-import { COUNTRY_CURRENCY } from "../../shared/data";
+import { COUNTRY_CURRENCY, GUEST_TRIP_LIMIT } from "../../shared/data";
 import { Avatar, Button, Field, Flag } from "../components/ui";
 import { CountryPicker, CurrencySelect, ShareCode } from "../components/bits";
 import { DateRangeField } from "../components/DatePicker";
@@ -28,7 +28,8 @@ export function NewTrip() {
     startDate: "",
     endDate: "",
     settleCurrency: "", // vacío = sugerida según el país detectado
-    members: [session.data?.user.name ?? ""],
+    // un invitado recién creado se llama "Invitado": que escriba su nombre
+    members: [session.data?.user.name && session.data.user.name !== "Invitado" ? session.data.user.name : ""],
   });
   const [draft, setDraft] = useState("");
   // "Otro viaje con este grupo": precarga los nombres (vos primero, con tu nombre de ese viaje) y la moneda de repartida
@@ -255,7 +256,11 @@ export function NewTrip() {
         </AnimatePresence>
       </div>
 
-      {create.isError && <p className="mb-3 text-center text-sm text-neg">{t.genericError}</p>}
+      {create.isError && (
+        <p className="mb-3 text-center text-sm text-neg">
+          {(create.error as ApiError).code === "guest_limit" ? t.guestLimitBody.replace("{n}", String(GUEST_TRIP_LIMIT)) : t.genericError}
+        </p>
+      )}
       <Button className="mt-6 w-full" disabled={!canNext} loading={create.isPending} onClick={() => (step < 2 ? go(step + 1) : create.mutate())}>
         {step < 2 ? t.next : t.create}
       </Button>
