@@ -118,5 +118,18 @@ Completar la pantalla de consentimiento (nombre, logo, link a `/privacy/`) y pub
 - Unirse con código (vista previa y pedido) tiene límite por IP, y cualquier escritura de la API límite por usuario (Workers Rate Limiting). Crear cuentas invitadas también tiene límite por IP.
 - Invitados: con el código se puede entrar sin registrarse eligiendo un nombre de la lista (cuenta invitada, plugin `anonymous` de better-auth). Un nombre nuevo queda como pedido hasta que lo apruebe quien creó el viaje. Si el invitado después crea su cuenta, todo lo suyo pasa a ella.
 - Quien creó el viaje puede generar un código nuevo (el anterior deja de funcionar) y desvincular integrantes que perdieron el acceso.
-- Un cron diario (`triggers.crons` en `wrangler.jsonc`) borra invitados de más de 30 días sin viajes, pedidos pendientes ni gastos.
+- Un cron diario (`triggers.crons` en `wrangler.jsonc`) aplica el vencimiento de viajes (`shared/retention.ts`, con tests) y después borra invitados de más de 30 días sin viajes, pedidos pendientes ni gastos.
+
+## Vencimiento de viajes
+
+Plazos en `shared/retention.ts` (`RETENTION`):
+
+| Viaje | Solo invitados | Con alguien registrado |
+|---|---|---|
+| Finalizado | se borra a los 30 días | se borra a los 12 meses, con email de aviso 7 días antes |
+| Sin finalizar, sin actividad | se borra a los 60 días | recordatorio a los 60 días, aviso a los 83, borrado a los 90 |
+
+Nunca se borra un viaje con registrados sin un aviso enviado al menos 7 días antes. Cualquier actividad (gasto, repartida, pago, integrante nuevo) reinicia los plazos. Los emails requieren `RESEND_API_KEY`; sin ella se imprimen en la consola.
+
+Para probar la tarea diaria en local: `curl "http://localhost:5173/cdn-cgi/handler/scheduled?cron=0+4+*+*+*"`.
 - Headers de seguridad en `public/_headers` (páginas) y `hono/secure-headers` (API).

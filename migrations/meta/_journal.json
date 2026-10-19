@@ -22,6 +22,13 @@
       "when": 1792367371472,
       "tag": "0002_guests_join_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792372946419,
+      "tag": "0003_trip_retention",
+      "breakpoints": true
     }
   ]
 }

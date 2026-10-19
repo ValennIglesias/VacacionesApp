@@ -9,10 +9,14 @@ import * as s from "./db/schema";
 import { CATEGORIES, COUNTRY_CURRENCY, CURRENCIES, MEMBER_COLORS } from "../shared/data";
 import { computeBalances, convertCents, minTransfers, splitEqual } from "../shared/settle";
 import { BRAND } from "../shared/brand";
+import { retentionPlan, type Notice } from "../shared/retention";
+import { retentionEmail, sendEmail } from "./email";
 
 type AppEnv = { Bindings: Env; Variables: { userId: string; userName: string; isGuest: boolean } };
 const app = new Hono<AppEnv>();
-const db = (c: Context<AppEnv>) => drizzle(c.env.DB, { schema: s });
+const dbOf = (env: Env) => drizzle(env.DB, { schema: s });
+type DB = ReturnType<typeof dbOf>;
+const db = (c: Context<AppEnv>) => dbOf(c.env);
 const now = () => Date.now();
 const uid = () => crypto.randomUUID();
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -162,9 +166,11 @@ app.get("/api/trips/:id", async (c) => {
     trip.createdBy === c.get("userId")
       ? await d.query.joinRequests.findMany({ where: and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.status, "pending")), orderBy: asc(s.joinRequests.createdAt) })
       : [];
+  const [facts] = await tripFacts(c.env, trip.id);
   return c.json({
     trip,
     meId: me.id,
+    deleteAt: planFor(facts, Date.now()).deleteAt,
     requests: requests.map((r) => ({ id: r.id, name: r.name, createdAt: r.createdAt })),
     members: await withImages(c, members),
     expenses: expenses.map((e) => ({ ...e, shares: shares.filter((x) => x.expenseId === e.id) })),
@@ -180,8 +186,7 @@ app.patch("/api/trips/:id", async (c) => {
 });
 
 /** Sentencias para borrar un viaje entero, hijos primero (las FKs a integrantes no tienen cascade). */
-function deleteTripStatements(c: Context<AppEnv>, tripId: string) {
-  const d = db(c);
+function deleteTripStatements(d: DB, tripId: string) {
   const settlementIds = d.select({ id: s.settlements.id }).from(s.settlements).where(eq(s.settlements.tripId, tripId));
   const expenseIds = d.select({ id: s.expenses.id }).from(s.expenses).where(eq(s.expenses.tripId, tripId));
   return [
@@ -199,7 +204,7 @@ function deleteTripStatements(c: Context<AppEnv>, tripId: string) {
 app.delete("/api/trips/:id", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
   if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
-  await db(c).batch(deleteTripStatements(c, trip.id));
+  await db(c).batch(deleteTripStatements(db(c), trip.id));
   return c.json({ ok: true });
 });
 
@@ -503,7 +508,7 @@ app.delete("/api/account", async (c) => {
     const heir = await d.query.members.findFirst({ where: and(eq(s.members.tripId, trip.id), isNotNull(s.members.userId), ne(s.members.userId, userId)) });
     // el viaje pasa a otro integrante con cuenta; si no queda nadie, se borra
     if (heir) stmts.push(d.update(s.trips).set({ createdBy: heir.userId! }).where(eq(s.trips.id, trip.id)));
-    else stmts.push(...deleteTripStatements(c, trip.id));
+    else stmts.push(...deleteTripStatements(db(c), trip.id));
   }
   stmts.push(
     d.update(s.members).set({ userId: null, alias: null }).where(eq(s.members.userId, userId)),
@@ -582,6 +587,53 @@ app.get("/app/*", async (c) => {
 });
 app.get("/app", (c) => c.env.ASSETS.fetch(new URL("/app/", c.req.url)));
 
+type TripFacts = { id: string; name: string; notice: Notice; noticeAt: number | null; closedAt: number | null; lastActivity: number; emails: string | null };
+async function tripFacts(env: Env, tripId?: string) {
+  const { results } = await env.DB.prepare(
+    `SELECT t.id, t.name, t.retention_notice AS notice, t.retention_notice_at AS noticeAt,
+       (SELECT MAX(created_at) FROM settlements WHERE trip_id = t.id AND kind = 'final') AS closedAt,
+       MAX(t.created_at,
+         COALESCE((SELECT MAX(updated_at) FROM expenses WHERE trip_id = t.id), 0),
+         COALESCE((SELECT MAX(created_at) FROM settlements WHERE trip_id = t.id), 0),
+         COALESCE((SELECT MAX(created_at) FROM members WHERE trip_id = t.id), 0),
+         COALESCE((SELECT MAX(MAX(COALESCE(tr.paid_at, 0), COALESCE(tr.confirmed_at, 0))) FROM transfers tr JOIN settlements st ON st.id = tr.settlement_id WHERE st.trip_id = t.id), 0)
+       ) AS lastActivity,
+       (SELECT group_concat(u.email) FROM members m JOIN user u ON u.id = m.user_id WHERE m.trip_id = t.id AND COALESCE(u.isAnonymous, 0) = 0) AS emails
+     FROM trips t ${tripId ? "WHERE t.id = ?" : ""}`,
+  )
+    .bind(...(tripId ? [tripId] : []))
+    .all<TripFacts>();
+  return results;
+}
+const planFor = (f: TripFacts, now: number) =>
+  retentionPlan({ closedAt: f.closedAt, lastActivity: f.lastActivity, hasRegistered: !!f.emails, notice: f.notice, noticeAt: f.noticeAt }, now);
+
+/** Tarea diaria: borra viajes vencidos y manda recordatorios/avisos a los registrados (shared/retention.ts). */
+export async function retentionJob(env: Env, now = Date.now()) {
+  const d = dbOf(env);
+  const done = { deleted: 0, reminded: 0, warned: 0 };
+  // shortcut: recorre todos los viajes una vez por día; con muchos miles conviene paginar o filtrar por fecha
+  for (const f of await tripFacts(env)) {
+    const plan = planFor(f, now);
+    try {
+      if (plan.action === "delete") {
+        await d.batch(deleteTripStatements(d, f.id));
+        done.deleted++;
+      } else if (plan.action) {
+        const kind = plan.action === "remind" ? "remind" : f.closedAt ? "warnClosed" : "warn";
+        const { subject, html } = retentionEmail(kind, f.name, plan.deleteAt!, `${env.BETTER_AUTH_URL}/app/t/${f.id}`);
+        for (const to of f.emails!.split(",")) await sendEmail(env, to, subject, html);
+        // el aviso se registra solo si los emails salieron (si fallan, se reintenta mañana)
+        await d.update(s.trips).set({ retentionNotice: plan.action === "remind" ? 1 : 2, retentionNoticeAt: now }).where(eq(s.trips.id, f.id));
+        done[plan.action === "remind" ? "reminded" : "warned"]++;
+      }
+    } catch (err) {
+      console.error("retention", f.id, err);
+    }
+  }
+  return done;
+}
+
 /** Borra invitados de más de 30 días sin viajes, pedidos ni gastos a su nombre (sesiones caen en cascada). */
 export async function cleanupGuests(env: Env) {
   const cutoff = new Date(Date.now() - 30 * 86_400_000).toISOString();
@@ -602,5 +654,7 @@ export async function cleanupGuests(env: Env) {
 
 export default {
   fetch: app.fetch,
-  scheduled: async (_: ScheduledController, env: Env) => void (await cleanupGuests(env)),
+  scheduled: async (_: ScheduledController, env: Env) => {
+    console.log("retention", await retentionJob(env), "guests", await cleanupGuests(env));
+  },
 } satisfies ExportedHandler<Env>;

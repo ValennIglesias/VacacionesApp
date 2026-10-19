@@ -46,7 +46,7 @@ export type TransferRow = {
 };
 export type Settlement = { id: string; kind: "partial" | "final"; currency: string; rate: number; createdAt: number; transfers: TransferRow[] };
 export type JoinRequest = { id: string; name: string; createdAt: number };
-export type TripData = { trip: Trip; meId: string; requests: JoinRequest[]; members: Member[]; expenses: Expense[]; settlements: Settlement[] };
+export type TripData = { trip: Trip; meId: string; deleteAt: number | null; requests: JoinRequest[]; members: Member[]; expenses: Expense[]; settlements: Settlement[] };
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string) {

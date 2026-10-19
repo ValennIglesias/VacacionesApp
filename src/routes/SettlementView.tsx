@@ -88,7 +88,7 @@ export function SettlementView() {
         ))}
       </ul>
 
-      {s.kind === "final" && <TripEnded tripId={trip.id} />}
+      {s.kind === "final" && <TripEnded tripId={trip.id} deleteAt={data.deleteAt} />}
     </div>
   );
 }

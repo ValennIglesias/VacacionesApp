@@ -71,6 +71,9 @@ export const trips = sqliteTable("trips", {
   status: text("status", { enum: ["active", "closed"] }).notNull().default("active"),
   createdBy: text("created_by").notNull().references(() => user.id),
   createdAt: integer("created_at").notNull(),
+  // vencimiento (shared/retention.ts): último aviso enviado y cuándo
+  retentionNotice: integer("retention_notice").notNull().default(0),
+  retentionNoticeAt: integer("retention_notice_at"),
 });
 
 export const members = sqliteTable(

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { Receipt, LockSimple, ArrowRight, HandCoins } from "@phosphor-icons/react";
+import { Receipt, LockSimple, ArrowRight, HandCoins, ClockCountdown } from "@phosphor-icons/react";
 import { useTripCtx } from "./TripLayout";
 import { useLocale, useT } from "../lib/i18n";
 import { formatDay, money } from "../lib/format";
@@ -48,7 +48,16 @@ export function Expenses() {
 
   return (
     <div className="flex flex-col gap-5 pt-2">
-      {trip.status === "closed" && <TripEnded tripId={trip.id} />}
+      {trip.status === "closed" && <TripEnded tripId={trip.id} deleteAt={data.deleteAt} />}
+      {trip.status === "active" && data.deleteAt && (
+        <div role="status" className="flex items-start gap-3 rounded-3xl bg-[color-mix(in_srgb,var(--neg)_10%,transparent)] p-4">
+          <ClockCountdown size={24} weight="duotone" className="shrink-0 text-neg" />
+          <p className="text-sm">
+            <span className="block font-semibold text-neg">{t.inactiveTitle.replace("{date}", formatDay(new Date(data.deleteAt).toISOString().slice(0, 10), locale))}</span>
+            <span className="text-muted">{t.inactiveBody}</span>
+          </p>
+        </div>
+      )}
       {/* resumen */}
       <section className="relative overflow-hidden rounded-3xl bg-accent p-5 text-white">
         <div className="pointer-events-none absolute -right-10 -top-16 size-48 rounded-full bg-white/10" />
