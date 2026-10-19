@@ -36,3 +36,14 @@ export const guessHomeCurrency = (country?: string | null) => {
   const region = country || navigator.languages.map((l) => new Intl.Locale(l).region).find(Boolean);
   return (region && COUNTRY_CURRENCY[region]) || "USD";
 };
+
+const daysBetween = (a: string, b: string) => Math.round((Date.parse(b) - Date.parse(a)) / 86_400_000);
+
+/** Momento del viaje según sus fechas (YYYY-MM-DD): falta, en curso (día N de total) o terminado. */
+export function tripTiming(start: string | null, end: string | null, now = today()) {
+  if (!start) return null;
+  const total = end ? daysBetween(start, end) + 1 : null;
+  if (now < start) return { phase: "upcoming", days: daysBetween(now, start), total } as const;
+  if (!end || now <= end) return { phase: "ongoing", day: daysBetween(start, now) + 1, total } as const;
+  return { phase: "past", days: daysBetween(end, now), total } as const;
+}

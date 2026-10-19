@@ -121,13 +121,14 @@ const tripInput = z.object({
   city: z.string().trim().max(60).optional(),
   currency: z.string().refine((x) => CURRENCIES.includes(x)),
   settleCurrency: z.string().refine((x) => CURRENCIES.includes(x)),
-  startDate: z.iso.date().optional(),
+  startDate: z.iso.date(), // obligatoria: el viaje se ordena por días a partir de acá
   endDate: z.iso.date().optional(),
   members: z.array(z.string().trim().min(1).max(30)).min(1).max(30), // members[0] = yo
 });
 
 app.post("/api/trips", async (c) => {
   const body = tripInput.parse(await c.req.json());
+  if (body.endDate && body.endDate < body.startDate) throw new HttpError(400, "invalid_dates");
   const tripId = uid();
   const inviteCode = newCode();
   const t = now();
@@ -146,6 +147,67 @@ app.post("/api/trips", async (c) => {
     ),
   ]);
   return c.json({ id: tripId, inviteCode }, 201);
+});
+
+// viaje de ejemplo para probar la app sin mezclar datos reales (empezó ayer, con gastos previos y del viaje)
+app.post("/api/demo", async (c) => {
+  // today: fecha local del usuario (en UTC puede ser otro día)
+  const { lang, today } = z.object({ lang: z.enum(["es", "en"]), today: z.iso.date() }).parse(await c.req.json());
+  const es = lang === "es";
+  const d = db(c);
+  const t = now();
+  const iso = (days: number) => new Date(Date.parse(today) + days * 86_400_000).toISOString().slice(0, 10);
+  const tripId = uid();
+  const inviteCode = newCode();
+  const names = [c.get("userName"), "Lucía", "Tomás", "Valen"];
+  const mIds = names.map(() => uid());
+  const all = [0, 1, 2, 3];
+  // [descripción es, en, categoría, día relativo a hoy, BRL x100, quién pagó, entre quiénes]
+  const sample: [string, string, (typeof CATEGORIES)[number], number, number, number, number[]][] = [
+    ["Pasajes de avión", "Flights", "transport", -40, 240000, 0, all],
+    ["Reserva de la posada", "Guesthouse booking", "lodging", -25, 180000, 1, all],
+    ["Supermercado", "Groceries", "groceries", -1, 32050, 2, all],
+    ["Cena en la playa", "Beach dinner", "food", -1, 41000, 0, [0, 1, 2]],
+    ["Paseo en barco", "Boat tour", "activities", 0, 60000, 3, all],
+    ["Uber al centro", "Ride downtown", "transport", 0, 4580, 1, [1, 3]],
+  ];
+  const expenseRows = sample.map(([des, den, category, day, cents, payer, who]) => ({
+    id: uid(),
+    tripId,
+    paidBy: mIds[payer],
+    description: es ? des : den,
+    category,
+    date: iso(day),
+    amountCents: cents,
+    currency: "BRL",
+    rate: 1,
+    amountTripCents: cents,
+    createdBy: c.get("userId"),
+    createdAt: t,
+    updatedAt: t,
+    who,
+  }));
+  await d.batch([
+    d.insert(s.trips).values({
+      id: tripId,
+      name: es ? "Viaje de ejemplo" : "Sample trip",
+      countryCode: "BR",
+      city: "Florianópolis",
+      currency: "BRL",
+      settleCurrency: "BRL",
+      inviteCode,
+      startDate: iso(-1),
+      endDate: iso(5),
+      createdBy: c.get("userId"),
+      createdAt: t,
+    }),
+    d.insert(s.members).values(names.map((name, i) => ({ id: mIds[i], tripId, name, userId: i === 0 ? c.get("userId") : null, color: i, createdAt: t + i }))),
+    d.insert(s.expenses).values(expenseRows.map(({ who: _, ...e }) => e)),
+    d.insert(s.expenseShares).values(
+      expenseRows.flatMap((e) => [...splitEqual(e.amountTripCents, e.who.map((i) => mIds[i]))].map(([memberId, shareCents]) => ({ expenseId: e.id, memberId, shareCents }))),
+    ),
+  ]);
+  return c.json({ id: tripId }, 201);
 });
 
 app.get("/api/trips/:id", async (c) => {
@@ -180,7 +242,14 @@ app.get("/api/trips/:id", async (c) => {
 
 app.patch("/api/trips/:id", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
-  const body = tripInput.pick({ name: true, city: true, settleCurrency: true }).partial().parse(await c.req.json());
+  const body = tripInput
+    .pick({ name: true, city: true, settleCurrency: true, startDate: true })
+    .extend({ endDate: z.iso.date().nullable() }) // el inicio se puede cambiar pero no borrar; el fin, sí
+    .partial()
+    .parse(await c.req.json());
+  const start = body.startDate !== undefined ? body.startDate : trip.startDate;
+  const end = body.endDate !== undefined ? body.endDate : trip.endDate;
+  if (start && end && end < start) throw new HttpError(400, "invalid_dates");
   await db(c).update(s.trips).set(body).where(eq(s.trips.id, trip.id));
   return c.json({ ok: true });
 });

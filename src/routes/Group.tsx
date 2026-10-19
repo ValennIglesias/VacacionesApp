@@ -10,6 +10,7 @@ import { useTheme } from "../lib/theme";
 import { AvatarPicker } from "../components/AvatarPicker";
 import { Avatar, Button, Field, Segmented } from "../components/ui";
 import { ConfirmSheet, CurrencySelect, ShareCode } from "../components/bits";
+import { DateRangeField } from "../components/DatePicker";
 
 export function Group() {
   const t = useT();
@@ -61,13 +62,15 @@ export function Group() {
   });
   const [newName, setNewName] = useState("");
   const [tripName, setTripName] = useState(trip.name);
+  const [dates, setDates] = useState({ start: trip.startDate ?? "", end: trip.endDate ?? "" });
+  const datesChanged = dates.start !== (trip.startDate ?? "") || dates.end !== (trip.endDate ?? "");
 
   const addMember = useMutation({
     mutationFn: () => api(`/trips/${trip.id}/members`, { body: { name: newName.trim() } }),
     onSuccess: () => (setNewName(""), refresh()),
   });
   const updateTrip = useMutation({
-    mutationFn: (body: { name?: string; settleCurrency?: string }) => api(`/trips/${trip.id}`, { method: "PATCH", body }),
+    mutationFn: (body: { name?: string; settleCurrency?: string; startDate?: string | null; endDate?: string | null }) => api(`/trips/${trip.id}`, { method: "PATCH", body }),
     onSuccess: refresh,
   });
 
@@ -154,6 +157,15 @@ export function Group() {
 
       <section className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
         <h2 className="font-semibold">{t.tripSettings}</h2>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-muted">{t.tripDates}</span>
+          <DateRangeField start={dates.start} end={dates.end} onChange={(start, end) => setDates({ start, end })} />
+          {datesChanged && (
+            <Button variant="soft" loading={updateTrip.isPending} disabled={!dates.start} onClick={() => updateTrip.mutate({ startDate: dates.start, endDate: dates.end || null })}>
+              <Check size={20} weight="bold" /> {t.saveDates}
+            </Button>
+          )}
+        </div>
         <form
           className="flex items-end gap-2"
           onSubmit={(e) => {

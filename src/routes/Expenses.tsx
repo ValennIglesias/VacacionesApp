@@ -4,13 +4,14 @@ import { AnimatePresence, motion } from "motion/react";
 import { Receipt, LockSimple, ArrowRight, HandCoins, ClockCountdown } from "@phosphor-icons/react";
 import { useTripCtx } from "./TripLayout";
 import { useLocale, useT } from "../lib/i18n";
-import { formatDay, money } from "../lib/format";
+import { formatDay, money, tripTiming } from "../lib/format";
 import { CATEGORIES, type Category } from "../../shared/data";
 import { computeBalances } from "../../shared/settle";
 import { CategoryIcon, CATEGORY_META, Empty } from "../components/ui";
 import { crossRate, useRates, type TripData } from "../lib/api";
 import { AdSlot } from "../components/AdSlot";
 import { TripEnded } from "../components/TripEnded";
+import { TripTiming } from "../components/TripTiming";
 
 export const pendingBalances = (data: TripData) =>
   computeBalances(
@@ -18,11 +19,13 @@ export const pendingBalances = (data: TripData) =>
     data.expenses.filter((e) => !e.settlementId),
   );
 
+/** Día del viaje (1 = inicio); null = antes del viaje (pasajes, reservas). Sin fecha de inicio cuenta desde el primer gasto. */
 export const dayNumber = (data: TripData, date: string) => {
-  // día 1 = inicio del viaje o primer gasto, el que sea anterior (nunca días negativos)
-  const start = [data.trip.startDate, data.expenses[0]?.date, date].filter((x): x is string => !!x).sort()[0];
-  return Math.round((Date.parse(date) - Date.parse(start)) / 86_400_000) + 1;
+  const start = data.trip.startDate ?? data.expenses[0]?.date ?? date;
+  const n = Math.round((Date.parse(date) - Date.parse(start)) / 86_400_000) + 1;
+  return n >= 1 ? n : null;
 };
+const PRE = "pre";
 
 export function Expenses() {
   const t = useT();
@@ -35,6 +38,12 @@ export function Expenses() {
   const total = expenses.reduce((a, e) => a + e.amountTripCents, 0);
   const rates = useRates();
   const settleK = crossRate(rates.data, trip.currency, trip.settleCurrency) ?? 1;
+  // promedio por día: días transcurridos del viaje (en curso) o el total (terminado)
+  const timing = tripTiming(trip.startDate, trip.endDate);
+  const daysSoFar = timing?.phase === "ongoing" ? timing.day : timing?.phase === "past" ? timing.total : null;
+  // sin los gastos previos (pasajes, reservas): inflarían el promedio de los primeros días
+  const duringTrip = expenses.filter((e) => dayNumber(data, e.date) !== null).reduce((a, e) => a + e.amountTripCents, 0);
+  const perDay = daysSoFar && duringTrip > 0 ? t.perDay.replace("{amount}", money(Math.round(duringTrip / daysSoFar), trip.currency, locale)) : undefined;
   const myBalance = useMemo(() => pendingBalances(data).get(meId) ?? 0, [data, meId]);
   const myDebt = settlements.flatMap((s) => s.transfers.map((tr) => ({ ...tr, s }))).find((tr) => tr.fromMember === meId && tr.status === "pending");
 
@@ -42,7 +51,11 @@ export function Expenses() {
   const shown = expenses.filter((e) => !filter || e.category === filter);
   const byDay = useMemo(() => {
     const map = new Map<string, typeof shown>();
-    for (const e of [...shown].reverse()) map.set(e.date, [...(map.get(e.date) ?? []), e]);
+    // los gastos previos al inicio van todos juntos en "Antes del viaje"
+    for (const e of [...shown].reverse()) {
+      const key = dayNumber(data, e.date) === null ? PRE : e.date;
+      map.set(key, [...(map.get(key) ?? []), e]);
+    }
     return [...map];
   }, [shown]);
 
@@ -71,6 +84,7 @@ export function Expenses() {
             ≈ {money(Math.round(total * settleK), trip.settleCurrency, locale)}
           </p>
         )}
+        <TripTiming start={trip.startDate} end={trip.endDate} extra={perDay} />
         <div className="mt-4 flex items-center justify-between rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-sm">
           <span className="text-sm text-white/80">{myBalance === 0 ? t.settledUp : myBalance > 0 ? t.theyOweYou : t.youOwe}</span>
           {myBalance !== 0 && (
@@ -114,7 +128,13 @@ export function Expenses() {
             <section key={date}>
               <h2 className="mb-2 flex items-baseline justify-between px-1">
                 <span className="font-semibold">
-                  {t.day} {dayNumber(data, date)} <span className="font-normal capitalize text-muted">· {formatDay(date, locale)}</span>
+                  {date === PRE ? (
+                    t.beforeTrip
+                  ) : (
+                    <>
+                      {t.day} {dayNumber(data, date)} <span className="font-normal capitalize text-muted">· {formatDay(date, locale)}</span>
+                    </>
+                  )}
                 </span>
                 <span className="text-sm text-muted tabular">{money(list.reduce((a, e) => a + e.amountTripCents, 0), trip.currency, locale)}</span>
               </h2>

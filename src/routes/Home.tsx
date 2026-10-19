@@ -1,15 +1,16 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk } from "@phosphor-icons/react";
+import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle } from "@phosphor-icons/react";
 import { api, auth, useIsGuest, type Trip } from "../lib/api";
-import { useLocale, useT } from "../lib/i18n";
-import { countryName } from "../lib/format";
+import { useI18n, useLocale, useT } from "../lib/i18n";
+import { countryName, today, tripTiming } from "../lib/format";
+import { timingLabel } from "../components/TripTiming";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { ConfirmSheet } from "../components/bits";
 
-import { Empty, Skeleton, Flag } from "../components/ui";
+import { Button, Empty, Skeleton, Flag } from "../components/ui";
 
 export function Home() {
   const t = useT();
@@ -17,11 +18,21 @@ export function Home() {
   const session = auth.useSession();
   const trips = useQuery({ queryKey: ["trips"], queryFn: () => api<Trip[]>("/trips") });
   const isGuest = useIsGuest();
+  const timingOf = (trip: Trip) => {
+    const x = tripTiming(trip.startDate, trip.endDate);
+    return x && timingLabel(t, x);
+  };
   const requests = useQuery({
     queryKey: ["join-requests"],
     queryFn: () => api<{ id: string; status: "pending" | "rejected"; tripName: string; countryCode: string; code: string }[]>("/join-requests"),
   });
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const nav = useNavigate();
+  const { lang } = useI18n();
+  const demo = useMutation({
+    mutationFn: () => api<{ id: string }>("/demo", { body: { lang, today: today() } }),
+    onSuccess: ({ id }) => nav(`/t/${id}`),
+  });
   const deleteAccount = useMutation({
     mutationFn: () => api("/account", { method: "DELETE" }),
     onSuccess: () => location.assign("/"),
@@ -57,6 +68,11 @@ export function Home() {
           <span className="font-medium">{t.joinTrip}</span>
         </Link>
       </div>
+      {!!trips.data?.length && (
+        <button type="button" onClick={() => demo.mutate()} disabled={demo.isPending} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink disabled:opacity-50">
+          <Sparkle size={16} weight="duotone" /> {t.tryDemo}
+        </button>
+      )}
 
       {isGuest && (
         <Link to="/login?save=1" className="mt-6 flex items-center gap-3 rounded-3xl bg-accent-soft p-4 text-accent-ink transition-transform active:scale-[0.98]">
@@ -86,7 +102,13 @@ export function Home() {
 
       <section className="mt-8 flex flex-col gap-3">
         {trips.isPending && [0, 1].map((i) => <Skeleton key={i} className="h-20" />)}
-        {trips.data?.length === 0 && <Empty icon={SuitcaseRolling} title={t.noTripsTitle} body={t.noTripsBody} />}
+        {trips.data?.length === 0 && (
+          <Empty icon={SuitcaseRolling} title={t.noTripsTitle} body={t.noTripsBody}>
+            <Button variant="soft" loading={demo.isPending} onClick={() => demo.mutate()}>
+              <Sparkle size={20} weight="duotone" /> {t.tryDemo}
+            </Button>
+          </Empty>
+        )}
         {trips.data?.map((trip, i) => (
           <motion.div
             key={trip.id}
@@ -101,6 +123,7 @@ export function Home() {
                 <p className="truncate text-sm text-muted">
                   {[trip.city, countryName(trip.countryCode, locale)].filter(Boolean).join(", ")}
                 </p>
+                {trip.status === "active" && timingOf(trip) && <p className="truncate text-xs font-medium text-accent-ink">{timingOf(trip)}</p>}
               </div>
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-medium ${trip.status === "active" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-muted"}`}

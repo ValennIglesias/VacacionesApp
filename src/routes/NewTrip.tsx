@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, Plus, X, Confetti, UsersThree } from "@phosphor-icons/react";
+import { ArrowLeft, Plus, X, Confetti, UsersThree, PencilSimple } from "@phosphor-icons/react";
 import { api, auth, useConfig, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName, currencyName, guessHomeCurrency } from "../lib/format";
@@ -10,6 +10,7 @@ import { COUNTRY_CURRENCY } from "../../shared/data";
 import { Avatar, Button, Field, Flag } from "../components/ui";
 import { CountryPicker, CurrencySelect, ShareCode } from "../components/bits";
 import { DateRangeField } from "../components/DatePicker";
+import { AvatarPicker } from "../components/AvatarPicker";
 
 export function NewTrip() {
   const t = useT();
@@ -17,6 +18,7 @@ export function NewTrip() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const session = auth.useSession();
+  const [picking, setPicking] = useState(false);
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
   const [form, setForm] = useState({
@@ -53,7 +55,7 @@ export function NewTrip() {
           city: form.city || undefined,
           currency,
           settleCurrency,
-          startDate: form.startDate || undefined,
+          startDate: form.startDate,
           endDate: form.endDate || undefined,
           members: [...form.members, draft].map((m) => m.trim()).filter(Boolean),
         },
@@ -76,7 +78,7 @@ export function NewTrip() {
     setDraft("");
   };
 
-  const canNext = [form.countryCode, true, form.members[0]?.trim()][step];
+  const canNext = [form.countryCode, form.startDate, form.members[0]?.trim()][step];
   const titles = [t.stepDestination, t.stepDates, t.stepMembers];
 
   if (created)
@@ -178,6 +180,7 @@ export function NewTrip() {
 
             {step === 2 && (
               <>
+                <p className="-mt-2 text-sm text-muted">{t.pickAvatarHint}</p>
                 <ul className="flex flex-col gap-2">
                   <AnimatePresence initial={false}>
                     {form.members.map((m, i) => (
@@ -189,7 +192,17 @@ export function NewTrip() {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="flex items-center gap-3 rounded-2xl bg-surface p-2 pr-3"
                       >
-                        <Avatar name={m || "?"} color={i} />
+                        {i === 0 ? (
+                          // tu avatar (de la cuenta): se elige acá mismo
+                          <button type="button" onClick={() => setPicking(true)} className="relative shrink-0 rounded-full transition-transform active:scale-90" aria-label={t.myAvatar}>
+                            <Avatar name={m || "?"} color={0} image={session.data?.user.image} />
+                            <span className="absolute -bottom-0.5 -right-0.5 inline-flex size-5 items-center justify-center rounded-full bg-accent text-white ring-2 ring-surface">
+                              <PencilSimple size={10} weight="bold" />
+                            </span>
+                          </button>
+                        ) : (
+                          <Avatar name={m || "?"} color={i} />
+                        )}
                         {i === 0 ? (
                           <input
                             value={m}
@@ -246,6 +259,7 @@ export function NewTrip() {
       <Button className="mt-6 w-full" disabled={!canNext} loading={create.isPending} onClick={() => (step < 2 ? go(step + 1) : create.mutate())}>
         {step < 2 ? t.next : t.create}
       </Button>
+      <AvatarPicker open={picking} onClose={() => setPicking(false)} name={form.members[0] || "?"} color={0} current={session.data?.user.image ?? null} />
     </main>
   );
 }

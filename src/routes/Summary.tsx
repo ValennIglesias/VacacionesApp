@@ -26,8 +26,12 @@ export function Summary() {
     const total = expenses.reduce((a, e) => a + e.amountTripCents, 0);
     const byCat = CATEGORIES.map((c) => ({ c, v: expenses.filter((e) => e.category === c).reduce((a, e) => a + e.amountTripCents, 0) })).filter((x) => x.v > 0);
     const days = new Map<string, number>();
-    for (const e of expenses) days.set(e.date, (days.get(e.date) ?? 0) + e.amountTripCents);
-    const byDay = [...days].sort(([a], [b]) => a.localeCompare(b)).map(([date, v]) => ({ label: `${t.day} ${dayNumber(data, date)}`, v }));
+    // "0000" ordena los gastos previos primero
+    for (const e of expenses) {
+      const key = dayNumber(data, e.date) === null ? "0000" : e.date;
+      days.set(key, (days.get(key) ?? 0) + e.amountTripCents);
+    }
+    const byDay = [...days].sort(([a], [b]) => a.localeCompare(b)).map(([date, v]) => ({ label: date === "0000" ? t.beforeTripShort : `${t.day} ${dayNumber(data, date)}`, v }));
     const byPerson = members.map((m) => ({
       m,
       paid: expenses.filter((e) => e.paidBy === m.id).reduce((a, e) => a + e.amountTripCents, 0),
