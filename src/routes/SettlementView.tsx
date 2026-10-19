@@ -11,6 +11,7 @@ import { money } from "../lib/format";
 import { convertCents } from "../../shared/settle";
 import { Avatar, Button } from "../components/ui";
 import { CopyButton } from "../components/bits";
+import { TripEnded } from "../components/TripEnded";
 
 export function SettlementView() {
   const t = useT();
@@ -86,6 +87,8 @@ export function SettlementView() {
           </motion.li>
         ))}
       </ul>
+
+      {s.kind === "final" && <TripEnded tripId={trip.id} />}
     </div>
   );
 }

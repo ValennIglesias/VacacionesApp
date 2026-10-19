@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, Plus, X, Confetti } from "@phosphor-icons/react";
-import { api, auth, useConfig } from "../lib/api";
+import { ArrowLeft, Plus, X, Confetti, UsersThree } from "@phosphor-icons/react";
+import { api, auth, useConfig, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName, currencyName, guessHomeCurrency } from "../lib/format";
 import { COUNTRY_CURRENCY } from "../../shared/data";
@@ -29,6 +29,16 @@ export function NewTrip() {
     members: [session.data?.user.name ?? ""],
   });
   const [draft, setDraft] = useState("");
+  // "Otro viaje con este grupo": precarga los nombres (vos primero, con tu nombre de ese viaje) y la moneda de repartida
+  const [params] = useSearchParams();
+  const from = params.get("from");
+  const source = useQuery({ queryKey: ["trip", from], queryFn: () => api<TripData>(`/trips/${from}`), enabled: !!from });
+  useEffect(() => {
+    if (!source.data) return;
+    const { members, meId, trip } = source.data;
+    const me = members.find((m) => m.id === meId);
+    setForm((f) => ({ ...f, settleCurrency: trip.settleCurrency, members: [me?.name ?? f.members[0], ...members.filter((m) => m.id !== meId).map((m) => m.name)] }));
+  }, [source.data]);
   const currency = COUNTRY_CURRENCY[form.countryCode];
   const config = useConfig();
   const settleCurrency = form.settleCurrency || guessHomeCurrency(config.data?.country);
@@ -124,6 +134,11 @@ export function NewTrip() {
             className="flex flex-col gap-5"
           >
             <h1 className="text-3xl font-semibold tracking-tight">{titles[step]}</h1>
+            {source.data && step === 0 && (
+              <p className="-mt-2 inline-flex items-center gap-2 self-start rounded-full bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent-ink">
+                <UsersThree size={16} weight="duotone" /> {t.sameGroupAs.replace("{trip}", source.data.trip.name).replace("{n}", String(source.data.members.length))}
+              </p>
+            )}
 
             {step === 0 && (
               <>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navigate, useSearchParams } from "react-router";
 import { motion } from "motion/react";
 import { GoogleLogo } from "@phosphor-icons/react";
-import { auth, useConfig } from "../lib/api";
+import { auth, useConfig, useIsGuest } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { Button, Field } from "../components/ui";
 
@@ -12,13 +12,15 @@ export function Login() {
   const next = params.get("next") || "/";
   const session = auth.useSession();
   const config = useConfig();
-  const [mode, setMode] = useState<"in" | "up" | "forgot">("in");
+  // invitado: crea su cuenta (o entra a una existente) y todo lo suyo pasa a esa cuenta
+  const isGuest = useIsGuest();
+  const [mode, setMode] = useState<"in" | "up" | "forgot">(isGuest ? "up" : "in");
   const [notice, setNotice] = useState(params.get("reset") === "ok" ? t.passwordChanged : "");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (session.data) return <Navigate to={next} replace />;
+  if (session.data && !isGuest) return <Navigate to={next} replace />;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ export function Login() {
         ? await auth.requestPasswordReset({ email: form.email, redirectTo: "/app/reset" })
         : mode === "in"
           ? await auth.signIn.email({ email: form.email, password: form.password })
-          : await auth.signUp.email({ email: form.email, password: form.password, name: form.name || form.email.split("@")[0] });
+          : await auth.signUp.email({ email: form.email, password: form.password, name: form.name || (isGuest ? session.data!.user.name : form.email.split("@")[0]) });
     setLoading(false);
     if (res.error) setError(res.error.status === 429 ? t.tooManyAttempts : t.authError);
     // mismo mensaje exista o no la cuenta, para no revelar qué emails están registrados
@@ -43,8 +45,8 @@ export function Login() {
     <main className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-10 pt-[max(3rem,env(safe-area-inset-top))]">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
         <img src="/favicon.svg" alt="" width="64" height="64" className="size-16 rounded-[22px] shadow-[0_12px_32px_-12px_rgba(47,91,255,0.8)]" />
-        <h1 className="mt-6 text-4xl font-semibold tracking-tight">{t.appName}</h1>
-        <p className="mt-2 text-lg text-muted">{t.tagline}</p>
+        <h1 className="mt-6 text-4xl font-semibold tracking-tight">{isGuest ? t.saveAccessTitle : t.appName}</h1>
+        <p className="mt-2 text-lg text-muted">{isGuest ? t.saveAccessBody : t.tagline}</p>
       </motion.div>
 
       <motion.div

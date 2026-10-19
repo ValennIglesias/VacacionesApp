@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { motion } from "motion/react";
-import { Check, Plus, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette, Trash, DoorOpen } from "@phosphor-icons/react";
+import { AnimatePresence, motion } from "motion/react";
+import { Check, Plus, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette, Trash, DoorOpen, ArrowsClockwise, X, LinkBreak, FloppyDisk } from "@phosphor-icons/react";
 import { useNavigate } from "react-router";
 import { useTripCtx } from "./TripLayout";
-import { api, auth, type Member } from "../lib/api";
+import { api, auth, useIsGuest, type Member } from "../lib/api";
 import { useI18n, useT } from "../lib/i18n";
 import { useTheme } from "../lib/theme";
 import { AvatarPicker } from "../components/AvatarPicker";
@@ -22,24 +22,42 @@ export function Group() {
   const nav = useNavigate();
   const session = auth.useSession();
   const isOwner = trip.createdBy === session.data?.user.id;
-  const [confirm, setConfirm] = useState<"leave" | "delete" | Member | null>(null);
+  const isGuest = useIsGuest();
+  type Action = { kind: "leave" } | { kind: "delete" } | { kind: "code" } | { kind: "remove"; member: Member } | { kind: "unlink"; member: Member };
+  const [confirm, setConfirm] = useState<Action | null>(null);
   // se puede quitar a alguien sin gastos ni pagos (para no romper las cuentas)
   const hasMovements = (id: string) =>
     data.expenses.some((e) => e.paidBy === id || e.shares.some((x) => x.memberId === id)) ||
     data.settlements.some((st) => st.transfers.some((x) => x.fromMember === id || x.toMember === id));
   const act = useMutation({
-    mutationFn: (what: "leave" | "delete" | Member) =>
-      what === "leave"
+    mutationFn: (a: Action) =>
+      a.kind === "leave"
         ? api(`/trips/${trip.id}/leave`, { method: "POST" })
-        : what === "delete"
+        : a.kind === "delete"
           ? api(`/trips/${trip.id}`, { method: "DELETE" })
-          : api(`/trips/${trip.id}/members/${what.id}`, { method: "DELETE" }),
-    onSuccess: (_, what) => {
+          : a.kind === "code"
+            ? api(`/trips/${trip.id}/code`, { method: "POST" })
+            : a.kind === "unlink"
+              ? api(`/trips/${trip.id}/members/${a.member.id}/unlink`, { method: "POST" })
+              : api(`/trips/${trip.id}/members/${a.member.id}`, { method: "DELETE" }),
+    onSuccess: (_, a) => {
       setConfirm(null);
-      if (typeof what === "object") return refresh();
+      if (a.kind !== "leave" && a.kind !== "delete") return refresh();
       qc.invalidateQueries({ queryKey: ["trips"] });
       nav("/", { replace: true });
     },
+  });
+  const ask = (a: Action) => (act.reset(), setConfirm(a));
+  const copy = confirm && {
+    leave: { title: t.leaveTrip, body: t.leaveTripBody, ok: t.leave },
+    delete: { title: t.deleteTrip, body: t.deleteTripBody, ok: t.delete },
+    code: { title: t.newCode, body: t.newCodeBody, ok: t.newCodeConfirm },
+    remove: { title: t.removeMember, body: t.removeMemberBody, ok: t.remove },
+    unlink: { title: t.unlinkMember, body: t.unlinkMemberBody, ok: t.unlink },
+  }[confirm.kind];
+  const decide = useMutation({
+    mutationFn: ({ id, ok }: { id: string; ok: boolean }) => api(`/trips/${trip.id}/requests/${id}/${ok ? "approve" : "reject"}`, { method: "POST" }),
+    onSuccess: refresh,
   });
   const [newName, setNewName] = useState("");
   const [tripName, setTripName] = useState(trip.name);
@@ -58,7 +76,41 @@ export function Group() {
       <section className="rounded-3xl bg-surface p-5 text-center">
         <h2 className="mb-4 font-semibold">{t.inviteCode}</h2>
         <ShareCode code={trip.inviteCode} tripName={trip.name} />
+        {isOwner && (
+          <button type="button" onClick={() => ask({ kind: "code" })} className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink">
+            <ArrowsClockwise size={16} /> {t.newCode}
+          </button>
+        )}
       </section>
+
+      {data.requests.length > 0 && (
+        <section className="rounded-3xl bg-accent-soft p-5">
+          <h2 className="font-semibold text-accent-ink">{t.joinRequests}</h2>
+          <p className="mb-3 text-sm text-accent-ink/80">{t.joinRequestsHelp}</p>
+          <ul className="flex flex-col gap-2">
+            <AnimatePresence initial={false}>
+              {data.requests.map((r) => (
+                <motion.li key={r.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: 40 }} className="flex items-center gap-3 rounded-2xl bg-surface p-2 pr-2">
+                  <Avatar name={r.name} color={members.length} />
+                  <span className="min-w-0 flex-1 truncate font-medium">{r.name}</span>
+                  <button
+                    type="button"
+                    disabled={decide.isPending}
+                    onClick={() => decide.mutate({ id: r.id, ok: false })}
+                    className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-transform active:scale-90 disabled:opacity-50"
+                    aria-label={`${t.reject} ${r.name}`}
+                  >
+                    <X size={16} weight="bold" />
+                  </button>
+                  <Button className="h-10 shrink-0 !px-4 text-sm" loading={decide.isPending && decide.variables?.id === r.id && decide.variables.ok} onClick={() => decide.mutate({ id: r.id, ok: true })}>
+                    {t.approve}
+                  </Button>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+        </section>
+      )}
 
       <section>
         <h2 className="text-xl font-semibold">
@@ -72,7 +124,8 @@ export function Group() {
               m={m}
               isMe={m.id === meId}
               tripId={trip.id}
-              onRemove={m.id !== meId && !hasMovements(m.id) && (!m.userId || isOwner) ? () => (act.reset(), setConfirm(m)) : undefined}
+              onRemove={m.id !== meId && !hasMovements(m.id) && (!m.userId || isOwner) ? () => ask({ kind: "remove", member: m }) : undefined}
+              onUnlink={isOwner && m.id !== meId && m.userId ? () => ask({ kind: "unlink", member: m }) : undefined}
             />
           ))}
         </ul>
@@ -133,27 +186,33 @@ export function Group() {
         </div>
       </section>
 
-      <Button variant="danger" onClick={() => (act.reset(), setConfirm(isOwner ? "delete" : "leave"))}>
+      <Button variant="danger" onClick={() => ask({ kind: isOwner ? "delete" : "leave" })}>
         {isOwner ? <Trash size={20} /> : <DoorOpen size={20} />} {isOwner ? t.deleteTrip : t.leaveTrip}
       </Button>
       <ConfirmSheet
         open={!!confirm}
         onClose={() => setConfirm(null)}
-        title={confirm === "delete" ? t.deleteTrip : confirm === "leave" ? t.leaveTrip : t.removeMember}
-        body={confirm === "delete" ? t.deleteTripBody : confirm === "leave" ? t.leaveTripBody : t.removeMemberBody.replace("{name}", (confirm as Member | null)?.name ?? "")}
-        confirmLabel={confirm === "delete" ? t.delete : confirm === "leave" ? t.leave : t.remove}
+        title={copy?.title ?? ""}
+        body={(copy?.body ?? "").replace("{name}", confirm && "member" in confirm ? confirm.member.name : "")}
+        confirmLabel={copy?.ok ?? ""}
         loading={act.isPending}
         error={act.isError ? t.genericError : undefined}
         onConfirm={() => confirm && act.mutate(confirm)}
       />
-      <Button variant="ghost" onClick={() => auth.signOut().then(() => location.assign("/app/login"))}>
-        <SignOut size={20} /> {t.logout}
-      </Button>
+      {isGuest ? (
+        <Button variant="soft" onClick={() => nav("/login?save=1")}>
+          <FloppyDisk size={20} /> {t.saveAccess}
+        </Button>
+      ) : (
+        <Button variant="ghost" onClick={() => auth.signOut().then(() => location.assign("/app/login"))}>
+          <SignOut size={20} /> {t.logout}
+        </Button>
+      )}
     </div>
   );
 }
 
-function MemberRow({ m, isMe, tripId, onRemove }: { m: Member; isMe: boolean; tripId: string; onRemove?: () => void }) {
+function MemberRow({ m, isMe, tripId, onRemove, onUnlink }: { m: Member; isMe: boolean; tripId: string; onRemove?: () => void; onUnlink?: () => void }) {
   const t = useT();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
@@ -192,6 +251,11 @@ function MemberRow({ m, isMe, tripId, onRemove }: { m: Member; isMe: boolean; tr
               ))}
           </p>
         </div>
+        {onUnlink && (
+          <button onClick={onUnlink} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.unlink} ${m.name}`}>
+            <LinkBreak size={18} />
+          </button>
+        )}
         {onRemove && (
           <button onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.remove} ${m.name}`}>
             <Trash size={18} />

@@ -1,7 +1,7 @@
 import { Hono, type Context } from "hono";
 import { secureHeaders } from "hono/secure-headers";
 import { drizzle } from "drizzle-orm/d1";
-import { and, asc, eq, inArray, isNotNull, isNull, ne } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNotNull, isNull, lt, ne, sql } from "drizzle-orm";
 import type { BatchItem } from "drizzle-orm/batch";
 import { z } from "zod";
 import { getAuth } from "./auth";
@@ -10,7 +10,7 @@ import { CATEGORIES, COUNTRY_CURRENCY, CURRENCIES, MEMBER_COLORS } from "../shar
 import { computeBalances, convertCents, minTransfers, splitEqual } from "../shared/settle";
 import { BRAND } from "../shared/brand";
 
-type AppEnv = { Bindings: Env; Variables: { userId: string; userName: string } };
+type AppEnv = { Bindings: Env; Variables: { userId: string; userName: string; isGuest: boolean } };
 const app = new Hono<AppEnv>();
 const db = (c: Context<AppEnv>) => drizzle(c.env.DB, { schema: s });
 const now = () => Date.now();
@@ -38,19 +38,48 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => getAuth(c.env).handler(c.req.raw))
 // country: país del visitante según Cloudflare, para sugerir su moneda
 app.get("/api/config", (c) => c.json({ google: !!c.env.GOOGLE_CLIENT_ID, country: (c.req.raw.cf?.country as string | undefined) ?? null }));
 
-// Todo lo demás bajo /api requiere sesión
+// IP real del visitante (en producción la pone Cloudflare y no se puede falsificar)
+const clientIp = (c: Context<AppEnv>) => c.req.header("cf-connecting-ip") ?? "local";
+
+// --- unirse con código: la vista previa es pública (se puede entrar sin cuenta), con límite por IP contra adivinar códigos ---
+const findByCode = async (c: Context<AppEnv>) => {
+  const trip = await db(c).query.trips.findFirst({ where: eq(s.trips.inviteCode, c.req.param("code")!.toUpperCase()) });
+  if (!trip) throw new HttpError(404, "invalid_code");
+  return trip;
+};
+
+app.get("/api/join/:code", async (c) => {
+  if (!(await c.env.JOIN_LIMITER.limit({ key: clientIp(c) })).success) return c.json({ error: "too_many_requests" }, 429);
+  const trip = await findByCode(c);
+  const session = await getAuth(c.env).api.getSession({ headers: c.req.raw.headers });
+  const d = db(c);
+  const members = await d.query.members.findMany({ where: eq(s.members.tripId, trip.id), orderBy: asc(s.members.createdAt) });
+  const request = session
+    ? await d.query.joinRequests.findFirst({ where: and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.userId, session.user.id)), orderBy: desc(s.joinRequests.createdAt) })
+    : undefined;
+  return c.json({
+    trip: { id: trip.id, name: trip.name, countryCode: trip.countryCode, city: trip.city, status: trip.status },
+    members: (await withImages(c, members)).map((m) => ({ id: m.id, name: m.name, color: m.color, image: m.image, claimed: m.userId !== null })),
+    alreadyMember: !!session && members.some((m) => m.userId === session.user.id),
+    request: request ? { status: request.status, name: request.name } : null,
+  });
+});
+
+// Todo lo demás bajo /api requiere sesión (cuenta normal o invitada)
 app.use("/api/*", async (c, next) => {
   const session = await getAuth(c.env).api.getSession({ headers: c.req.raw.headers });
   if (!session) return c.json({ error: "unauthorized" }, 401);
   c.set("userId", session.user.id);
   c.set("userName", session.user.name);
+  c.set("isGuest", !!(session.user as { isAnonymous?: boolean | null }).isAnonymous);
   await next();
 });
 
-// límites por usuario: unirse con código (contra adivinar códigos) y cualquier escritura (contra spam)
+// límites: unirse con código por IP (contra adivinar códigos) y cualquier escritura por usuario (contra spam)
 app.use("/api/*", async (c, next) => {
-  const limiter = c.req.path.startsWith("/api/join/") ? c.env.JOIN_LIMITER : c.req.method !== "GET" ? c.env.WRITE_LIMITER : null;
-  if (limiter && !(await limiter.limit({ key: c.get("userId") })).success) return c.json({ error: "too_many_requests" }, 429);
+  const join = c.req.path.startsWith("/api/join/");
+  const limiter = join ? c.env.JOIN_LIMITER : c.req.method !== "GET" ? c.env.WRITE_LIMITER : null;
+  if (limiter && !(await limiter.limit({ key: join ? clientIp(c) : c.get("userId") })).success) return c.json({ error: "too_many_requests" }, 429);
   await next();
 });
 
@@ -129,9 +158,14 @@ app.get("/api/trips/:id", async (c) => {
   const transfers = settlements.length
     ? await d.select().from(s.transfers).where(inArray(s.transfers.settlementId, settlements.map((x) => x.id)))
     : [];
+  const requests =
+    trip.createdBy === c.get("userId")
+      ? await d.query.joinRequests.findMany({ where: and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.status, "pending")), orderBy: asc(s.joinRequests.createdAt) })
+      : [];
   return c.json({
     trip,
     meId: me.id,
+    requests: requests.map((r) => ({ id: r.id, name: r.name, createdAt: r.createdAt })),
     members: await withImages(c, members),
     expenses: expenses.map((e) => ({ ...e, shares: shares.filter((x) => x.expenseId === e.id) })),
     settlements: settlements.map((x) => ({ ...x, transfers: transfers.filter((t) => t.settlementId === x.id) })),
@@ -156,6 +190,7 @@ function deleteTripStatements(c: Context<AppEnv>, tripId: string) {
     d.delete(s.expenses).where(eq(s.expenses.tripId, tripId)),
     d.delete(s.settlements).where(eq(s.settlements.tripId, tripId)),
     d.delete(s.members).where(eq(s.members.tripId, tripId)),
+    d.delete(s.joinRequests).where(eq(s.joinRequests.tripId, tripId)),
     d.delete(s.trips).where(eq(s.trips.id, tripId)),
   ] as const;
 }
@@ -220,46 +255,102 @@ app.delete("/api/trips/:id/members/:mid", async (c) => {
 });
 
 // --- unirse con código ---
-const findByCode = async (c: Context<AppEnv>) => {
-  const trip = await db(c).query.trips.findFirst({ where: eq(s.trips.inviteCode, c.req.param("code")!.toUpperCase()) });
-  if (!trip) throw new HttpError(404, "invalid_code");
-  return trip;
-};
-
-app.get("/api/join/:code", async (c) => {
-  const trip = await findByCode(c);
-  const members = await db(c).query.members.findMany({ where: eq(s.members.tripId, trip.id), orderBy: asc(s.members.createdAt) });
-  return c.json({
-    trip: { id: trip.id, name: trip.name, countryCode: trip.countryCode, city: trip.city, status: trip.status },
-    members: (await withImages(c, members)).map((m) => ({ id: m.id, name: m.name, color: m.color, image: m.image, claimed: m.userId !== null })),
-    alreadyMember: members.some((m) => m.userId === c.get("userId")),
-  });
-});
+const MAX_PENDING = 20;
+/** El invitado toma el primer nombre que elige (mientras sigue como "Invitado"); después su cuenta no cambia de nombre. */
+const nameGuest = (c: Context<AppEnv>, name: string) =>
+  db(c).update(s.user).set({ name }).where(and(eq(s.user.id, c.get("userId")), eq(s.user.name, "Invitado")));
 
 app.post("/api/join/:code", async (c) => {
   const trip = await findByCode(c);
   const body = z.object({ memberId: z.string().optional(), name: z.string().trim().min(1).max(30).optional() }).parse(await c.req.json());
   const d = db(c);
+  const userId = c.get("userId");
   const members = await d.query.members.findMany({ where: eq(s.members.tripId, trip.id) });
-  if (members.some((m) => m.userId === c.get("userId"))) return c.json({ id: trip.id });
+  if (members.some((m) => m.userId === userId)) return c.json({ id: trip.id, status: "member" });
+
   if (body.memberId) {
+    // "Soy Camila": vincula ese nombre; si es invitado, la cuenta toma el nombre elegido
+    const m = members.find((x) => x.id === body.memberId);
     const res = await d
       .update(s.members)
-      .set({ userId: c.get("userId") })
+      .set({ userId })
       .where(and(eq(s.members.id, body.memberId), eq(s.members.tripId, trip.id), isNull(s.members.userId)));
-    if (!res.meta.changes) throw new HttpError(409, "member_taken");
-  } else {
-    if (members.length >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
-    await d.insert(s.members).values({
-      id: uid(),
-      tripId: trip.id,
-      name: body.name ?? c.get("userName"),
-      userId: c.get("userId"),
-      color: members.length % MEMBER_COLORS,
-      createdAt: now(),
-    });
+    if (!res.meta.changes || !m) throw new HttpError(409, "member_taken");
+    if (c.get("isGuest")) await nameGuest(c, m.name);
+    return c.json({ id: trip.id, status: "member" });
   }
-  return c.json({ id: trip.id });
+
+  // nombre nuevo: queda pendiente hasta que lo apruebe quien creó el viaje
+  const name = body.name ?? c.get("userName");
+  if (trip.status !== "active") throw new HttpError(409, "trip_closed");
+  const pending = await d.query.joinRequests.findMany({ where: and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.status, "pending")) });
+  if (pending.some((r) => r.userId === userId)) return c.json({ id: trip.id, status: "pending" });
+  if (pending.length >= MAX_PENDING || members.length >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
+  await d.insert(s.joinRequests).values({ id: uid(), tripId: trip.id, userId, name, createdAt: now() });
+  if (c.get("isGuest")) await nameGuest(c, name);
+  return c.json({ id: trip.id, status: "pending" });
+});
+
+// mis pedidos para unirme (pendientes o rechazados) para mostrarlos en "Mis viajes"
+app.get("/api/join-requests", async (c) => {
+  const d = db(c);
+  const rows = await d
+    .select({ id: s.joinRequests.id, status: s.joinRequests.status, name: s.joinRequests.name, tripName: s.trips.name, countryCode: s.trips.countryCode, code: s.trips.inviteCode })
+    .from(s.joinRequests)
+    .innerJoin(s.trips, eq(s.trips.id, s.joinRequests.tripId))
+    .where(and(eq(s.joinRequests.userId, c.get("userId")), ne(s.joinRequests.status, "approved")))
+    .orderBy(desc(s.joinRequests.createdAt));
+  return c.json(rows);
+});
+
+// quien creó el viaje aprueba o rechaza
+async function ownerRequest(c: Context<AppEnv>) {
+  const { trip } = await requireMember(c, c.req.param("id")!);
+  if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
+  const r = await db(c).query.joinRequests.findFirst({ where: and(eq(s.joinRequests.id, c.req.param("rid")!), eq(s.joinRequests.tripId, trip.id)) });
+  if (!r || r.status !== "pending") throw new HttpError(404, "request_not_found");
+  return { trip, r };
+}
+
+app.post("/api/trips/:id/requests/:rid/approve", async (c) => {
+  const { trip, r } = await ownerRequest(c);
+  const d = db(c);
+  const members = await d.query.members.findMany({ where: eq(s.members.tripId, trip.id) });
+  if (members.length >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
+  const already = members.some((m) => m.userId === r.userId);
+  await d.batch([
+    d.update(s.joinRequests).set({ status: "approved" }).where(eq(s.joinRequests.id, r.id)),
+    ...(already ? [] : [d.insert(s.members).values({ id: uid(), tripId: trip.id, name: r.name, userId: r.userId, color: members.length % MEMBER_COLORS, createdAt: now() })]),
+  ] as [BatchItem<"sqlite">, ...BatchItem<"sqlite">[]]);
+  return c.json({ ok: true });
+});
+
+app.post("/api/trips/:id/requests/:rid/reject", async (c) => {
+  const { r } = await ownerRequest(c);
+  await db(c).update(s.joinRequests).set({ status: "rejected" }).where(eq(s.joinRequests.id, r.id));
+  return c.json({ ok: true });
+});
+
+// código nuevo: el anterior deja de funcionar (por si se filtró)
+app.post("/api/trips/:id/code", async (c) => {
+  const { trip } = await requireMember(c, c.req.param("id"));
+  if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
+  const inviteCode = newCode();
+  await db(c).update(s.trips).set({ inviteCode }).where(eq(s.trips.id, trip.id));
+  return c.json({ inviteCode });
+});
+
+// desvincular: el nombre queda en el viaje sin cuenta (ej. un invitado perdió el acceso y vuelve a entrar con el código)
+app.post("/api/trips/:id/members/:mid/unlink", async (c) => {
+  const { trip, me } = await requireMember(c, c.req.param("id"));
+  if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
+  if (c.req.param("mid") === me.id) throw new HttpError(409, "use_leave");
+  const res = await db(c)
+    .update(s.members)
+    .set({ userId: null, alias: null })
+    .where(and(eq(s.members.id, c.req.param("mid")), eq(s.members.tripId, trip.id)));
+  if (!res.meta.changes) throw new HttpError(404, "member_not_found");
+  return c.json({ ok: true });
 });
 
 // --- gastos ---
@@ -416,6 +507,7 @@ app.delete("/api/account", async (c) => {
   }
   stmts.push(
     d.update(s.members).set({ userId: null, alias: null }).where(eq(s.members.userId, userId)),
+    d.delete(s.joinRequests).where(eq(s.joinRequests.userId, userId)),
     d.delete(s.session).where(eq(s.session.userId, userId)),
     d.delete(s.account).where(eq(s.account.userId, userId)),
     d
@@ -490,4 +582,25 @@ app.get("/app/*", async (c) => {
 });
 app.get("/app", (c) => c.env.ASSETS.fetch(new URL("/app/", c.req.url)));
 
-export default app;
+/** Borra invitados de más de 30 días sin viajes, pedidos ni gastos a su nombre (sesiones caen en cascada). */
+export async function cleanupGuests(env: Env) {
+  const cutoff = new Date(Date.now() - 30 * 86_400_000).toISOString();
+  const d = drizzle(env.DB, { schema: s });
+  const res = await d.delete(s.user).where(
+    and(
+      eq(s.user.isAnonymous, 1),
+      lt(s.user.createdAt, cutoff),
+      sql`${s.user.id} NOT IN (SELECT user_id FROM members WHERE user_id IS NOT NULL)`,
+      sql`${s.user.id} NOT IN (SELECT user_id FROM join_requests WHERE status = 'pending')`,
+      sql`${s.user.id} NOT IN (SELECT created_by FROM trips)`,
+      sql`${s.user.id} NOT IN (SELECT created_by FROM expenses UNION SELECT updated_by FROM expenses WHERE updated_by IS NOT NULL)`,
+      sql`${s.user.id} NOT IN (SELECT created_by FROM settlements)`,
+    ),
+  );
+  return res.meta.changes;
+}
+
+export default {
+  fetch: app.fetch,
+  scheduled: async (_: ScheduledController, env: Env) => void (await cleanupGuests(env)),
+} satisfies ExportedHandler<Env>;

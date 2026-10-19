@@ -27,5 +27,7 @@
   "vars": {
     "BETTER_AUTH_URL": "http://localhost:5173"
   },
+  // limpieza diaria de invitados viejos sin uso (worker/index.ts: cleanupGuests)
+  "triggers": { "crons": ["0 4 * * *"] },
   "observability": { "enabled": true }
 }

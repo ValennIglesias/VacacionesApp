@@ -10,6 +10,7 @@ import { computeBalances } from "../../shared/settle";
 import { CategoryIcon, CATEGORY_META, Empty } from "../components/ui";
 import { crossRate, useRates, type TripData } from "../lib/api";
 import { AdSlot } from "../components/AdSlot";
+import { TripEnded } from "../components/TripEnded";
 
 export const pendingBalances = (data: TripData) =>
   computeBalances(
@@ -18,7 +19,8 @@ export const pendingBalances = (data: TripData) =>
   );
 
 export const dayNumber = (data: TripData, date: string) => {
-  const start = data.trip.startDate ?? data.expenses[0]?.date ?? date;
+  // día 1 = inicio del viaje o primer gasto, el que sea anterior (nunca días negativos)
+  const start = [data.trip.startDate, data.expenses[0]?.date, date].filter((x): x is string => !!x).sort()[0];
   return Math.round((Date.parse(date) - Date.parse(start)) / 86_400_000) + 1;
 };
 
@@ -46,6 +48,7 @@ export function Expenses() {
 
   return (
     <div className="flex flex-col gap-5 pt-2">
+      {trip.status === "closed" && <TripEnded tripId={trip.id} />}
       {/* resumen */}
       <section className="relative overflow-hidden rounded-3xl bg-accent p-5 text-white">
         <div className="pointer-events-none absolute -right-10 -top-16 size-48 rounded-full bg-white/10" />

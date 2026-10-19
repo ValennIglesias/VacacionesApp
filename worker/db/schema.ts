@@ -9,6 +9,8 @@ export const user = sqliteTable("user", {
   image: text("image"),
   createdAt: text("createdAt").notNull(),
   updatedAt: text("updatedAt").notNull(),
+  // cuenta invitada (se unió con código sin registrarse); plugin anonymous de better-auth
+  isAnonymous: integer("isAnonymous").default(0),
 });
 
 export const session = sqliteTable("session", {
@@ -153,3 +155,17 @@ export const rates = sqliteTable("rates", {
   day: text("day").notNull(),
   json: text("json").notNull(),
 });
+
+// pedidos para unirse con un nombre que no está en la lista: los aprueba quien creó el viaje
+export const joinRequests = sqliteTable(
+  "join_requests",
+  {
+    id: text("id").primaryKey(),
+    tripId: text("trip_id").notNull().references(() => trips.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    status: text("status", { enum: ["pending", "approved", "rejected"] }).notNull().default("pending"),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [index("join_requests_trip").on(t.tripId), index("join_requests_user").on(t.userId)],
+);

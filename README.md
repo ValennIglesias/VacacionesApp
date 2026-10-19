@@ -115,5 +115,8 @@ Completar la pantalla de consentimiento (nombre, logo, link a `/privacy/`) y pub
 ## Seguridad
 
 - Login, registro y recuperar contraseña tienen límite de intentos por IP (better-auth, guardado en D1).
-- Unirse con código y cualquier escritura de la API tienen límite por usuario (Workers Rate Limiting).
+- Unirse con código (vista previa y pedido) tiene límite por IP, y cualquier escritura de la API límite por usuario (Workers Rate Limiting). Crear cuentas invitadas también tiene límite por IP.
+- Invitados: con el código se puede entrar sin registrarse eligiendo un nombre de la lista (cuenta invitada, plugin `anonymous` de better-auth). Un nombre nuevo queda como pedido hasta que lo apruebe quien creó el viaje. Si el invitado después crea su cuenta, todo lo suyo pasa a ella.
+- Quien creó el viaje puede generar un código nuevo (el anterior deja de funcionar) y desvincular integrantes que perdieron el acceso.
+- Un cron diario (`triggers.crons` en `wrangler.jsonc`) borra invitados de más de 30 días sin viajes, pedidos pendientes ni gastos.
 - Headers de seguridad en `public/_headers` (páginas) y `hono/secure-headers` (API).

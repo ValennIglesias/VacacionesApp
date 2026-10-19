@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { createAuthClient } from "better-auth/react";
+import { anonymousClient } from "better-auth/client/plugins";
 import type { Category } from "../../shared/data";
 
-export const auth = createAuthClient({ baseURL: location.origin });
+export const auth = createAuthClient({ baseURL: location.origin, plugins: [anonymousClient()] });
+
+/** Sesión de invitado (entró con código sin registrarse). */
+export const useIsGuest = () => !!(auth.useSession().data?.user as { isAnonymous?: boolean | null } | undefined)?.isAnonymous;
 
 export type Trip = {
   id: string;
@@ -41,7 +45,8 @@ export type TransferRow = {
   status: "pending" | "paid" | "confirmed";
 };
 export type Settlement = { id: string; kind: "partial" | "final"; currency: string; rate: number; createdAt: number; transfers: TransferRow[] };
-export type TripData = { trip: Trip; meId: string; members: Member[]; expenses: Expense[]; settlements: Settlement[] };
+export type JoinRequest = { id: string; name: string; createdAt: number };
+export type TripData = { trip: Trip; meId: string; requests: JoinRequest[]; members: Member[]; expenses: Expense[]; settlements: Settlement[] };
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string) {

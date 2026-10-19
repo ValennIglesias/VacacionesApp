@@ -2,8 +2,8 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut } from "@phosphor-icons/react";
-import { api, auth, type Trip } from "../lib/api";
+import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk } from "@phosphor-icons/react";
+import { api, auth, useIsGuest, type Trip } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName } from "../lib/format";
 import { ThemeToggle } from "../components/ThemeToggle";
@@ -16,6 +16,11 @@ export function Home() {
   const locale = useLocale();
   const session = auth.useSession();
   const trips = useQuery({ queryKey: ["trips"], queryFn: () => api<Trip[]>("/trips") });
+  const isGuest = useIsGuest();
+  const requests = useQuery({
+    queryKey: ["join-requests"],
+    queryFn: () => api<{ id: string; status: "pending" | "rejected"; tripName: string; countryCode: string; code: string }[]>("/join-requests"),
+  });
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteAccount = useMutation({
     mutationFn: () => api("/account", { method: "DELETE" }),
@@ -31,13 +36,14 @@ export function Home() {
         </div>
         <div className="flex items-center gap-1">
         <ThemeToggle />
-        <button
+        {/* un invitado que cierra sesión pierde el acceso: para él está "Guardar mi acceso" */}
+        {!isGuest && <button
           onClick={() => auth.signOut().then(() => location.assign("/app/login"))}
           className="inline-flex size-11 items-center justify-center rounded-full text-muted active:scale-95"
           aria-label={t.logout}
         >
           <SignOut size={22} />
-        </button>
+        </button>}
         </div>
       </header>
 
@@ -51,6 +57,32 @@ export function Home() {
           <span className="font-medium">{t.joinTrip}</span>
         </Link>
       </div>
+
+      {isGuest && (
+        <Link to="/login?save=1" className="mt-6 flex items-center gap-3 rounded-3xl bg-accent-soft p-4 text-accent-ink transition-transform active:scale-[0.98]">
+          <FloppyDisk size={28} weight="duotone" className="shrink-0" />
+          <span className="flex-1">
+            <span className="block font-semibold">{t.guestBannerTitle}</span>
+            <span className="block text-sm opacity-80">{t.guestBannerBody}</span>
+          </span>
+          <CaretRight size={18} />
+        </Link>
+      )}
+
+      {!!requests.data?.length && (
+        <section className="mt-8 flex flex-col gap-2">
+          <h2 className="px-1 text-sm font-medium text-muted">{t.myRequests}</h2>
+          {requests.data.map((r) => (
+            <Link key={r.id} to={`/join/${r.code}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4">
+              <Flag cc={r.countryCode} size={36} />
+              <span className="min-w-0 flex-1 truncate font-medium">{r.tripName}</span>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${r.status === "pending" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-neg"}`}>
+                {r.status === "pending" ? t.requestPendingShort : t.requestRejectedShort}
+              </span>
+            </Link>
+          ))}
+        </section>
+      )}
 
       <section className="mt-8 flex flex-col gap-3">
         {trips.isPending && [0, 1].map((i) => <Skeleton key={i} className="h-20" />)}

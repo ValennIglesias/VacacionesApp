@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { ArrowRight, CalendarCheck, FlagCheckered, CaretRight, CheckCircle } from "@phosphor-icons/react";
+import { ArrowRight, CalendarCheck, FlagCheckered, CaretRight, CheckCircle, Warning } from "@phosphor-icons/react";
 import { useTripCtx } from "./TripLayout";
 import { pendingBalances } from "./Expenses";
 import { api, arsCrossRate, crossRate, useArsRates, useRates, type ArsType } from "../lib/api";
@@ -140,6 +140,8 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
   const autoRate = crossRate(rates.data, trip.currency, currency);
   const rate = currency === trip.currency ? 1 : Number(manualRate.replace(",", ".")) || autoRate;
   const name = (id: string) => members.find((m) => m.id === id)!;
+  // al finalizar: pagos de repartidas anteriores que todavía no se saldaron (no bloquea: se pueden marcar con el viaje cerrado)
+  const unsettled = kind === "final" ? data.settlements.flatMap((st) => st.transfers.filter((x) => x.status !== "confirmed").map((x) => ({ ...x, currency: st.currency }))) : [];
   const pendingTotal = data.expenses.filter((e) => !e.settlementId).reduce((a, e) => a + e.amountTripCents, 0);
   const preview = rate ? minTransfers(balances).map((x) => ({ ...x, amount: convertCents(x.cents, rate, currency) })).filter((x) => x.amount > 0) : [];
 
@@ -155,6 +157,26 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
   return (
     <div className="flex flex-col gap-5">
       <p className="text-sm text-muted">{kind === "final" ? t.settleFinalBody : t.settlePartialBody}</p>
+      {unsettled.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} role="alert" className="rounded-2xl border border-[color-mix(in_srgb,var(--neg)_35%,transparent)] bg-[color-mix(in_srgb,var(--neg)_10%,transparent)] p-4">
+          <p className="flex items-center gap-2 font-semibold text-neg">
+            <Warning size={20} weight="duotone" /> {unsettled.length === 1 ? t.unsettledTitleOne : t.unsettledTitle.replace("{n}", String(unsettled.length))}
+          </p>
+          <ul className="mt-2 flex flex-col gap-1.5 text-sm">
+            {unsettled.map((x) => (
+              <li key={x.id} className="flex items-center justify-between gap-2">
+                <span className="min-w-0 truncate">
+                  {name(x.fromMember).name} → {name(x.toMember).name}
+                </span>
+                <span className="shrink-0 text-muted">
+                  <span className="tabular">{money(x.amountCents, x.currency, locale)}</span> · {x.status === "paid" ? t.unsettledNotConfirmed : t.unsettledNotPaid}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs text-muted">{t.unsettledHelp}</p>
+        </motion.div>
+      )}
       <div className="flex flex-col gap-2">
         <label htmlFor="pay-cur" className="text-sm font-medium text-muted">
           {t.payIn}

@@ -31,12 +31,13 @@ const router = createBrowserRouter(
   [
     { path: "/login", element: <Login /> },
     { path: "/reset", element: <ResetPassword /> },
+    // se puede entrar con código sin cuenta: la pantalla crea un invitado al elegir un nombre
+    { path: "/join/:code?", element: <Join /> },
     {
       element: <RequireAuth />,
       children: [
         { path: "/", element: <Home /> },
         { path: "/new", element: <NewTrip /> },
-        { path: "/join/:code?", element: <Join /> },
         {
           path: "/t/:tripId",
           element: <TripLayout />,

@@ -38,7 +38,7 @@ export function TripLayout() {
     { to: base, label: t.tabExpenses, icon: Receipt, end: true },
     { to: `${base}/balances`, label: t.tabBalances, icon: Scales },
     { to: `${base}/summary`, label: t.tabSummary, icon: ChartPieSlice },
-    { to: `${base}/group`, label: t.tabGroup, icon: UsersThree },
+    { to: `${base}/group`, label: t.tabGroup, icon: UsersThree, badge: q.data.requests.length },
   ];
   const showFab = trip.status === "active" && (loc.pathname.endsWith(trip.id) || loc.pathname.endsWith("/balances"));
 
@@ -88,12 +88,23 @@ export function TripLayout() {
 
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
         <div className="mx-auto grid max-w-lg grid-cols-4">
-          {tabs.map(({ to, label, icon: I, end }) => (
+          {tabs.map(({ to, label, icon: I, end, badge }) => (
             <NavLink key={to} to={to} end={end} className="relative flex flex-col items-center gap-1 py-2.5 text-xs font-medium">
               {({ isActive }) => (
                 <>
                   {isActive && <motion.span layoutId="tab-pill" className="absolute top-1.5 h-8 w-14 rounded-full bg-accent-soft" transition={spring} />}
                   <I size={24} weight={isActive ? "fill" : "regular"} className={`relative ${isActive ? "text-accent-ink" : "text-muted"}`} />
+                  {!!badge && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={spring}
+                      className="absolute right-[calc(50%-22px)] top-1 inline-flex min-w-5 items-center justify-center rounded-full bg-neg px-1 text-[11px] font-semibold text-white"
+                      aria-label={`${badge} ${t.joinRequests}`}
+                    >
+                      {badge}
+                    </motion.span>
+                  )}
                   <span className={isActive ? "text-ink" : "text-muted"}>{label}</span>
                 </>
               )}
