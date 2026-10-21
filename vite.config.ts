@@ -32,6 +32,11 @@ Allow: /
 Disallow: /app/
 Disallow: /api/
 
+# el crawler de AdSense necesita ver la app para elegir anuncios acordes (no indexa nada)
+User-agent: Mediapartners-Google
+Allow: /
+Disallow: /api/
+
 Sitemap: ${SITE}/sitemap.xml
 ` });
     this.emitFile({
