@@ -80,6 +80,12 @@ details[open] .chev {
 .prose table {
   @apply w-full overflow-hidden rounded-2xl bg-surface text-left text-[15px];
 }
+.prose .table-wrap {
+  @apply mt-4 overflow-x-auto rounded-2xl;
+}
+.prose .table-wrap table {
+  @apply mt-0;
+}
 .prose th,
 .prose td {
   @apply border-b border-line px-4 py-3;

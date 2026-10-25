@@ -352,7 +352,7 @@ export const GUIDES = [
     title: "Paying abroad: cards, cash and how to avoid hidden fees",
     desc: "How to pay when you travel abroad without losing money to foreign transaction fees, ATM charges and dynamic currency conversion, plus how it affects splitting costs with your group.",
     lead: "The exchange rate you see online is rarely the one you get. Between card fees, ATM charges and bad conversions, a trip can quietly cost several percent more than it should.",
-    related: ["travel-expenses-multiple-currencies", "group-trip-budget", "how-to-split-travel-expenses"],
+    related: ["travel-expenses-multiple-currencies", "group-trip-budget", "esim-vs-local-sim-vs-roaming"],
     body: `
 <h2>Where the money actually goes</h2>
 <p>When you pay in another currency, there are up to three layers of cost on top of the price:</p>
@@ -435,7 +435,7 @@ export const GUIDES = [
     title: "How to plan a group trip budget",
     desc: "A step-by-step way to work out what a group trip costs per person: fixed costs, daily spending, a buffer for surprises, agreeing on a spending level and tracking it during the trip.",
     lead: "A good budget isn't a guess. It separates what you already know from what you need to estimate, and leaves room for the unexpected.",
-    related: ["group-trip-planning-checklist", "how-to-split-travel-expenses", "paying-abroad-cards-cash-fees"],
+    related: ["group-trip-planning-checklist", "group-travel-insurance", "paying-abroad-cards-cash-fees"],
     body: `
 <h2>Why a group needs a budget</h2>
 <p>Traveling alone, a budget is a personal choice. In a group, it's an agreement. If each person imagines a different trip (one pictures hostels and supermarket meals, another a hotel with breakfast and dinners out), problems start on day one. Building the budget together puts those expectations on the table before anyone books.</p>
@@ -528,7 +528,7 @@ export const GUIDES = [
 <li><strong>Book lodging and main transport</strong>. For groups, a whole house or apartment is often cheaper per person than several hotel rooms, and gives you a common space to cook and hang out.</li>
 <li><strong>Decide how you'll split costs</strong>: what everyone shares, what each person pays alone, and which currency you'll use to pay each other back.</li>
 <li><strong>Create the shared expense group</strong> and add everyone, so whoever pays a deposit can log it right away.</li>
-<li><strong>Get travel insurance</strong> if you're leaving the country. Check what it covers, including any adventure activities you're planning.</li>
+<li><strong>Get travel insurance</strong> if you're leaving the country. Check what it covers, including any adventure activities you're planning; see <a href="/en/guides/group-travel-insurance/">group travel insurance: what to check</a>.</li>
 </ul>
 [[fig new-trip | Creating the trip: destination, dates and currency in three steps]]
 <p>When you create a trip in TribuSplit you pick the country (its currency fills in automatically), the dates and the currency you'll settle in. Then you share a six-letter code and everyone joins by picking their name.</p>
@@ -541,6 +541,7 @@ export const GUIDES = [
 <li>Bring some local cash for the first expenses (taxi, tips).</li>
 <li>Share a common packing list so you don't end up with five hair dryers and no charger. First-aid kit, adapters and sunscreen are usually shared.</li>
 <li>Everyone adds their payment details so paying each other back is quick.</li>
+<li>Sort out mobile data: <a href="/en/guides/esim-vs-local-sim-vs-roaming/">eSIM, local SIM or roaming</a>.</li>
 <li>Download offline maps and save bookings on your phone.</li>
 </ul>
 
@@ -720,6 +721,155 @@ export const GUIDES = [
 [[fig join | Joining with the code: everyone picks who they are from the group's list]]
 
 <p><strong>In short:</strong> agree before spending, keep a record everyone can see, ask clearly and kindly, set a deadline and confirm payments. Friendships appreciate the clarity.</p>
+`,
+  },
+
+  {
+    slug: "group-travel-insurance",
+    pair: "seguro-de-viaje-en-grupo",
+    published: "2026-10-25",
+    title: "Group travel insurance: what to check before you buy",
+    desc: "What to look for in travel insurance when you travel as a group: medical limits, pre-existing conditions, activities, cancellation if one person drops out, and whether to buy one policy or individual ones.",
+    lead: "Travel insurance is one of those things nobody wants to use and everyone is glad to have. In a group there's an extra decision: does everyone buy their own, or does one person cover everybody?",
+    related: ["group-trip-planning-checklist", "group-trip-budget", "esim-vs-local-sim-vs-roaming"],
+    body: `
+<h2>Why it matters more than people think</h2>
+<p>Most people assume their health coverage at home goes with them. Often it doesn't, or only partly. In the US, Medicare generally doesn't cover care abroad, and many private plans cover little outside their network. In the UK, the GHIC card gives access to state healthcare in EU countries, but it isn't travel insurance: it doesn't cover private treatment, repatriation or cancellations.</p>
+<p>A private emergency visit, a hospital stay or a medical flight home can cost far more than insuring the whole group. And on a group trip, one person's emergency affects everyone's plans.</p>
+
+<h2>Group policy or individual policies?</h2>
+<p>Both work. The trade-offs:</p>
+<table>
+<thead><tr><th></th><th>One group policy</th><th>Individual policies</th></tr></thead>
+<tbody>
+<tr><td>Price</td><td>Some insurers discount groups or families</td><td>Each person pays for their own profile</td></tr>
+<tr><td>Minimum size</td><td>Some insurers require a minimum number of travelers</td><td>None</td></tr>
+<tr><td>Fit</td><td>Same cover for everyone</td><td>Each picks cover for their age, health and activities</td></tr>
+<tr><td>Admin</td><td>One purchase, one contact</td><td>Everyone handles their own</td></tr>
+<tr><td>Splitting the cost</td><td>One person pays and it's shared</td><td>Nothing to split</td></tr>
+</tbody>
+</table>
+<p>A common middle ground: one policy for the people who want the same basic cover, and individual upgrades for anyone with specific needs (a pre-existing condition, diving, skiing).</p>
+
+<h2>What to check in any policy</h2>
+<ul>
+<li><strong>Medical limit</strong>: the maximum paid per person and per incident. Is it enough for a hospital stay at your destination?</li>
+<li><strong>Emergency evacuation and repatriation</strong>: often the most expensive item, and the one people forget to check.</li>
+<li><strong>Direct billing or reimbursement</strong>: does the insurer pay the hospital, or do you pay first and claim later?</li>
+<li><strong>Pre-existing conditions</strong>: excluded, covered with a declaration, or covered for an extra premium?</li>
+<li><strong>Activities</strong>: hiking above a certain altitude, scuba, surfing, skiing and riding scooters are common exclusions.</li>
+<li><strong>Trip cancellation and interruption</strong>: what counts as a covered reason, and how much of the prepaid trip is refunded.</li>
+<li><strong>Baggage and delays</strong>: limits per item and in total.</li>
+<li><strong>Deductible (excess)</strong>: what you pay before the insurer pays anything.</li>
+<li><strong>Age limits</strong>: some policies cost more or cover less above certain ages.</li>
+</ul>
+<p>Read the exclusions as carefully as the coverage. That's where two policies that look the same turn out to be different.</p>
+
+<h2>The group-specific question: what if one person cancels?</h2>
+<p>On a group trip, costs are shared. If one person drops out a week before, the rental house still costs the same, now split among fewer people. Check two things:</p>
+<ol>
+<li>Does the policy refund <strong>that person's share</strong> of non-refundable costs if they cancel for a covered reason?</li>
+<li>Does anyone else's cover change if the trip changes because of one person (for example, if everyone has to come home early)?</li>
+</ol>
+<p>Talk about it before booking: who absorbs the cost if someone cancels for a reason the insurance doesn't cover? Agreeing in advance avoids an awkward conversation later. More ideas in <a href="/en/guides/talking-about-money-with-friends/">how to talk about money with friends</a>.</p>
+
+<h2>Splitting the cost of a shared policy</h2>
+<p>If one person buys cover for everyone, log it like any other trip expense, split among the people insured. It's settled with everything else at the end.</p>
+[[fig add-expense | One person pays for the group policy and logs it, split among everyone insured]]
+<p>If some people chose extra cover, split the base policy among everyone and have each person pay their own upgrade.</p>
+
+<h2>Budgeting for it</h2>
+<p>Price depends on trip length, destination, ages and cover, so there's no universal number. Get two or three quotes for the same dates and add the chosen one to the trip's fixed costs per person, just like lodging. See <a href="/en/guides/group-trip-budget/">how to plan a group trip budget</a>.</p>
+
+<h2>Before you leave</h2>
+<ul>
+<li>Save the policy PDF and the emergency number on your phone.</li>
+<li>Share everyone's insurer contact details in the group chat.</li>
+<li>If your credit card includes travel cover, check the limits and conditions; many require the trip to be paid with that card.</li>
+<li>If someone has a medical condition, make sure at least one other person in the group knows.</li>
+</ul>
+
+<h2>FAQ</h2>
+<h3>Is credit card travel insurance enough?</h3>
+<p>Sometimes. Card cover often has lower limits and activation conditions. Compare it against the checklist above.</p>
+<h3>What should I do if I need to use it?</h3>
+<p>Call the insurer's assistance line before going to a clinic, unless it's a serious emergency: many policies only cover care they arrange or approve. Keep every receipt.</p>
+
+<p class="meta">This guide is general information, not insurance or legal advice. Policies, public health coverage abroad and entry requirements change; check the current terms before you travel.</p>
+`,
+  },
+
+  {
+    slug: "esim-vs-local-sim-vs-roaming",
+    pair: null,
+    published: "2026-10-25",
+    title: "eSIM, local SIM or roaming: what's best for a group trip",
+    desc: "How travel eSIMs, local SIM cards and roaming compare on cost, convenience and keeping your number, what your phone needs, and how a group can share and split data costs.",
+    lead: "Staying connected abroad used to mean expensive roaming or hunting for a SIM shop. Now there are three real options, and on a group trip the best choice isn't always the same for everyone.",
+    related: ["paying-abroad-cards-cash-fees", "group-trip-planning-checklist", "group-travel-insurance"],
+    body: `
+<h2>The three options</h2>
+<h3>Roaming</h3>
+<p>Your home plan works abroad, usually for a daily or per-trip fee. No setup at all, and you keep your number for calls and verification texts. It's typically the most expensive per gigabyte, though some plans include roaming in certain regions (for example, many European plans within the EU). Check your plan before assuming either way.</p>
+<h3>Local SIM card</h3>
+<p>A prepaid SIM from a local carrier at your destination. Often the cheapest per gigabyte, especially for longer stays in one country, and it usually comes with a local number. The downsides: you need to find a shop, some countries require ID registration, and if your phone has a single SIM slot, your home number goes offline while it's in use.</p>
+<h3>Travel eSIM</h3>
+<p>A digital SIM you buy and install online, often before you leave, which activates on arrival. Most are data-only. If your phone supports eSIM, you keep your home SIM active alongside it. Usually a middle ground on price: more than a local SIM, much less than most roaming.</p>
+
+<h2>Side-by-side</h2>
+<table>
+<thead><tr><th></th><th>Roaming</th><th>Local SIM</th><th>Travel eSIM</th></tr></thead>
+<tbody>
+<tr><td>Setup</td><td>None</td><td>Find a shop, maybe register ID</td><td>Install via QR or app, minutes</td></tr>
+<tr><td>Typical cost</td><td>Highest</td><td>Lowest per GB</td><td>Middle</td></tr>
+<tr><td>Home number</td><td>Works normally</td><td>Offline if single SIM slot</td><td>Stays active (dual SIM)</td></tr>
+<tr><td>Local number</td><td>No</td><td>Yes</td><td>Usually not (data only)</td></tr>
+<tr><td>Multi-country trips</td><td>Easy</td><td>New SIM per country</td><td>Regional plans available</td></tr>
+<tr><td>Phone requirement</td><td>None</td><td>Unlocked phone</td><td>Unlocked and eSIM-compatible</td></tr>
+</tbody>
+</table>
+
+<h2>What your phone needs</h2>
+<ul>
+<li><strong>Unlocked</strong>: phones bought through a carrier may be locked to it. A locked phone won't accept another SIM or eSIM. Ask your carrier to unlock it before the trip.</li>
+<li><strong>eSIM support</strong>: most recent iPhones and many recent Android phones support eSIM, but not all models or regional versions do. Check your phone's settings or the manufacturer's site.</li>
+<li><strong>Dual SIM</strong>: to keep your home number active while using a travel data plan, your phone needs to support two lines at once.</li>
+</ul>
+
+<h2>Which one to pick</h2>
+<ul>
+<li><strong>Weekend or very short trip</strong>: roaming, if your plan's daily fee is reasonable. Zero hassle.</li>
+<li><strong>One or two weeks, one or two countries</strong>: a travel eSIM is usually the best balance.</li>
+<li><strong>Long stay in one country</strong>: a local SIM tends to be cheapest.</li>
+<li><strong>You need to receive bank verification texts</strong>: keep your home line active (roaming, or eSIM in dual-SIM mode).</li>
+</ul>
+
+<h2>On a group trip: share and split</h2>
+<p>Not everyone in the group needs their own plan. Some approaches that work:</p>
+<ul>
+<li><strong>One big plan, shared hotspot</strong>: one person buys a large local SIM or eSIM plan and shares a hotspot when the group is together. Cheap, but battery-hungry, and it doesn't help when you split up.</li>
+<li><strong>Everyone their own, but the same provider</strong>: easier to help each other set it up, and you know coverage will be the same.</li>
+<li><strong>Mixed</strong>: people with eSIM-compatible phones use eSIMs, others share a hotspot or use roaming.</li>
+</ul>
+<p>If one person pays for shared data, log it as a trip expense split among those who use it. Like any other shared cost, it's settled at the end with everything else.</p>
+[[fig expenses | Shared data plans can be logged like any trip expense and split among the people using them]]
+
+<h2>Setup checklist</h2>
+<ul>
+<li>Confirm your phone is unlocked and supports eSIM before buying.</li>
+<li>Install the eSIM at home over Wi-Fi, but only switch it on when you land.</li>
+<li>Turn off data roaming on your home line if you don't want roaming charges.</li>
+<li>Download offline maps as a backup.</li>
+<li>Save the provider's support contact somewhere you can reach without data.</li>
+</ul>
+
+<h2>FAQ</h2>
+<h3>Can I make calls with a travel eSIM?</h3>
+<p>Most are data-only, but you can use internet-based calling apps. Some providers offer plans with a number.</p>
+<h3>Will I get charged on my home line by accident?</h3>
+<p>It can happen if your home line's data roaming is on. Set your travel line as the data line and turn off roaming on your home line.</p>
+
+<p class="meta">This guide is general information. Phone compatibility, prices and plan terms vary by carrier and change over time.</p>
 `,
   },
 ];

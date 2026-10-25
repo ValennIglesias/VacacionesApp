@@ -106,7 +106,7 @@ export const GUIDES = [
     title: "Cómo manejar gastos en distintas monedas durante un viaje",
     desc: "Qué moneda usar para anotar los gastos, cómo convertir pagos en otra divisa y cómo saldar las deudas del grupo en la moneda de casa, con ejemplos y errores comunes.",
     lead: "Viajar al exterior suma una capa de complejidad: se paga en moneda local, a veces en dólares o euros, y las deudas se saldan en la moneda de casa. Ordenarlo es más simple de lo que parece.",
-    related: ["dolar-tarjeta-mep-blue-viajar", "como-dividir-gastos-de-un-viaje", "minimizar-transferencias"],
+    related: ["dolar-tarjeta-mep-blue-viajar", "pagar-en-brasil-pix-tarjeta-efectivo", "como-dividir-gastos-de-un-viaje"],
     body: `
 <h2>Tres monedas distintas en un mismo viaje</h2>
 <p>Pensemos en un caso típico: cuatro amigos de Buenos Aires se van una semana a Florianópolis. El alojamiento lo reservaron desde Argentina y se cobró en reales. En Brasil pagan casi todo en reales, pero un paseo en barco se lo cobraron en dólares. Y cuando vuelvan, se van a transferir pesos argentinos entre ellos.</p>
@@ -364,7 +364,7 @@ export const GUIDES = [
     title: "Dólar oficial, MEP, blue o tarjeta: cuál usar para repartir gastos de viaje",
     desc: "Qué es cada tipo de dólar en Argentina y cuál conviene usar para pasar a pesos las deudas de un viaje en grupo, según cómo pagó cada uno. Con ejemplos y criterios para acordarlo.",
     lead: "En Argentina conviven varias cotizaciones del dólar. Cuando un grupo vuelve de viaje y tiene que pasar las deudas a pesos, elegir una u otra puede cambiar bastante los montos.",
-    related: ["gastos-en-distintas-monedas", "como-dividir-gastos-de-un-viaje", "minimizar-transferencias"],
+    related: ["gastos-en-distintas-monedas", "pagar-en-brasil-pix-tarjeta-efectivo", "como-dividir-gastos-de-un-viaje"],
     body: `
 <h2>Por qué importa</h2>
 <p>Supongamos que un grupo gastó en reales en Brasil y al volver se transfiere pesos. Para pasar cada deuda a pesos hay que elegir una cotización. Si se usa una que está bastante por encima de otra, quien debe paga más pesos y quien cobra recibe más. Con deudas de cientos de dólares, la diferencia entre una cotización y otra puede ser de decenas de miles de pesos.</p>
@@ -585,7 +585,7 @@ export const GUIDES = [
     title: "Cómo armar el presupuesto de un viaje en grupo",
     desc: "Paso a paso para calcular cuánto cuesta un viaje en grupo por persona: gastos fijos, gastos diarios, imprevistos, cómo acordar el nivel de gasto y cómo controlar el presupuesto durante el viaje.",
     lead: "Un buen presupuesto no es adivinar una cifra: es separar lo que ya se sabe de lo que hay que estimar, y dejar margen para lo inesperado.",
-    related: ["viajar-en-grupo-checklist", "como-dividir-gastos-de-un-viaje", "gastos-en-distintas-monedas"],
+    related: ["viajar-en-grupo-checklist", "seguro-de-viaje-en-grupo", "como-dividir-gastos-de-un-viaje"],
     body: `
 <h2>Por qué hace falta un presupuesto en grupo</h2>
 <p>Cuando se viaja solo, el presupuesto es una decisión personal. En grupo, es un acuerdo: si cada uno imagina un viaje distinto (uno piensa en hostels y comida de súper, otro en hotel con desayuno y cenas afuera), los problemas aparecen el primer día. Armar el presupuesto juntos obliga a poner esas expectativas sobre la mesa antes de reservar.</p>
@@ -678,7 +678,7 @@ export const GUIDES = [
 <li><strong>Reserven alojamiento y transporte principal</strong>. Para grupos, una casa o departamento entero suele salir más barato por persona que varias habitaciones de hotel, y da un espacio común para cocinar y juntarse.</li>
 <li><strong>Decidan cómo se van a repartir los gastos</strong>: qué se divide entre todos, qué paga cada uno, y en qué moneda se saldan las deudas.</li>
 <li><strong>Creen el grupo de gastos</strong> y sumen a todos, así el que adelanta una reserva ya puede anotarla.</li>
-<li><strong>Contraten un seguro de viaje</strong> si salen del país. Revisen qué cubre y si incluye actividades de riesgo si van a hacerlas.</li>
+<li><strong>Contraten un seguro de viaje</strong> si salen del país. Revisen qué cubre y si incluye actividades de riesgo si van a hacerlas: hay una lista de qué mirar en <a href="/guias/seguro-de-viaje-en-grupo/">seguro de viaje para viajar en grupo</a>.</li>
 </ul>
 [[fig new-trip | Crear el viaje: destino, fechas y moneda, en tres pasos]]
 <p>Al crear el viaje en TribuSplit se elige el país (la moneda local se completa sola), las fechas y en qué moneda se van a pagar entre ustedes. Después se comparte un código de seis letras y cada uno se suma eligiendo su nombre.</p>
@@ -724,6 +724,144 @@ export const GUIDES = [
 </table>
 
 <div class="tip"><strong>Consejo:</strong> la mayoría de los conflictos en viajes grupales no vienen de los destinos ni de las actividades, sino de expectativas de gasto distintas y cuentas poco claras. Hablarlo antes es la mejor inversión del viaje.</div>
+`,
+  },
+
+  {
+    slug: "pagar-en-brasil-pix-tarjeta-efectivo",
+    pair: null,
+    published: "2026-10-25",
+    title: "Cómo pagar en Brasil siendo argentino: Pix, tarjeta o efectivo",
+    desc: "Qué conviene usar para pagar en Brasil: Pix desde billeteras argentinas, tarjeta o reales en efectivo. Cómo funciona cada uno, qué cotización se aplica y cómo repartir los gastos con tu grupo.",
+    lead: "En Brasil casi todo se paga con Pix, y desde hace poco también se puede pagar así desde billeteras argentinas. Pero no es la única opción, y la más cómoda no siempre es la más barata.",
+    related: ["dolar-tarjeta-mep-blue-viajar", "gastos-en-distintas-monedas", "seguro-de-viaje-en-grupo"],
+    body: `
+<h2>Qué es Pix y por qué está en todos lados</h2>
+<p>Pix es el sistema de pagos instantáneos del Banco Central de Brasil. Funciona con un código QR o con una "chave" (un alias: puede ser un teléfono, un email o un número de documento) y la plata llega en segundos. Para los brasileños reemplazó en gran parte al efectivo y a la tarjeta de débito: lo aceptan desde un restaurante hasta el puesto de la playa que vende cocos.</p>
+<p>Para un turista eso cambia la forma de pagar. En lugares chicos, que antes solo aceptaban efectivo, hoy muchas veces hay un QR de Pix pegado en el mostrador.</p>
+
+<h2>Cómo pagar con Pix desde Argentina</h2>
+<p>Desde fines de 2025, varias billeteras virtuales argentinas permiten escanear un QR de Pix y pagar con saldo en pesos. Mercado Pago lo anunció para el verano 2026, y otras como Ualá, Prex, Belo o Lemon también ofrecen la función. El funcionamiento es parecido en todas:</p>
+<ol>
+<li>Abrís la app y elegís pagar con Pix.</li>
+<li>Escaneás el QR del comercio o ingresás su chave.</li>
+<li>La app muestra el monto en reales y cuánto te va a debitar en pesos.</li>
+<li>Confirmás y el pago se acredita al instante.</li>
+</ol>
+<p>Dos detalles importantes. Primero, la función se fue habilitando de forma gradual, así que conviene <strong>comprobar antes de viajar</strong> que aparece en tu app. Segundo, el pago se hace en reales pero se debita en pesos, con <strong>una cotización que define cada billetera</strong>. Antes de usarla para gastos grandes, compará esa cotización con la del dólar tarjeta o la del MEP del día.</p>
+
+<h2>Tarjeta argentina</h2>
+<p>La tarjeta de crédito o débito sigue funcionando en casi todo comercio establecido: hoteles, restaurantes, supermercados, estaciones de servicio. Si pagás en reales con una tarjeta argentina en pesos, el consumo se convierte con el <strong>dólar tarjeta</strong>, es decir, el oficial más los impuestos y percepciones vigentes. Si tenés dólares en el banco, muchas tarjetas permiten pagar el resumen en dólares y evitar esa conversión.</p>
+<p>Cuando la terminal ofrezca cobrarte "en pesos argentinos" en lugar de reales, elegí reales: esa conversión en el momento suele tener una cotización peor. Lo explicamos en la guía de <a href="/en/guides/paying-abroad-cards-cash-fees/">pagos en el exterior</a> (en inglés).</p>
+
+<h2>Efectivo en reales</h2>
+<p>El efectivo pierde terreno en Brasil, pero sigue siendo útil para propinas, vendedores ambulantes y lugares donde falla la señal. Se puede llevar desde Argentina (comprando reales o llevando dólares para cambiar allá) o sacar de un cajero con tarjeta, con las comisiones del banco y del cajero.</p>
+<p>No hace falta llevar mucho: alcanza con algo para los primeros días y para imprevistos.</p>
+
+<h2>Comparación rápida</h2>
+<table>
+<thead><tr><th>Medio</th><th>Dónde sirve</th><th>Cotización</th><th>Lo bueno</th><th>Lo malo</th></tr></thead>
+<tbody>
+<tr><td>Pix desde billetera</td><td>Casi todo comercio, incluso los más chicos</td><td>La que define la billetera</td><td>Rápido, sin llevar efectivo</td><td>Depende de la app y de tener datos</td></tr>
+<tr><td>Tarjeta en pesos</td><td>Comercios establecidos</td><td>Dólar tarjeta</td><td>Aceptada casi siempre</td><td>Suele ser la cotización más cara</td></tr>
+<tr><td>Tarjeta pagando en dólares</td><td>Comercios establecidos</td><td>Lo que te costaron tus dólares</td><td>Evita la conversión a pesos</td><td>Necesitás dólares en el banco</td></tr>
+<tr><td>Efectivo en reales</td><td>Todo, sin señal ni app</td><td>La que conseguiste al cambiar</td><td>Plan B universal</td><td>Riesgo de pérdida; mal cambio en aeropuertos</td></tr>
+</tbody>
+</table>
+<p>La combinación que mejor funciona para la mayoría: <strong>Pix para el día a día, tarjeta para los gastos grandes y algo de efectivo como respaldo</strong>. Y siempre un plan B, porque no todos los comercios aceptan todos los medios y la app puede fallar.</p>
+
+<h2>Si viajás en grupo: cómo repartir pagos hechos de formas distintas</h2>
+<p>En un grupo es casi seguro que cada uno va a pagar distinto: uno con Pix, otro con tarjeta, otro con efectivo. Cada medio tiene su propia cotización, y tratar de reflejar eso gasto por gasto complica las cuentas. Lo que funciona:</p>
+<ol>
+<li><strong>Anotar cada gasto en reales</strong>, el monto del ticket, sin importar cómo se pagó.</li>
+<li>Calcular saldos y transferencias en reales.</li>
+<li>Al volver, <strong>pasar a pesos con una sola cotización acordada</strong>. La guía <a href="/guias/dolar-tarjeta-mep-blue-viajar/">qué dólar usar para repartir</a> explica cómo elegirla.</li>
+</ol>
+[[fig add-expense | Los gastos se cargan en reales, la moneda del destino, sin importar cómo se pagaron]]
+<p>Si quien adelantó la mayoría de los gastos pagó con tarjeta, lo justo suele ser una cotización cercana al dólar tarjeta. Si la mayoría pagó con Pix, la cotización que les dio la billetera es una buena referencia.</p>
+[[fig settle-fx | Al repartir en pesos se elige la cotización y queda fija para esa repartida]]
+
+<h2>Antes de viajar</h2>
+<ul>
+<li>Revisá que tu billetera tenga habilitado el pago con Pix y probá con un monto chico.</li>
+<li>Activá tu tarjeta para usar en el exterior si tu banco lo pide.</li>
+<li>Llevá una segunda tarjeta o medio de pago, de otro banco.</li>
+<li>Asegurate de tener datos en el teléfono: sin conexión no hay Pix.</li>
+<li>Acordá con tu grupo en qué moneda y con qué cotización se van a saldar las deudas.</li>
+</ul>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Necesito una cuenta en Brasil para usar Pix?</h3>
+<p>No para pagar desde las billeteras argentinas que lo ofrecen: la billetera hace de intermediaria. Para recibir pagos por Pix sí hace falta una cuenta brasileña.</p>
+<h3>¿Pix es más barato que la tarjeta?</h3>
+<p>Depende de la cotización que aplique la billetera ese día comparada con el dólar tarjeta. Muchas veces conviene, pero no siempre: comparalo en la app antes de pagar algo grande.</p>
+<h3>¿Puedo pagarle a un amigo del grupo por Pix?</h3>
+<p>Solo si tiene una cuenta brasileña. Entre argentinos, lo práctico es saldar al volver con transferencias en pesos.</p>
+
+<p class="meta">Fuentes: <a href="https://news.mercadolibre.com/pagar-con-pix-en-brasil-con-mercado-pago-argentina" rel="noopener">Mercado Libre: pagar con Pix en Brasil con Mercado Pago</a>; <a href="https://www.infobae.com/economia/2025/12/26/reales-tarjeta-y-pix-como-conviene-pagar-en-brasil-durante-el-verano-2026/" rel="noopener">Infobae: reales, tarjeta y Pix</a>. Esta guía es informativa y no es asesoramiento financiero; las funciones de cada billetera y la normativa cambiaria pueden cambiar.</p>
+`,
+  },
+
+  {
+    slug: "seguro-de-viaje-en-grupo",
+    pair: "group-travel-insurance",
+    published: "2026-10-25",
+    title: "Seguro de viaje para viajar en grupo: qué revisar antes de contratar",
+    desc: "Qué mirar en un seguro o asistencia al viajero cuando viajan en grupo: coberturas médicas, preexistencias, deportes, cancelación, y si hace falta para viajar a Brasil. Con una tabla para comparar planes.",
+    lead: "Un seguro de viaje es de esas cosas que nadie quiere usar y todos agradecen tener. En grupo, además, hay que decidir si cada uno contrata el suyo o si se compra para todos.",
+    related: ["viajar-en-grupo-checklist", "presupuesto-de-viaje-en-grupo", "pagar-en-brasil-pix-tarjeta-efectivo"],
+    body: `
+<h2>Seguro de viaje y asistencia al viajero: ¿son lo mismo?</h2>
+<p>En la práctica se usan como sinónimos, pero no siempre funcionan igual. Una <strong>asistencia al viajero</strong> suele coordinar y pagar directamente la atención: te deriva a un médico o clínica de su red. Un <strong>seguro de viaje</strong> a veces funciona por reintegro: pagás vos y después te devuelven lo cubierto. Antes de contratar, conviene saber cuál de los dos modelos tiene el plan, porque cambia mucho cuánta plata tenés que tener disponible si pasa algo.</p>
+
+<h2>¿Hace falta para viajar a Brasil?</h2>
+<p>Según la información difundida para turistas argentinos, para entrar a Brasil como turista alcanza con el DNI o el pasaporte vigentes y no se exige un seguro médico de viaje. La excepción conocida es <strong>quien viaja en auto</strong>: el vehículo necesita un seguro con cobertura en el Mercosur que incluya responsabilidad civil.</p>
+<p>Que no sea obligatorio no significa que no convenga. Una atención privada de urgencia, una internación o un traslado pueden costar mucho más que el seguro de todo el grupo. Antes de viajar, verificá los requisitos vigentes en fuentes oficiales, porque pueden cambiar.</p>
+
+<h2>Qué revisar en cualquier plan</h2>
+<table>
+<thead><tr><th>Punto</th><th>Qué preguntar</th></tr></thead>
+<tbody>
+<tr><td>Tope de cobertura médica</td><td>¿Cuál es el monto máximo por persona y por evento? ¿Alcanza para una internación en el destino?</td></tr>
+<tr><td>Forma de atención</td><td>¿Pagan directo o por reintegro? ¿Cómo se pide asistencia: app, WhatsApp, teléfono?</td></tr>
+<tr><td>Preexistencias</td><td>¿Cubre enfermedades previas, aunque sea con un tope menor? Es la exclusión más común.</td></tr>
+<tr><td>Deportes y actividades</td><td>¿Cubre surf, buceo, trekking o moto? Muchos planes los excluyen o los cobran aparte.</td></tr>
+<tr><td>Medicamentos y odontología</td><td>¿Hay tope específico? Suelen ser bajos.</td></tr>
+<tr><td>Equipaje</td><td>¿Cubre pérdida o demora del equipaje en el vuelo? ¿Con qué monto?</td></tr>
+<tr><td>Cancelación</td><td>¿Devuelve lo pagado si tenés que cancelar el viaje por enfermedad o fuerza mayor?</td></tr>
+<tr><td>Edad y embarazo</td><td>¿Hay límites o recargos por edad? ¿Cubre urgencias durante el embarazo?</td></tr>
+<tr><td>Franquicia o deducible</td><td>¿Hay un monto que pagás vos antes de que cubra el seguro?</td></tr>
+</tbody>
+</table>
+<p>Leé las exclusiones con la misma atención que las coberturas. Ahí está la diferencia entre dos planes que parecen iguales.</p>
+
+<h2>En grupo: ¿un plan para todos o cada uno el suyo?</h2>
+<p>Hay dos formas de hacerlo, y las dos funcionan:</p>
+<ul>
+<li><strong>Cada uno contrata el suyo.</strong> Permite que cada persona elija según su edad, su salud y las actividades que va a hacer. Es lo más simple para las cuentas: no entra en la repartida.</li>
+<li><strong>Uno contrata para todos.</strong> Algunas empresas hacen descuentos por grupo o por familia. Quien paga lo anota como un gasto del viaje dividido entre todos los asegurados, y se salda con el resto de las cuentas.</li>
+</ul>
+<p>Si uno contrata para todos, asegurate de que cada persona tenga su número de póliza y el contacto de asistencia en su propio teléfono. En una urgencia no hay tiempo de buscar a quien hizo la compra.</p>
+[[fig add-expense | Si uno paga el seguro de todos, se carga como un gasto más y se divide entre los asegurados]]
+
+<h2>Cuánto presupuestar</h2>
+<p>El costo depende de la duración, el destino, la edad y las coberturas, así que no hay un número universal. Para el presupuesto del grupo conviene cotizar dos o tres planes con las mismas fechas y sumar el elegido como gasto fijo por persona, igual que el alojamiento. La guía <a href="/guias/presupuesto-de-viaje-en-grupo/">cómo armar el presupuesto de un viaje en grupo</a> muestra cómo ordenar esos gastos.</p>
+
+<h2>Antes de salir</h2>
+<ul>
+<li>Guardá la póliza en PDF en el teléfono y el número de asistencia en los contactos.</li>
+<li>Compartí con el grupo los datos de contacto de la asistencia de cada uno.</li>
+<li>Si tenés tarjetas de crédito con asistencia incluida, revisá qué cubren y qué hay que hacer para activarla (muchas exigen haber pagado el pasaje con esa tarjeta).</li>
+<li>Si alguien tiene una condición médica, que lo sepa al menos otra persona del grupo.</li>
+</ul>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿La asistencia de la tarjeta de crédito alcanza?</h3>
+<p>A veces sí, a veces no. Suelen tener topes más bajos y condiciones de activación. Compará sus coberturas con la tabla de arriba antes de decidir.</p>
+<h3>¿Qué hago si tengo que usarlo?</h3>
+<p>Primero, contactá a la asistencia antes de ir a cualquier clínica (salvo una emergencia grave): muchos planes solo cubren si te derivan ellos. Guardá todos los comprobantes.</p>
+
+<p class="meta">Esta guía es informativa y no constituye asesoramiento legal ni de seguros. Los requisitos de ingreso y las condiciones de cada plan cambian: verificá la información vigente antes de viajar.</p>
 `,
   },
 ];

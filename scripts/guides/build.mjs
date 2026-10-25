@@ -14,7 +14,7 @@ const LINKEDIN = "https://www.linkedin.com/in/valentin-iglesias1/";
 const L = {
   es: {
     base: "/guias/", home: "/", homeLabel: "Inicio", guides: "Guías", related: "Seguí leyendo", read: "min de lectura",
-    updated: "Actualizado el 24 de octubre de 2026", by: "Por", role: "creador de %BRAND%", about: "/nosotros/#autor", aboutTitle: "Sobre el autor",
+    updated: "Actualizado el", by: "Por", role: "creador de %BRAND%", about: "/nosotros/#autor", aboutTitle: "Sobre el autor",
     bio: "Valentin es de Buenos Aires y lidera proyectos de desarrollo enfocados en experiencia de usuario (UX). Después de más de cinco viajes en grupo a la costa argentina y a Brasil, creó %BRAND% porque recordar cada gasto y dividir día a día se volvía difícil. Escribe estas guías a partir de esos viajes y de cómo funciona la app.",
     indexTitle: "Guías para viajar en grupo y compartir gastos",
     indexDesc: "Consejos prácticos para dividir gastos de viajes, convivencia y salidas: presupuestos, monedas, deudas y cómo hablar de plata con amigos.",
@@ -23,7 +23,7 @@ const L = {
   },
   en: {
     base: "/en/guides/", home: "/en/", homeLabel: "Home", guides: "Guides", related: "Keep reading", read: "min read",
-    updated: "Updated October 24, 2026", by: "By", role: "creator of %BRAND%", about: "/en/about/#author", aboutTitle: "About the author",
+    updated: "Updated", by: "By", role: "creator of %BRAND%", about: "/en/about/#author", aboutTitle: "About the author",
     bio: "Valentin is based in Buenos Aires and leads development projects focused on user experience (UX). After more than five group trips to the Argentine coast and Brazil, Valentin built %BRAND% because remembering every expense and splitting day by day kept getting harder. These guides come from those trips and from how the app works.",
     indexTitle: "Guides to group travel and shared expenses",
     indexDesc: "Practical tips to split travel, household and night-out costs: budgets, currencies, debts and talking about money with friends.",
@@ -85,14 +85,18 @@ function build(lang, guides, otherGuides) {
     if (g.pair && !known.has(g.pair)) throw new Error(`${g.slug}: pair inexistente ${g.pair}`);
     for (const r of g.related) if (!titles[r]) throw new Error(`${g.slug}: related inexistente ${r}`);
     const path = `${t.base}${g.slug}/`;
-    const body = figs(lang, g.body);
+    // una guía nueva no puede figurar como modificada antes de publicarse
+    const modified = g.published > MODIFIED ? g.published : MODIFIED;
+    const updated = new Intl.DateTimeFormat(lang === "es" ? "es-AR" : "en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(modified));
+    // las tablas anchas scrollean dentro de su caja en vez de ensanchar la página en mobile
+    const body = figs(lang, g.body).replaceAll("<table>", '<div class="table-wrap"><table>').replaceAll("</table>", "</table></div>");
     const words = body.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(2, Math.round(words / 220));
     const ld = {
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "Article", headline: g.title, description: g.desc, inLanguage: lang, datePublished: g.published, dateModified: MODIFIED,
+          "@type": "Article", headline: g.title, description: g.desc, inLanguage: lang, datePublished: g.published, dateModified: modified,
           image: "%SITE%/og.png", mainEntityOfPage: `%SITE%${path}`, wordCount: words,
           author: { "@type": "Person", name: AUTHOR, jobTitle: t.role, url: `%SITE%${t.about}`, sameAs: [LINKEDIN] },
           publisher: { "@type": "Organization", name: "%BRAND%", logo: { "@type": "ImageObject", url: "%SITE%/icon-512.png" } },
@@ -109,7 +113,7 @@ function build(lang, guides, otherGuides) {
         <nav class="crumbs" aria-label="breadcrumb"><a href="${t.home}">${t.homeLabel}</a> / <a href="${t.base}">${t.guides}</a></nav>
         <h1>${esc(g.title)}</h1>
         <p class="lead">${esc(g.lead)}</p>
-        <p class="meta byline">${t.by} <a href="${t.about}">${AUTHOR}</a>, ${t.role} · ${t.updated} · ${minutes} ${t.read}</p>
+        <p class="meta byline">${t.by} <a href="${t.about}">${AUTHOR}</a>, ${t.role} · ${t.updated} ${updated} · ${minutes} ${t.read}</p>
 ${body.trim()}
         <aside class="author"><span class="avatar" aria-hidden="true">V</span><div><strong>${t.aboutTitle}</strong><p>${t.bio} <a href="${LINKEDIN}" rel="me noopener" target="_blank">LinkedIn</a></p></div></aside>
         <div id="ad-landing" class="mt-10" hidden></div>
