@@ -5,14 +5,14 @@
     <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How to handle travel expenses in multiple currencies | %BRAND%</title>
-    <meta name="description" content="Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts when everyone lives in a different country." />
+    <meta name="description" content="Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts in your home currency, with worked examples and common mistakes." />
     <link rel="canonical" href="%SITE%/en/guides/travel-expenses-multiple-currencies/" />
     <link rel="alternate" hreflang="en" href="%SITE%/en/guides/travel-expenses-multiple-currencies/" />
     <link rel="alternate" hreflang="es" href="%SITE%/guias/gastos-en-distintas-monedas/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="%BRAND%" />
     <meta property="og:title" content="How to handle travel expenses in multiple currencies" />
-    <meta property="og:description" content="Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts when everyone lives in a different country." />
+    <meta property="og:description" content="Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts in your home currency, with worked examples and common mistakes." />
     <meta property="og:url" content="%SITE%/en/guides/travel-expenses-multiple-currencies/" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="%SITE%/og.png" />
@@ -20,7 +20,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/site.css" />
     <script type="module" src="/src/landing.ts"></script>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "How to handle travel expenses in multiple currencies", "description": "Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts when everyone lives in a different country.", "inLanguage": "en", "datePublished": "2026-10-18", "dateModified": "2026-10-18", "image": "%SITE%/og.png", "mainEntityOfPage": "%SITE%/en/guides/travel-expenses-multiple-currencies/", "author": {"@type": "Organization", "name": "%BRAND%"}, "publisher": {"@type": "Organization", "name": "%BRAND%", "logo": {"@type": "ImageObject", "url": "%SITE%/icon-512.png"}}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "%SITE%/en/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "%SITE%/en/guides/"}, {"@type": "ListItem", "position": 3, "name": "How to handle travel expenses in multiple currencies", "item": "%SITE%/en/guides/travel-expenses-multiple-currencies/"}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"How to handle travel expenses in multiple currencies","description":"Which currency to log expenses in, how to convert payments made in another currency, and how to settle group debts in your home currency, with worked examples and common mistakes.","inLanguage":"en","datePublished":"2026-10-18","dateModified":"2026-10-24","image":"%SITE%/og.png","mainEntityOfPage":"%SITE%/en/guides/travel-expenses-multiple-currencies/","wordCount":863,"author":{"@type":"Person","name":"Valentin","jobTitle":"creator of %BRAND%","url":"%SITE%/en/about/#author"},"publisher":{"@type":"Organization","name":"%BRAND%","logo":{"@type":"ImageObject","url":"%SITE%/icon-512.png"}}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"%SITE%/en/"},{"@type":"ListItem","position":2,"name":"Guides","item":"%SITE%/en/guides/"},{"@type":"ListItem","position":3,"name":"How to handle travel expenses in multiple currencies","item":"%SITE%/en/guides/travel-expenses-multiple-currencies/"}]}]}</script>
   </head>
   <body>
     %GUIDE_HEADER%
@@ -28,41 +28,72 @@
       <article class="prose">
         <nav class="crumbs" aria-label="breadcrumb"><a href="/en/">Home</a> / <a href="/en/guides/">Guides</a></nav>
         <h1>How to handle travel expenses in multiple currencies</h1>
-        <p class="lead">Traveling abroad adds a layer: you pay in local currency, sometimes in dollars or euros, and you pay each other back in your home currency. Keeping it straight is easier than it looks.</p>
-        <p class="meta">Updated October 18, 2026 · 2 min read</p>
+        <p class="lead">Traveling abroad adds a layer of complexity: you pay in the local currency, sometimes in dollars or euros, and you settle debts in your home currency. Sorting it out is simpler than it looks.</p>
+        <p class="meta byline">By <a href="/en/about/#author">Valentin</a>, creator of %BRAND% · Updated October 24, 2026 · 4 min read</p>
+<h2>Three currencies on one trip</h2>
+<p>Take a typical case: four friends from Chicago spend a week in Lisbon. The apartment was booked from home and charged in euros. In Portugal they pay almost everything in euros, but a day trip booked through a US site was charged in dollars. And when they get home, they'll pay each other back in dollars.</p>
+<p>Three roles, often three currencies:</p>
+<ul>
+<li><strong>The trip currency</strong> (euros): where most expenses happen and where it's best to keep the books.</li>
+<li><strong>Occasional currencies</strong>: one-off payments in something else.</li>
+<li><strong>The settle-up currency</strong> (dollars): what the group uses to pay each other back.</li>
+</ul>
+<p>Mixing them up causes almost every error. The trick is to keep them separate, with three rules.</p>
 
-<h2>Rule 1: log each expense in the currency you paid</h2>
-<p>Paid dinner in pesos? Log it in pesos. Paid a tour in dollars? Log it in dollars. Converting in your head on the spot introduces errors, and today's rate isn't next week's.</p>
-<p>Ideally your tool uses <strong>the destination's currency by default</strong> and lets you log an expense in another currency when needed.</p>
+<h2>Rule 1: log each expense in the currency you paid in</h2>
+<p>If dinner was paid in euros, log it in euros. If the day trip was charged in dollars, log it in dollars. Converting in your head on the spot introduces errors and mixes exchange rates from different days.</p>
+<p>The practical setup is a tool that defaults to the destination's currency, so 90 % of expenses need no thought, and lets you pick another currency when needed.</p>
+<figure><img src="/img/guides/en-expenses.jpg" width="390" height="844" alt="Trip expenses, all in the destination currency, grouped by day" loading="lazy" decoding="async" /><figcaption>Trip expenses, all in the destination currency, grouped by day</figcaption></figure>
 
-<h2>Rule 2: convert foreign-currency expenses at that day's rate</h2>
-<p>When an expense is paid in a currency other than the trip's, convert it at the rate of the day it was paid and <strong>lock that rate</strong>. That expense keeps its value even if the currency moves later.</p>
+<h2>Rule 2: convert other-currency expenses at that day's rate</h2>
+<p>When an expense is in a different currency from the trip, convert it to the trip currency <strong>at the rate on the day it happened</strong>, and lock that rate. That way the expense's value doesn't change if the currency moves next week.</p>
+<p>Example: the day trip cost 150 dollars and that day 1 dollar was worth 0.92 euros. It's recorded as 138 euros. If the dollar drops by the end of the trip, that expense is still 138 euros: that's what it actually cost.</p>
+<p>In TribuSplit, you tap "Other" when adding an expense, pick the currency and the app fetches the day's rate. If the payer knows their card charged something different, they can correct it.</p>
 
 <h2>Rule 3: agree on the currency you'll settle in</h2>
-<p>The currency you spend in and the currency you settle in can differ. A group from Spain traveling in Mexico spends pesos and probably settles in euros. The practical approach:</p>
+<p>The currency you spend in and the one you settle in are separate decisions. Americans in Lisbon spend euros and settle in dollars; Canadians in Mexico spend pesos and settle in Canadian dollars; a mixed group from the UK and Germany might spend in Japanese yen and settle in euros.</p>
+<p>The procedure that avoids errors is always the same:</p>
 <ol>
-<li>Compute all balances in the trip's currency.</li>
-<li>When settling, convert only the final transfers into the currency you'll pay in.</li>
-<li>Agree on which exchange rate to use for that conversion.</li>
+<li>Work out all balances in the trip currency.</li>
+<li>Work out the minimum transfers in that same currency.</li>
+<li>Only then convert each transfer to the settle-up currency, using <strong>a single agreed rate</strong>.</li>
 </ol>
+<p>Converting at the end, and only the transfers, keeps every intermediate calculation exact and applies the rate exactly once.</p>
+<figure><img src="/img/guides/en-settle-fx.jpg" width="390" height="844" alt="When settling, you choose the payment currency and rate; transfers show in both currencies" loading="lazy" decoding="async" /><figcaption>When settling, you choose the payment currency and rate; transfers show in both currencies</figcaption></figure>
 
-<h2>Which exchange rate?</h2>
-<ul>
-<li><strong>International market rate</strong>: published by exchange services and central banks. A good neutral reference.</li>
-<li><strong>Your card's rate</strong>: what your bank actually charged, usually including fees.</li>
-<li><strong>Exchange office rate</strong>: if you changed cash.</li>
-</ul>
-<p>None is "the right one" for every group. What matters is agreeing before you settle.</p>
+<h2>Which rate should you settle at?</h2>
+<p>There's no single "correct" rate. Several references are reasonable:</p>
+<table>
+<thead><tr><th>Reference</th><th>What it is</th><th>When it fits</th></tr></thead>
+<tbody>
+<tr><td>Market rate</td><td>The mid-market rate published by exchange services and central banks</td><td>A neutral default when nobody has a reason for another</td></tr>
+<tr><td>Card rate</td><td>What the bank actually charged, including fees</td><td>When whoever fronted the money paid mostly by card</td></tr>
+<tr><td>Exchange office rate</td><td>What you got changing cash</td><td>When the trip was mostly paid in cash</td></tr>
+</tbody>
+</table>
+<p>The question that settles it: <strong>how much did it really cost, in their own currency, the person who fronted the money?</strong> A lower rate than their real cost means they lose; a higher one means they gain at others' expense. For most trips with fee-free cards, the difference between market and card rates is small, and the market rate is the simplest choice.</p>
+
+<h2>A full example</h2>
+<p>Here's a real split from a sample trip to Brazil: balances worked out in reais, then converted to US dollars at one rate.</p>
+<figure><img src="/img/guides/en-transfers.jpg" width="390" height="844" alt="The split stores the rate used and each amount in both currencies" loading="lazy" decoding="async" /><figcaption>The split stores the rate used and each amount in both currencies</figcaption></figure>
+<p>The rate is fixed when you confirm the split. If the real moves the following week, the amounts don't change: what was agreed is what gets paid.</p>
 
 <h2>Common mistakes</h2>
 <ul>
-<li><strong>Adding different currencies together</strong> without converting.</li>
-<li><strong>Converting everything at the end</strong> with the last day's rate, even though expenses happened weeks apart.</li>
-<li><strong>Not agreeing on the settlement rate</strong> until debts already exist.</li>
+<li><strong>Adding different currencies without converting.</strong> 100 euros plus 50 dollars isn't 150 of anything.</li>
+<li><strong>Converting everything at the last day's rate</strong>, even though expenses happened over weeks.</li>
+<li><strong>Choosing the rate at the end</strong>, when everyone already knows which one suits them. Agree beforehand.</li>
+<li><strong>Ignoring card and ATM fees</strong>: if they're significant, they can justify using the card rate. More in <a href="/en/guides/paying-abroad-cards-cash-fees/">paying abroad without hidden fees</a>.</li>
 </ul>
 
-<div class="tip"><strong>Summary:</strong> log in the currency you paid, lock the rate for each foreign-currency expense, compute balances in the trip currency, and convert only the final transfers.</div>
+<h2>FAQ</h2>
+<h3>What if everyone lives in a different country?</h3>
+<p>Pick one common settle-up currency (often dollars or euros) and let each person convert from there with their own payment method. You can also run separate splits in different currencies, but it usually complicates more than it helps.</p>
+<h3>Can we change the settle-up currency mid-trip?</h3>
+<p>Yes. Each split, partial or final, has its own currency and rate. You could settle a partial split in reais while in Brazil and the final one in dollars back home.</p>
 
+<p><strong>In short:</strong> log in the currency you paid in, lock the rate for other-currency expenses, calculate everything in the trip currency, and convert only the final transfers at a rate you agreed on in advance.</p>
+        <aside class="author"><span class="avatar" aria-hidden="true">V</span><div><strong>About the author</strong><p>Valentin built %BRAND% so group trips don't end with the math scribbled on a napkin. He writes these guides based on how the app works and the problems that come up most often when friends, couples and families split costs.</p></div></aside>
         <div id="ad-landing" class="mt-10" hidden></div>
         <section class="related"><h2 class="!mt-0 text-lg">Keep reading</h2><ul><li><a href="/en/guides/paying-abroad-cards-cash-fees/">Paying abroad: cards, cash and how to avoid hidden fees</a></li><li><a href="/en/guides/how-to-split-travel-expenses/">How to split travel expenses with friends without arguing</a></li><li><a href="/en/guides/settle-group-debts-fewer-transfers/">How to settle group debts with the fewest transfers</a></li></ul></section>
       </article>

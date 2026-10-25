@@ -15,7 +15,7 @@ export const header = (lang: Lang) => `<header class="mx-auto flex h-16 max-w-6x
       </a>
       <nav class="flex items-center gap-1 text-sm font-medium">
         <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted hover:text-ink" aria-label="${t[lang].theme}"><i class="ph-duotone ph-circle-half text-xl"></i></button>
-        <a href="${t[lang].guides}" class="hidden rounded-full px-3 py-2 text-muted hover:text-ink sm:inline">${t[lang].guidesLabel}</a>
+        <a href="${t[lang].guides}" class="rounded-full px-2 py-2 text-muted hover:text-ink sm:px-3">${t[lang].guidesLabel}</a>
         <a href="/app/" class="rounded-full border border-line bg-surface px-4 py-2">${t[lang].open}</a>
       </nav>
     </header>`;

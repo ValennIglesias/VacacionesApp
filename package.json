@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
     "test": "vitest run",
+    "guides": "node scripts/guides/build.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply tribusplit-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply tribusplit-db --remote",

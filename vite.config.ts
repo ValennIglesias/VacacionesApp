@@ -1,5 +1,5 @@
 import { globSync } from "node:fs";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
@@ -9,6 +9,10 @@ import { cta, footer, header } from "./site/partials.ts";
 
 // URL pública del sitio para canonical/hreflang/og (absolutas). Se define al compilar: SITE_URL=https://dominio npm run build
 const SITE = (process.env.SITE_URL ?? "http://localhost:5173").replace(/\/$/, "");
+
+// ID de AdSense (ca-pub-…) desde .env o variables de build: verificación del sitio (meta tag) y ads.txt
+const ADSENSE = loadEnv("production", process.cwd(), "VITE_").VITE_ADSENSE_CLIENT || "";
+if (ADSENSE && !/^ca-pub-\d+$/.test(ADSENSE)) throw new Error(`VITE_ADSENSE_CLIENT inválido: ${ADSENSE}`);
 
 // %BRAND% y %SITE% en las páginas estáticas
 const brand = (): Plugin => ({
@@ -21,7 +25,8 @@ const brand = (): Plugin => ({
       .replace("%GUIDE_FOOTER%", footer(lang))
       .replaceAll("%BRAND%", BRAND)
       .replaceAll("%CONTACT%", CONTACT)
-      .replaceAll("%SITE%", SITE);
+      .replaceAll("%SITE%", SITE)
+      .replace("</head>", ADSENSE ? `  <meta name="google-adsense-account" content="${ADSENSE}" />\n  </head>` : "</head>");
   },
   // robots.txt y sitemap.xml con las páginas públicas (la app y los legales no suman para buscadores)
   generateBundle() {
@@ -39,6 +44,7 @@ Disallow: /api/
 
 Sitemap: ${SITE}/sitemap.xml
 ` });
+    if (ADSENSE) this.emitFile({ type: "asset", fileName: "ads.txt", source: `google.com, ${ADSENSE.slice(3)}, DIRECT, f08c47fec0942fa0\n` });
     this.emitFile({
       type: "asset",
       fileName: "sitemap.xml",

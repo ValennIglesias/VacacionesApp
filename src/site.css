@@ -102,3 +102,24 @@ details[open] .chev {
 .prose .related ul {
   @apply list-none pl-0;
 }
+.prose figure {
+  @apply mx-auto mt-8 mb-2 max-w-[300px];
+}
+.prose figure img {
+  @apply h-auto w-full rounded-[28px] border border-line shadow-[0_20px_40px_-24px_rgba(15,23,42,0.45)];
+}
+.prose figcaption {
+  @apply mt-3 text-center text-sm text-muted;
+}
+.prose .byline a {
+  @apply text-muted;
+}
+.prose .author {
+  @apply mt-12 flex items-start gap-4 rounded-3xl bg-surface p-6;
+}
+.prose .author p {
+  @apply mt-1 text-[15px] text-muted;
+}
+.prose .author .avatar {
+  @apply inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-lg font-semibold text-white;
+}

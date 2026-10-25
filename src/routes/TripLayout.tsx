@@ -43,7 +43,7 @@ export function TripLayout() {
   const showFab = trip.status === "active" && (loc.pathname.endsWith(trip.id) || loc.pathname.endsWith("/balances"));
 
   return (
-    <div className="mx-auto min-h-[100dvh] max-w-lg pb-32">
+    <div className="mx-auto min-h-[100dvh] max-w-lg pb-44">
       <header className="sticky top-0 z-20 flex items-center gap-3 bg-bg/85 px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md">
         <Link to="/" className="inline-flex size-10 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
           <ArrowLeft size={20} />
