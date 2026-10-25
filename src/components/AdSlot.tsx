@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useT } from "../lib/i18n";
 
 const CLIENT = import.meta.env.VITE_ADSENSE_CLIENT as string | undefined; // ca-pub-...
 const SLOTS: Record<string, string | undefined> = {
@@ -14,6 +15,7 @@ declare global {
 
 /** Bloque de AdSense; no renderiza nada si no está configurado. Nunca ubicarlo junto a formularios o botones de pago. */
 export function AdSlot({ slot }: { slot: keyof typeof SLOTS }) {
+  const t = useT();
   const ref = useRef<HTMLModElement>(null);
   const id = SLOTS[slot];
   useEffect(() => {
@@ -32,8 +34,11 @@ export function AdSlot({ slot }: { slot: keyof typeof SLOTS }) {
   }, [id]);
   if (!CLIENT || !id) return null;
   return (
-    <div className="my-2 min-h-[100px] overflow-hidden rounded-3xl">
-      <ins ref={ref} className="adsbygoogle block" data-ad-client={CLIENT} data-ad-slot={id} data-ad-format="auto" data-full-width-responsive="true" />
+    <div className="my-2">
+      <p className="mb-1 text-center text-xs text-muted">{t.ad}</p>
+      <div className="min-h-[100px] overflow-hidden rounded-3xl">
+        <ins ref={ref} className="adsbygoogle block" data-ad-client={CLIENT} data-ad-slot={id} data-ad-format="auto" data-full-width-responsive="true" />
+      </div>
     </div>
   );
 }

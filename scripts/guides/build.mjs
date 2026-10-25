@@ -9,12 +9,13 @@ import { GUIDES as EN } from "./en.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const MODIFIED = "2026-10-24";
 const AUTHOR = "Valentin";
+const LINKEDIN = "https://www.linkedin.com/in/valentin-iglesias1/";
 
 const L = {
   es: {
     base: "/guias/", home: "/", homeLabel: "Inicio", guides: "Guías", related: "Seguí leyendo", read: "min de lectura",
     updated: "Actualizado el 24 de octubre de 2026", by: "Por", role: "creador de %BRAND%", about: "/nosotros/#autor", aboutTitle: "Sobre el autor",
-    bio: "Valentin creó %BRAND% para que los viajes en grupo no terminen con las cuentas en una servilleta. Escribe estas guías a partir de cómo funciona la app y de los problemas que más se repiten al repartir gastos entre amigos, parejas y familias.",
+    bio: "Valentin es de Buenos Aires y lidera proyectos de desarrollo enfocados en experiencia de usuario (UX). Después de más de cinco viajes en grupo a la costa argentina y a Brasil, creó %BRAND% porque recordar cada gasto y dividir día a día se volvía difícil. Escribe estas guías a partir de esos viajes y de cómo funciona la app.",
     indexTitle: "Guías para viajar en grupo y compartir gastos",
     indexDesc: "Consejos prácticos para dividir gastos de viajes, convivencia y salidas: presupuestos, monedas, deudas y cómo hablar de plata con amigos.",
     indexLead: "Todo lo que conviene saber para que la plata no sea un tema en el viaje, en la casa o con amigos.",
@@ -23,7 +24,7 @@ const L = {
   en: {
     base: "/en/guides/", home: "/en/", homeLabel: "Home", guides: "Guides", related: "Keep reading", read: "min read",
     updated: "Updated October 24, 2026", by: "By", role: "creator of %BRAND%", about: "/en/about/#author", aboutTitle: "About the author",
-    bio: "Valentin built %BRAND% so group trips don't end with the math scribbled on a napkin. He writes these guides based on how the app works and the problems that come up most often when friends, couples and families split costs.",
+    bio: "Valentin is based in Buenos Aires and leads development projects focused on user experience (UX). After more than five group trips to the Argentine coast and Brazil, Valentin built %BRAND% because remembering every expense and splitting day by day kept getting harder. These guides come from those trips and from how the app works.",
     indexTitle: "Guides to group travel and shared expenses",
     indexDesc: "Practical tips to split travel, household and night-out costs: budgets, currencies, debts and talking about money with friends.",
     indexLead: "What's worth knowing so money never becomes the topic of the trip.",
@@ -93,7 +94,7 @@ function build(lang, guides, otherGuides) {
         {
           "@type": "Article", headline: g.title, description: g.desc, inLanguage: lang, datePublished: g.published, dateModified: MODIFIED,
           image: "%SITE%/og.png", mainEntityOfPage: `%SITE%${path}`, wordCount: words,
-          author: { "@type": "Person", name: AUTHOR, jobTitle: t.role, url: `%SITE%${t.about}` },
+          author: { "@type": "Person", name: AUTHOR, jobTitle: t.role, url: `%SITE%${t.about}`, sameAs: [LINKEDIN] },
           publisher: { "@type": "Organization", name: "%BRAND%", logo: { "@type": "ImageObject", url: "%SITE%/icon-512.png" } },
         },
         crumbs([[t.homeLabel, t.home], [t.guides, t.base], [g.title, path]]),
@@ -110,7 +111,7 @@ function build(lang, guides, otherGuides) {
         <p class="lead">${esc(g.lead)}</p>
         <p class="meta byline">${t.by} <a href="${t.about}">${AUTHOR}</a>, ${t.role} · ${t.updated} · ${minutes} ${t.read}</p>
 ${body.trim()}
-        <aside class="author"><span class="avatar" aria-hidden="true">V</span><div><strong>${t.aboutTitle}</strong><p>${t.bio}</p></div></aside>
+        <aside class="author"><span class="avatar" aria-hidden="true">V</span><div><strong>${t.aboutTitle}</strong><p>${t.bio} <a href="${LINKEDIN}" rel="me noopener" target="_blank">LinkedIn</a></p></div></aside>
         <div id="ad-landing" class="mt-10" hidden></div>
         <section class="related"><h2 class="!mt-0 text-lg">${t.related}</h2><ul>${related}</ul></section>
       </article>

@@ -18,7 +18,7 @@ if (client && slot && host) {
   s.crossOrigin = "anonymous";
   s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`;
   document.head.appendChild(s);
-  host.innerHTML = `<ins class="adsbygoogle" style="display:block" data-ad-client="${client}" data-ad-slot="${slot}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+  host.innerHTML = `<p class="mb-1 text-center text-xs text-muted">${document.documentElement.lang === "en" ? "Advertisement" : "Publicidad"}</p><ins class="adsbygoogle" style="display:block" data-ad-client="${client}" data-ad-slot="${slot}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
   host.hidden = false;
   ((window as unknown as { adsbygoogle: unknown[] }).adsbygoogle ||= []).push({});
 }

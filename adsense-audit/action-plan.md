@@ -24,7 +24,7 @@ Prioridad alta.
 - [ ] Llevar las guías de menos de 800 palabras a 1.000 o más, con más casos y preguntas frecuentes. *(issue 5)*
 - [x] Variar la estructura entre guías (no todas con `.tip` al final) y escalonar fechas de publicación y actualización reales. *(issue 5 — Spam Policies: Scaled content abuse)*
 - [x] Sumar autoría: nombre, foto y breve bio en "Sobre nosotros" y como autor en las guías, también en el JSON-LD (`author: Person`). *(issue 8 — E-E-A-T / YMYL)*
-- [ ] Completar la bio de Valentin (experiencia viajando en grupo, ciudad, foto opcional) en "Sobre nosotros" y en la caja de autor. *(issue 8 — E-E-A-T)*
+- [x] Completar la bio de Valentin (experiencia viajando en grupo, ciudad, foto opcional) en "Sobre nosotros" y en la caja de autor. *(issue 8 — E-E-A-T)*
 - [x] Mostrar en el header en mobile el link a Guías. *(issue 13 — navegación)*
 - [x] Ampliar los términos: edad mínima, ley aplicable, contenido cargado por usuarios, limitación de responsabilidad y la versión en inglés completa. *(issue 11 — transparencia)*
 - [x] Agregar a la política de privacidad la sección de menores ("no dirigido a menores de 13 años") y el detalle del CMP real. *(issue 12 — Child-directed content)*
@@ -38,7 +38,8 @@ Optimización.
 - [ ] Páginas de presupuesto por destino (por ejemplo, "Florianópolis en grupo: cuánto cuesta una semana"). *(Revenue Optimization)*
 - [ ] Configurar el acceso del crawler de AdSense a la app (cuenta de prueba) una vez aprobada la cuenta. *(issue 14 — Display ads on login-protected pages)*
 - [ ] Imágenes propias en las guías (capturas, gráficos simples). *(issue 15)*
-- [ ] Etiquetar los bloques de anuncios ("Publicidad") y evaluar un segundo bloque en guías largas. *(issue 18 — Ad placement)*
+- [x] Etiquetar los bloques de anuncios ("Publicidad").
+- [ ] Evaluar un segundo bloque de anuncios en las guías largas. *(issue 18 — Ad placement)*
 - [ ] Unificar el separador de los títulos y agregar `hreflang` en privacidad y términos. *(issues 16 y 17)*
 - [ ] Medir Core Web Vitals en producción con PageSpeed y corregir lo que aparezca. *(UX)*
 - [ ] Evaluar links de afiliados (seguro de viaje, eSIM) como complemento de AdSense. *(Revenue Optimization)*

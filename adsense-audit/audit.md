@@ -12,12 +12,12 @@
 |---|---|---|---|
 | Content Quality | 62 | 74 | Guías reescritas (630 a 1.245 palabras de cuerpo), 20 capturas reales de la app, ejemplos con números verificados, preguntas frecuentes, estructuras distintas, guías en inglés adaptadas y no solo traducidas |
 | Policy Compliance | 85 | 88 | Privacidad con menores, CMP y preferencias locales |
-| Trust Signals | 50 | 70 | `contacto@tribusplit.com`, autor firmado (Valentin) con sección en "Sobre nosotros", `author: Person` en JSON-LD, términos completos |
+| Trust Signals | 50 | 76 | `contacto@tribusplit.com`; autor firmado (Valentin, líder de proyectos UX, Buenos Aires) con bio, experiencia de viajes y LinkedIn; `Person` en JSON-LD; términos completos |
 | UX Quality | 80 | 85 | Anuncio separado del botón flotante, Guías en el header mobile |
 | Monetization Readiness | 35 | 40 | `ads.txt` y meta tag automáticos; faltan dominio, ID y CMP |
-| **Total** | **63** | **73** | |
+| **Total** | **63** | **74** | |
 
-**Veredicto:** sigue en **FAIL** hasta publicar con dominio, ID de AdSense y el mensaje de consentimiento. Con eso hecho, Monetization pasa a unos 80 y el total a unos **79** (CONDITIONAL PASS). Para superar 80: bio más completa del autor y 2 a 4 guías nuevas.
+**Veredicto:** sigue en **FAIL** hasta publicar con dominio, ID de AdSense y el mensaje de consentimiento. Con eso hecho, Monetization pasa a unos 80 y el total a unos **80** (CONDITIONAL PASS / Ready). Para subir más: 2 a 4 guías nuevas y alargar las guías cortas.
 
 Lo que sigue abajo es la auditoría inicial, sin cambios.
 
