@@ -35,7 +35,7 @@ Prioridad alta.
 Optimización.
 
 - [ ] Publicar 1 o 2 guías por semana con temas de mayor valor publicitario, en inglés y en español para España: seguros de viaje, tarjetas sin comisión, eSIM, presupuestos por destino. *(Revenue Optimization)*
-  - 25/10: publicadas, según el Planificador de palabras clave, "Seguro de viaje en grupo" (es), "Pagar en Brasil: Pix, tarjeta o efectivo" (es), "Group travel insurance" (en) y "eSIM, local SIM or roaming" (en). Pendiente: "alquiler costa atlántica" (5.000 búsquedas/mes, necesita datos de los viajes de Valentin).
+  - 25/10: publicadas, según el Planificador de palabras clave, "Seguro de viaje en grupo" (es), "Pagar en Brasil: Pix, tarjeta o efectivo" (es), "Group travel insurance" (en) y "eSIM, local SIM or roaming" (en). También "Alquiler en la Costa Atlántica en grupo" (es), con la experiencia de Valentin ("alquiler costa atlántica", 5.000 búsquedas/mes).
 - [ ] Páginas de presupuesto por destino (por ejemplo, "Florianópolis en grupo: cuánto cuesta una semana"). *(Revenue Optimization)*
 - [ ] Configurar el acceso del crawler de AdSense a la app (cuenta de prueba) una vez aprobada la cuenta. *(issue 14 — Display ads on login-protected pages)*
 - [ ] Imágenes propias en las guías (capturas, gráficos simples). *(issue 15)*

@@ -585,7 +585,7 @@ export const GUIDES = [
     title: "Cómo armar el presupuesto de un viaje en grupo",
     desc: "Paso a paso para calcular cuánto cuesta un viaje en grupo por persona: gastos fijos, gastos diarios, imprevistos, cómo acordar el nivel de gasto y cómo controlar el presupuesto durante el viaje.",
     lead: "Un buen presupuesto no es adivinar una cifra: es separar lo que ya se sabe de lo que hay que estimar, y dejar margen para lo inesperado.",
-    related: ["viajar-en-grupo-checklist", "seguro-de-viaje-en-grupo", "como-dividir-gastos-de-un-viaje"],
+    related: ["alquiler-costa-atlantica-en-grupo", "viajar-en-grupo-checklist", "seguro-de-viaje-en-grupo"],
     body: `
 <h2>Por qué hace falta un presupuesto en grupo</h2>
 <p>Cuando se viaja solo, el presupuesto es una decisión personal. En grupo, es un acuerdo: si cada uno imagina un viaje distinto (uno piensa en hostels y comida de súper, otro en hotel con desayuno y cenas afuera), los problemas aparecen el primer día. Armar el presupuesto juntos obliga a poner esas expectativas sobre la mesa antes de reservar.</p>
@@ -658,7 +658,7 @@ export const GUIDES = [
     title: "Checklist para organizar un viaje en grupo",
     desc: "Lista completa para organizar un viaje con amigos o familia: fechas, presupuesto, reservas, documentos, gastos compartidos y convivencia, ordenada por etapas.",
     lead: "Organizar un viaje en grupo tiene más partes móviles que viajar solo. Esta lista ordena las decisiones para que nada quede librado al último momento.",
-    related: ["presupuesto-de-viaje-en-grupo", "como-dividir-gastos-de-un-viaje", "gastos-en-distintas-monedas"],
+    related: ["presupuesto-de-viaje-en-grupo", "alquiler-costa-atlantica-en-grupo", "como-dividir-gastos-de-un-viaje"],
     body: `
 <h2>Antes de empezar: quién organiza qué</h2>
 <p>El error más común en los viajes grupales es que una sola persona termina organizando todo: buscando alojamiento, comparando pasajes, armando el itinerario, cobrando las señas. Llega al viaje cansada y con la sensación de que nadie ayudó.</p>
@@ -675,7 +675,7 @@ export const GUIDES = [
 
 <h2>Uno o dos meses antes</h2>
 <ul>
-<li><strong>Reserven alojamiento y transporte principal</strong>. Para grupos, una casa o departamento entero suele salir más barato por persona que varias habitaciones de hotel, y da un espacio común para cocinar y juntarse.</li>
+<li><strong>Reserven alojamiento y transporte principal</strong>. Para grupos, una casa o departamento entero suele salir más barato por persona que varias habitaciones de hotel, y da un espacio común para cocinar y juntarse. Si van a la costa, hay ideas concretas en <a href="/guias/alquiler-costa-atlantica-en-grupo/">alquiler en la Costa Atlántica en grupo</a>.</li>
 <li><strong>Decidan cómo se van a repartir los gastos</strong>: qué se divide entre todos, qué paga cada uno, y en qué moneda se saldan las deudas.</li>
 <li><strong>Creen el grupo de gastos</strong> y sumen a todos, así el que adelanta una reserva ya puede anotarla.</li>
 <li><strong>Contraten un seguro de viaje</strong> si salen del país. Revisen qué cubre y si incluye actividades de riesgo si van a hacerlas: hay una lista de qué mirar en <a href="/guias/seguro-de-viaje-en-grupo/">seguro de viaje para viajar en grupo</a>.</li>
@@ -862,6 +862,123 @@ export const GUIDES = [
 <p>Primero, contactá a la asistencia antes de ir a cualquier clínica (salvo una emergencia grave): muchos planes solo cubren si te derivan ellos. Guardá todos los comprobantes.</p>
 
 <p class="meta">Esta guía es informativa y no constituye asesoramiento legal ni de seguros. Los requisitos de ingreso y las condiciones de cada plan cambian: verificá la información vigente antes de viajar.</p>
+`,
+  },
+
+  {
+    slug: "alquiler-costa-atlantica-en-grupo",
+    pair: null,
+    published: "2026-10-25",
+    title: "Alquiler en la Costa Atlántica en grupo: cómo organizar y dividir alquiler, nafta y comidas",
+    desc: "Cómo organizar un viaje en grupo a Pinamar, Villa Gesell, Miramar o cualquier lugar de la Costa Atlántica: alquilar la casa, dividir el alquiler si alguien llega después, repartir la nafta entre autos y no perder el control de los gastos del día a día.",
+    lead: "Una casa en la costa con amigos es de los mejores planes del verano, y también de los que más cuentas cruzadas generan: alquiler, nafta, súper, asados y salidas, entre seis u ocho personas y durante varios días.",
+    related: ["presupuesto-de-viaje-en-grupo", "como-dividir-gastos-de-un-viaje", "minimizar-transferencias"],
+    body: `
+<h2>La experiencia detrás de esta guía</h2>
+<p>Hice unos cinco viajes en grupo a la Costa Atlántica: varias veces a Pinamar, a Villa Gesell y a Miramar con Chapadmalal. Fuimos de a ocho, de a seis y de a cuatro. En todos se repetía lo mismo: lo que había que dividir era la nafta del viaje, las comidas y las salidas, y lo difícil no era el monto sino el desorden.</p>
+<p>Cuando el viaje es largo o el grupo es grande, en un mismo día hay muchos gastos: alguien carga nafta, otro hace el súper, a la noche se sale y paga uno con tarjeta. Al tercer día ya nadie se acuerda quién puso qué, y si alguien propone "hagamos cuentas de lo que llevamos hasta ahora", la cuenta se vuelve desprolija. De ahí salió %BRAND%, y de ahí sale esta guía.</p>
+
+<h2>1. Elegir y alquilar la casa</h2>
+<p>Para grupos de seis u ocho, una casa entera suele salir bastante más barata por persona que varios departamentos o habitaciones de hotel, y tiene algo que vale mucho: un lugar común para cocinar, hacer asados y juntarse antes de salir.</p>
+<p>Antes de señar, conviene revisar:</p>
+<ul>
+<li><strong>Camas reales</strong>, no "capacidad máxima". Una casa "para 8" con dos sillones cama no es lo mismo que una con ocho camas.</li>
+<li><strong>Qué incluye</strong>: ropa de cama y toallas, wifi, cochera o lugar para los autos, parrilla, limpieza final.</li>
+<li><strong>Distancia a la playa y al centro</strong>. Si hay que usar el auto para todo, se suma nafta y estacionamiento.</li>
+<li><strong>Condiciones de la seña y del depósito</strong>: cuánto se paga al reservar, cuándo se paga el resto, cuánto es el depósito en garantía y cuándo se devuelve.</li>
+<li><strong>Fechas de entrada y salida</strong>: en temporada alta muchos alquileres son por semana o por quincena completa.</li>
+</ul>
+<p>Pidan todo por escrito, aunque sea por mensaje: precio total, fechas, qué incluye y qué pasa si hay que cancelar.</p>
+
+<h2>2. La seña y el depósito: quién los paga y cómo se anotan</h2>
+<p>Casi siempre una sola persona transfiere la seña, semanas antes del viaje. Es el gasto que más fácil se olvida, porque cuando llega el viaje ya pasó un mes. Anótenlo apenas se paga, con su fecha real. En la app aparece agrupado como "Antes del viaje" y entra en la repartida igual que el resto.</p>
+<p>El <strong>depósito en garantía</strong> es distinto: no es un gasto, porque se devuelve al final si no hay daños. Lo más simple es que lo ponga una persona y lo recupere ella misma al irse. Si lo ponen entre todos, que cada uno sepa cuánto puso para devolvérselo. Si al final descuentan algo por un daño, ese descuento sí es un gasto del grupo.</p>
+
+<h2>3. Dividir el alquiler cuando no todos están todas las noches</h2>
+<p>Pasa seguido: dos del grupo tienen que trabajar y llegan unos días después. ¿Pagan lo mismo? Lo más justo es pensar que la casa cuesta lo mismo cada noche, y que esa noche la pagan los que están.</p>
+<p>Un ejemplo con números ilustrativos: casa para ocho, diez noches, $1.600.000 en total ($160.000 por noche). Seis llegan el primer día; dos llegan para la cuarta noche.</p>
+<table>
+<thead><tr><th>Tramo</th><th>Costo</th><th>Se divide entre</th><th>A cada uno</th></tr></thead>
+<tbody>
+<tr><td>Noches 1 a 3</td><td>$480.000</td><td>Los 6 que están</td><td>$80.000</td></tr>
+<tr><td>Noches 4 a 10</td><td>$1.120.000</td><td>Los 8</td><td>$140.000</td></tr>
+</tbody>
+</table>
+<p>Los seis que estuvieron todo el viaje pagan $220.000 cada uno; los dos que llegaron después, $140.000. La suma da exactamente $1.600.000.</p>
+<p>En la app se resuelve cargando el alquiler como dos gastos, uno por tramo, cada uno dividido entre quienes estaban. No hace falta ninguna fórmula.</p>
+<p>Otras situaciones comunes:</p>
+<ul>
+<li><strong>Una pareja comparte habitación</strong>: lo habitual es que pague igual que el resto por persona, porque usan la casa igual. Si la habitación es claramente mejor (en suite, con vista), pueden acordar un extra.</li>
+<li><strong>Alguien se va antes</strong>: mismo criterio, por tramos. Y conviene hacer una repartida parcial el día que se va.</li>
+</ul>
+
+<h2>4. La nafta y los peajes, auto por auto</h2>
+<p>Desde Buenos Aires hay unos 350 a 450 kilómetros según el destino, así que la nafta y los peajes son de los gastos más grandes del viaje después del alquiler. Con ocho personas suelen ser dos autos, y ahí aparece la pregunta: ¿cada auto divide lo suyo o se junta todo?</p>
+<table>
+<thead><tr><th>Opción</th><th>Cómo funciona</th><th>Cuándo conviene</th></tr></thead>
+<tbody>
+<tr><td>Cada auto lo suyo</td><td>La nafta y los peajes de cada auto se dividen entre quienes viajaron en él</td><td>Si los autos consumen muy distinto o hicieron recorridos distintos</td></tr>
+<tr><td>Todo junto</td><td>Se suma la nafta de todos los autos y se divide entre todo el grupo</td><td>Si los autos son parecidos y el grupo prefiere no complicarse</td></tr>
+</tbody>
+</table>
+<p>Ejemplo ilustrativo con dos autos de cuatro personas: el auto A gastó $120.000 entre nafta y peajes y el auto B $100.000. Con "cada auto lo suyo", los del auto A pagan $30.000 y los del B $25.000. Con "todo junto", todos pagan $27.500.</p>
+<p>Algunos grupos suman algo para el dueño del auto por el desgaste. No es obligatorio, pero si se hace, que se acuerde antes de salir.</p>
+<p>Durante la estadía, la nafta de las salidas en auto (ir a otra playa, a cenar al centro) se divide entre quienes fueron en ese viaje.</p>
+
+<h2>5. Súper, asados y salidas: el día a día</h2>
+<p>Acá es donde se pierde el control. En un día cualquiera puede haber:</p>
+<ul>
+<li>la compra grande del súper, que se divide entre todos;</li>
+<li>la carne y el carbón del asado, entre todos los que comieron;</li>
+<li>helados o facturas que compró uno para todos;</li>
+<li>la salida de la noche, donde fueron cinco de los ocho;</li>
+<li>un taxi de vuelta, entre los cuatro que volvieron juntos.</li>
+</ul>
+<p>Cinco gastos, cinco combinaciones distintas de personas, y eso en un solo día. Multiplicado por diez días, es imposible reconstruirlo de memoria. La única forma que funciona es <strong>anotar cada gasto en el momento</strong>, eligiendo entre quiénes se divide.</p>
+[[fig add-expense | Cada gasto se anota con quién pagó y entre quiénes se divide: el asado entre todos, la salida solo entre los que fueron]]
+<p>No hace falta que una persona haga de contador. Cualquiera puede cargar un gasto, incluso en nombre de otro: "Tomás pagó el súper, lo anoto yo".</p>
+[[fig expenses | Los gastos de cada día, con el total del viaje y el promedio diario]]
+
+<h2>6. Hacer cuentas a mitad de viaje sin desordenarse</h2>
+<p>En viajes de una semana o más, alguien siempre propone "hagamos cuentas de lo que llevamos". Es buena idea: quien pagó el alquiler o la compra grande recupera la plata antes, y nadie acumula una deuda grande. El problema es hacerlo a mano, porque al final del viaje hay que acordarse de qué ya se pagó y qué no.</p>
+<p>Con la app es un botón: "Repartir hasta hoy" toma todo lo pendiente, calcula quién le paga a quién con la menor cantidad de transferencias y deja esos gastos saldados. Los gastos de los días siguientes empiezan de cero, y el resumen del viaje sigue mostrando todo.</p>
+[[fig settle | La repartida parcial muestra los pagos antes de confirmar]]
+
+<h2>7. Al volver: la repartida final y el resumen</h2>
+<p>El último día, o apenas vuelven, hagan la repartida final. Cada uno ve cuánto le toca pagar y a quién, copia el alias y transfiere. Quien recibe confirma, y el viaje queda cerrado.</p>
+<p>El resumen por categoría y por día sirve para el año siguiente: cuánto se fue en alquiler, en nafta, en comida y en salidas. Con eso el presupuesto del próximo viaje deja de ser una adivinanza.</p>
+[[fig summary | El resumen del viaje, útil para planificar el próximo verano]]
+
+<h2>Presupuesto de ejemplo para ocho personas</h2>
+<p>Una estructura para armar el presupuesto propio. Los montos son ilustrativos: cambian mucho según el destino, la quincena y el año, así que usen los números reales de su alquiler y sus autos.</p>
+<table>
+<thead><tr><th>Concepto</th><th>Cómo se divide</th><th>Cuándo se paga</th></tr></thead>
+<tbody>
+<tr><td>Alquiler</td><td>Por noches presentes</td><td>Seña antes; resto al llegar o antes</td></tr>
+<tr><td>Nafta y peajes de ida y vuelta</td><td>Por auto o todo junto</td><td>En el viaje</td></tr>
+<tr><td>Súper y asados</td><td>Entre todos los que comen</td><td>Durante la estadía</td></tr>
+<tr><td>Salidas</td><td>Solo entre los que van</td><td>Durante la estadía</td></tr>
+<tr><td>Imprevistos (10 a 15 %)</td><td>Según el gasto</td><td>Durante la estadía</td></tr>
+</tbody>
+</table>
+<p>Para armar los números paso a paso, ver <a href="/guias/presupuesto-de-viaje-en-grupo/">cómo armar el presupuesto de un viaje en grupo</a>.</p>
+
+<h2>Errores que vimos repetirse</h2>
+<ul>
+<li><strong>Olvidar la seña</strong> porque se pagó un mes antes.</li>
+<li><strong>Dividir la salida entre todos</strong> cuando fue la mitad del grupo.</li>
+<li><strong>Hacer cuentas parciales en un papel</strong> y después contar esos gastos de nuevo al final.</li>
+<li><strong>No acordar cómo se divide la nafta</strong> hasta que alguien pregunta en la ruta de vuelta.</li>
+<li><strong>Dejar las cuentas para "cuando volvamos"</strong> y que pasen semanas.</li>
+</ul>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Conviene alquilar por semana o por quincena?</h3>
+<p>Depende de cuántos días puede cada uno. Si la mitad del grupo solo puede una semana, a veces conviene alquilar la quincena y que el resto se sume por tramos, dividiendo el alquiler por noches como en el ejemplo de arriba.</p>
+<h3>¿Qué hacemos con la comida que sobra al final?</h3>
+<p>Lo habitual es no recalcular nada: se reparte entre quienes se la quieran llevar. Recalcular por un paquete de fideos complica más de lo que ayuda.</p>
+<h3>¿Y si alguien no tiene la app?</h3>
+<p>Puede sumarse con el código del viaje sin crear una cuenta, o alguien del grupo anota sus gastos en su nombre.</p>
 `,
   },
 ];
