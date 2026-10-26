@@ -11,6 +11,7 @@ import { computeBalances, convertCents, minTransfers, splitEqual } from "../shar
 import { BRAND } from "../shared/brand";
 import { retentionPlan, type Notice } from "../shared/retention";
 import { retentionEmail, sendEmail } from "./email";
+import { DEMOS } from "./demo";
 
 type AppEnv = { Bindings: Env; Variables: { userId: string; userName: string; isGuest: boolean } };
 const app = new Hono<AppEnv>();
@@ -163,26 +164,25 @@ app.post("/api/demo", async (c) => {
   // today: fecha local del usuario (en UTC puede ser otro día)
   const { lang, today } = z.object({ lang: z.enum(["es", "en"]), today: z.iso.date() }).parse(await c.req.json());
   const es = lang === "es";
-  await checkGuestLimit(c);
   const d = db(c);
+  // un solo ejemplo por usuario: si ya tiene uno (y sigue siendo miembro), se abre ese
+  const [existing] = await d
+    .select({ id: s.trips.id })
+    .from(s.trips)
+    .innerJoin(s.members, and(eq(s.members.tripId, s.trips.id), eq(s.members.userId, c.get("userId"))))
+    .where(and(eq(s.trips.demo, true), eq(s.trips.createdBy, c.get("userId"))))
+    .limit(1);
+  if (existing) return c.json({ id: existing.id, existing: true });
+  await checkGuestLimit(c);
+  const demo = DEMOS[Math.floor(Math.random() * DEMOS.length)];
   const t = now();
   const iso = (days: number) => new Date(Date.parse(today) + days * 86_400_000).toISOString().slice(0, 10);
   const tripId = uid();
   const inviteCode = newCode();
   const me = c.get("isGuest") && c.get("userName") === "Invitado" ? (es ? "Yo" : "Me") : c.get("userName");
-  const names = [me, "Lucía", "Tomás", "Valen"];
+  const names = [me, ...demo.friends];
   const mIds = names.map(() => uid());
-  const all = [0, 1, 2, 3];
-  // [descripción es, en, categoría, día relativo a hoy, BRL x100, quién pagó, entre quiénes]
-  const sample: [string, string, (typeof CATEGORIES)[number], number, number, number, number[]][] = [
-    ["Pasajes de avión", "Flights", "transport", -40, 240000, 0, all],
-    ["Reserva de la posada", "Guesthouse booking", "lodging", -25, 180000, 1, all],
-    ["Supermercado", "Groceries", "groceries", -1, 32050, 2, all],
-    ["Cena en la playa", "Beach dinner", "food", -1, 41000, 0, [0, 1, 2]],
-    ["Paseo en barco", "Boat tour", "activities", 0, 60000, 3, all],
-    ["Uber al centro", "Ride downtown", "transport", 0, 4580, 1, [1, 3]],
-  ];
-  const expenseRows = sample.map(([des, den, category, day, cents, payer, who]) => ({
+  const expenseRows = demo.expenses.map(([des, den, category, day, cents, payer, who]) => ({
     id: uid(),
     tripId,
     paidBy: mIds[payer],
@@ -190,7 +190,7 @@ app.post("/api/demo", async (c) => {
     category,
     date: iso(day),
     amountCents: cents,
-    currency: "BRL",
+    currency: demo.currency,
     rate: 1,
     amountTripCents: cents,
     createdBy: c.get("userId"),
@@ -201,16 +201,17 @@ app.post("/api/demo", async (c) => {
   await d.batch([
     d.insert(s.trips).values({
       id: tripId,
-      name: es ? "Viaje de ejemplo" : "Sample trip",
-      countryCode: "BR",
-      city: "Florianópolis",
-      currency: "BRL",
-      settleCurrency: "BRL",
+      name: demo.name[lang],
+      countryCode: demo.countryCode,
+      city: demo.city,
+      currency: demo.currency,
+      settleCurrency: demo.currency,
       inviteCode,
       startDate: iso(-1),
       endDate: iso(5),
       createdBy: c.get("userId"),
       createdAt: t,
+      demo: true,
     }),
     d.insert(s.members).values(names.map((name, i) => ({ id: mIds[i], tripId, name, userId: i === 0 ? c.get("userId") : null, color: i, createdAt: t + i }))),
     d.insert(s.expenses).values(expenseRows.map(({ who: _, ...e }) => e)),

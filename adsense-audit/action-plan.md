@@ -44,3 +44,13 @@ Optimización.
 - [ ] Unificar el separador de los títulos y agregar `hreflang` en privacidad y términos. *(issues 16 y 17)*
 - [ ] Medir Core Web Vitals en producción con PageSpeed y corregir lo que aparezca. *(UX)*
 - [ ] Evaluar links de afiliados (seguro de viaje, eSIM) como complemento de AdSense. *(Revenue Optimization)*
+
+## Después de la aprobación: tráfico de países que pagan más
+
+Acordado el 25/10. No agregar idiomas antes de la aprobación: suma riesgo y no ayuda a aprobar.
+
+- [ ] Repetir el Planificador de palabras clave con Canadá y Australia: las mismas búsquedas en inglés más "split cottage rental", "ski trip cost split" y "road trip gas split".
+- [ ] Adaptar las guías en inglés a Canadá, Australia, el Reino Unido y EE. UU.: medios de pago locales (Interac e-Transfer, PayID, transferencia bancaria, Venmo/Zelle) y ejemplos en CAD y AUD.
+- [ ] Escribir 2 o 3 guías en inglés para esos países: cabañas de verano ("cottage"), viajes de esquí en grupo y road trips. También llegan a lectores nórdicos que buscan en inglés.
+- [ ] No traducir a idiomas nórdicos: mercados chicos, sin quien revise el texto y la app solo está en español e inglés.
+- [ ] Si hay tráfico, evaluar un tercer idioma de la web y la app: alemán (paga bien) o portugués (Brasil, público grande y afín).

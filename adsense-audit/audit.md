@@ -19,6 +19,19 @@
 
 **Veredicto:** sigue en **FAIL** hasta publicar con dominio, ID de AdSense y el mensaje de consentimiento. Con eso hecho, Monetization pasa a unos 80 y el total a unos **80** (CONDITIONAL PASS / Ready). Para subir más: 2 a 4 guías nuevas y alargar las guías cortas.
 
+### 25 de octubre de 2026
+
+| Dimensión | Puntaje | Qué cambió |
+|---|---|---|
+| Content Quality | 78 | 5 guías nuevas elegidas por búsquedas (seguro de viaje, Pix en Brasil, group travel insurance, eSIM, Costa Atlántica con experiencia propia de 1.560 palabras) |
+| Policy Compliance | 88 | Sin cambios |
+| Trust Signals | 76 | Bio del autor con experiencia y LinkedIn; fuentes citadas en las guías con datos |
+| UX Quality | 86 | Las tablas anchas ya no desbordan la pantalla en mobile |
+| Monetization Readiness | 42 | Temas de mayor valor publicitario; siguen faltando dominio, ID y CMP |
+| **Total** | **75** | |
+
+Con dominio, ID de AdSense y CMP, Monetization pasa a unos 80 y el total a unos **81** (Ready).
+
 Lo que sigue abajo es la auditoría inicial, sin cambios.
 
 ## Executive Summary

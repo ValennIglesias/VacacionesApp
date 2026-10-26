@@ -74,6 +74,8 @@ export const trips = sqliteTable("trips", {
   // vencimiento (shared/retention.ts): último aviso enviado y cuándo
   retentionNotice: integer("retention_notice").notNull().default(0),
   retentionNoticeAt: integer("retention_notice_at"),
+  // viaje de ejemplo (POST /api/demo): uno por usuario, se puede borrar rápido desde Mis viajes
+  demo: integer("demo", { mode: "boolean" }).notNull().default(false),
 });
 
 export const members = sqliteTable(

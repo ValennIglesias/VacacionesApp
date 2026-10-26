@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle } from "@phosphor-icons/react";
+import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle, Trash } from "@phosphor-icons/react";
 import { api, auth, useIsGuest, type Trip } from "../lib/api";
 import { useI18n, useLocale, useT } from "../lib/i18n";
 import { countryName, today, tripTiming } from "../lib/format";
@@ -32,9 +32,16 @@ export function Home() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const nav = useNavigate();
   const { lang } = useI18n();
+  // el servidor devuelve el ejemplo existente en vez de crear otro
   const demo = useMutation({
     mutationFn: () => api<{ id: string }>("/demo", { body: { lang, today: today() } }),
     onSuccess: ({ id }) => nav(`/t/${id}`),
+  });
+  const myDemo = trips.data?.find((x) => x.demo && x.createdBy === session.data?.user.id);
+  const qc = useQueryClient();
+  const deleteDemo = useMutation({
+    mutationFn: (id: string) => api(`/trips/${id}`, { method: "DELETE" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["trips"] }),
   });
   const deleteAccount = useMutation({
     mutationFn: () => api("/account", { method: "DELETE" }),
@@ -76,10 +83,17 @@ export function Home() {
           <span className="font-medium">{t.joinTrip}</span>
         </Link>
       </div>
-      {!!trips.data?.length && !atGuestLimit && (
-        <button type="button" onClick={() => demo.mutate()} disabled={demo.isPending} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink disabled:opacity-50">
-          <Sparkle size={16} weight="duotone" /> {t.tryDemo}
-        </button>
+      {myDemo ? (
+        <Link to={`/t/${myDemo.id}`} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink">
+          <Sparkle size={16} weight="duotone" /> {t.openDemo}
+        </Link>
+      ) : (
+        !!trips.data?.length &&
+        !atGuestLimit && (
+          <button type="button" onClick={() => demo.mutate()} disabled={demo.isPending} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink disabled:opacity-50">
+            <Sparkle size={16} weight="duotone" /> {t.tryDemo}
+          </button>
+        )
       )}
 
       {isGuest && (
@@ -123,8 +137,12 @@ export function Home() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
           >
-            <Link to={`/t/${trip.id}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+            <Link
+              to={`/t/${trip.id}`}
+              className={`flex items-center gap-4 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98] ${trip.demo ? "border border-dashed border-line pr-16" : ""}`}
+            >
 <Flag cc={trip.countryCode} size={44} />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-semibold">{trip.name}</p>
@@ -133,13 +151,31 @@ export function Home() {
                 </p>
                 {trip.status === "active" && timingOf(trip) && <p className="truncate text-xs font-medium text-accent-ink">{timingOf(trip)}</p>}
               </div>
-              <span
-                className={`rounded-full px-2.5 py-1 text-xs font-medium ${trip.status === "active" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-muted"}`}
-              >
-                {trip.status === "active" ? t.active : t.closed}
-              </span>
-              <CaretRight size={18} className="text-muted" />
+              {trip.demo ? (
+                <span className="rounded-full bg-surface-2 px-2.5 py-1 text-xs font-medium text-muted">{t.demoBadge}</span>
+              ) : (
+                <>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-medium ${trip.status === "active" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-muted"}`}
+                  >
+                    {trip.status === "active" ? t.active : t.closed}
+                  </span>
+                  <CaretRight size={18} className="text-muted" />
+                </>
+              )}
             </Link>
+            {/* el ejemplo se borra en un toque (fuera del link: no se anidan botones en un <a>) */}
+            {trip.demo && trip.createdBy === session.data?.user.id && (
+              <button
+                type="button"
+                onClick={() => deleteDemo.mutate(trip.id)}
+                disabled={deleteDemo.isPending}
+                className="absolute right-3 top-1/2 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:text-neg active:scale-90 disabled:opacity-50"
+                aria-label={t.deleteDemo}
+              >
+                <Trash size={20} />
+              </button>
+            )}
           </motion.div>
         ))}
       </section>

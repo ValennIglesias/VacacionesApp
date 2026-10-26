@@ -21,6 +21,7 @@ export type Trip = {
   status: "active" | "closed";
   createdBy: string;
   createdAt: number;
+  demo: boolean;
 };
 export type Member = { id: string; name: string; userId: string | null; alias: string | null; color: number; image: string | null };
 export type Expense = {
