@@ -5,3 +5,6 @@ GOOGLE_CLIENT_SECRET=
 RESEND_API_KEY=
 # ej: TribuSplit <hola@tribusplit.com> (el dominio tiene que estar verificado en Resend)
 EMAIL_FROM=
+
+# en local pisa el valor de producción de wrangler.jsonc
+BETTER_AUTH_URL=http://localhost:5173

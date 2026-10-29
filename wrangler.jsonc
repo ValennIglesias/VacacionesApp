@@ -14,8 +14,7 @@
     {
       "binding": "DB",
       "database_name": "tribusplit-db",
-      // reemplazar con el id de `wrangler d1 create tribusplit-db`
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "6a9e49d8-b0e7-48d0-903b-d9b27c3f0db0",
       "migrations_dir": "migrations"
     }
   ],
@@ -25,7 +24,7 @@
     { "name": "WRITE_LIMITER", "namespace_id": "1002", "simple": { "limit": 60, "period": 60 } }
   ],
   "vars": {
-    "BETTER_AUTH_URL": "http://localhost:5173"
+    "BETTER_AUTH_URL": "https://tribusplit.com"
   },
   // limpieza diaria de invitados viejos sin uso (worker/index.ts: cleanupGuests)
   "triggers": { "crons": ["0 4 * * *"] },
