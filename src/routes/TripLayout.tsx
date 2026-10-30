@@ -56,18 +56,10 @@ export function TripLayout() {
         <ThemeToggle />
       </header>
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={loc.pathname}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="px-5"
-        >
-          <Outlet context={{ data: q.data, openExpense: (expense?: Expense) => setSheet({ open: true, expense }) } satisfies Ctx} />
-        </motion.div>
-      </AnimatePresence>
+      {/* sin transición entre pestañas: si la animación no corre (pestaña en segundo plano, ahorro de batería) el contenido quedaba invisible hasta recargar */}
+      <div className="px-5">
+        <Outlet context={{ data: q.data, openExpense: (expense?: Expense) => setSheet({ open: true, expense }) } satisfies Ctx} />
+      </div>
 
       <AnimatePresence>
         {showFab && (
