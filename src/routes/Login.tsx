@@ -20,7 +20,9 @@ export function Login() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const nav = useNavigate();
 
+  // después de todos los hooks: si no, al iniciar sesión se renderizan menos hooks y React rompe (#300)
   if (session.data && !isGuest) return <Navigate to={next} replace />;
 
   const submit = async (e: React.FormEvent) => {
@@ -41,7 +43,6 @@ export function Login() {
   };
 
   const google = () => auth.signIn.social({ provider: "google", callbackURL: `/app${next}` });
-  const nav = useNavigate();
   // sin cuenta: entra como invitado (límite de viajes propios) y va directo a armar el viaje
   const guest = async () => {
     setError("");
