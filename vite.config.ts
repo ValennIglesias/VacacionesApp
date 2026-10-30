@@ -7,8 +7,9 @@ import { VitePWA } from "vite-plugin-pwa";
 import { BRAND, CONTACT } from "./shared/brand.ts";
 import { cta, footer, header } from "./site/partials.ts";
 
-// URL pública del sitio para canonical/hreflang/og (absolutas). Se define al compilar: SITE_URL=https://dominio npm run build
-const SITE = (process.env.SITE_URL ?? "http://localhost:5173").replace(/\/$/, "");
+// URL pública del sitio para canonical/hreflang/og/sitemap (absolutas). Por defecto la de producción, así el build de
+// Cloudflare no depende de una variable; SITE_URL la pisa (ej. para un entorno de prueba)
+const SITE = (process.env.SITE_URL || "https://tribusplit.com").replace(/\/$/, "");
 
 // ID de AdSense (ca-pub-…) desde .env o variables de build: verificación del sitio (meta tag) y ads.txt
 const ADSENSE = loadEnv("production", process.cwd(), "VITE_").VITE_ADSENSE_CLIENT || "";
