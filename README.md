@@ -103,7 +103,7 @@ Completar la pantalla de consentimiento (nombre, logo, link a `/privacy/`) y pub
 ### AdSense
 
 1. (vos) Con el sitio indexado, crear la cuenta en AdSense (mayor de 18, datos fiscales y de pago) y agregar el sitio.
-2. Con el `ca-pub-…`: cargarlo como variable de build `VITE_ADSENSE_CLIENT` y volver a publicar. El build agrega el meta tag de verificación (`google-adsense-account`) en todas las páginas y genera `ads.txt`. Confirmar en AdSense que el meta tag coincide con el que muestra la opción "Meta tag" del sitio.
+2. Con el `ca-pub-…`: cargarlo como variable de build `VITE_ADSENSE_CLIENT` y volver a publicar. Ya está en `.env.production` (el ID es público). El build agrega el meta tag de verificación (`google-adsense-account`) y el script de AdSense en el `<head>` de las páginas del sitio (no en la app), y genera `ads.txt`. Confirmar en AdSense que el meta tag coincide con el que muestra la opción "Meta tag" del sitio.
 3. (vos) AdSense > Privacidad y mensajes: activar el mensaje de consentimiento (EEA/UK).
 4. Tras la aprobación, crear unidades de anuncio y cargar como variables de build: `VITE_ADSENSE_SLOT_LANDING` (landing y guías), `VITE_ADSENSE_SLOT_TRIP`, `VITE_ADSENSE_SLOT_SUMMARY`. Sin estas variables no se muestra ningún anuncio.
 5. No hacer clic en los propios anuncios: es motivo de baja de la cuenta.

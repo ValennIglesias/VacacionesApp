@@ -17,6 +17,10 @@ const SITE = (process.env.SITE_URL || "https://tribusplit.com").replace(/\/$/, "
 // ID de AdSense (ca-pub-…) desde .env o variables de build: verificación del sitio (meta tag) y ads.txt
 const ADSENSE = loadEnv("production", process.cwd(), "VITE_").VITE_ADSENSE_CLIENT || "";
 if (ADSENSE && !/^ca-pub-\d+$/.test(ADSENSE)) throw new Error(`VITE_ADSENSE_CLIENT inválido: ${ADSENSE}`);
+// el snippet de AdSense va en el <head> del sitio (lo pide la revisión); en la app lo carga AdSlot recién cuando hay un anuncio
+const adsHead = (app: boolean) =>
+  `  <meta name="google-adsense-account" content="${ADSENSE}" />\n` +
+  (app ? "" : `  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE}" crossorigin="anonymous"></script>\n`);
 
 // <i class="ph-duotone ph-caret-down extra"></i> → SVG inline: la fuente de íconos pesaba 160 KB para ~16 íconos
 const icons = (html: string) =>
@@ -30,13 +34,13 @@ const icons = (html: string) =>
 // %BRAND% y %SITE% en las páginas estáticas
 const brand = (): Plugin => ({
   name: "brand",
-  transformIndexHtml: (html) => {
+  transformIndexHtml: (html, ctx) => {
     const lang = html.includes('<html lang="en"') ? "en" : "es";
     return icons(html.replace("%GUIDE_HEADER%", header(lang)).replace("%GUIDE_CTA%", cta(lang)).replace("%GUIDE_FOOTER%", footer(lang)))
       .replaceAll("%BRAND%", BRAND)
       .replaceAll("%CONTACT%", CONTACT)
       .replaceAll("%SITE%", SITE)
-      .replace("</head>", ADSENSE ? `  <meta name="google-adsense-account" content="${ADSENSE}" />\n  </head>` : "</head>");
+      .replace("</head>", ADSENSE ? `${adsHead(ctx.path.startsWith("/app/"))}  </head>` : "</head>");
   },
   // robots.txt y sitemap.xml con las páginas públicas (la app y los legales no suman para buscadores)
   generateBundle() {
