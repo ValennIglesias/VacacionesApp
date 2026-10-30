@@ -23,6 +23,7 @@ export function Login() {
   const nav = useNavigate();
 
   // después de todos los hooks: si no, al iniciar sesión se renderizan menos hooks y React rompe (#300)
+  if (session.isPending) return <div className="min-h-[100dvh]" />;
   if (session.data && !isGuest) return <Navigate to={next} replace />;
 
   const submit = async (e: React.FormEvent) => {

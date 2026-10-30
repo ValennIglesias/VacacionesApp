@@ -1,4 +1,5 @@
-import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, useEffect, useId } from "react";
+import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, useEffect, useId, useRef } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useDragControls, useReducedMotion } from "motion/react";
 import {
   Bed,
@@ -9,10 +10,15 @@ import {
   Martini,
   ShoppingBag,
   DotsThreeCircle,
+  X,
   type Icon,
 } from "@phosphor-icons/react";
 import type { Category } from "../../shared/data";
 import { isGalleryAvatar, isSafeAvatar } from "../../shared/avatars";
+import { useT } from "../lib/i18n";
+
+/** Enfoca sin hacer scroll: con autoFocus, el navegador scrollea la hoja mientras todavía entra animada desde abajo. */
+export const focusNoScroll = (el: HTMLElement | null) => el?.focus({ preventScroll: true });
 
 export const spring = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 } as const;
 
@@ -57,22 +63,28 @@ export function Field({ label, help, error, className = "", ...rest }: FieldProp
 
 /** Bottom sheet con backdrop; se cierra con Escape, tocando afuera o arrastrando hacia abajo. */
 export function Sheet({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
+  const t = useT();
   const reduce = useReducedMotion();
   const controls = useDragControls();
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    // con hojas apiladas, Escape cierra solo la de arriba
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && [...document.querySelectorAll("[aria-modal=true]")].at(-1) === ref.current && onClose();
     window.addEventListener("keydown", onKey);
+    // restaurar el valor previo: con una hoja abierta encima de otra, cerrar la de arriba no libera el scroll de fondo
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.body.style.overflow = prev;
     };
   }, [open, onClose]);
-  return (
+  // portal: una hoja abierta desde otra hoja quedaría atrapada en el transform de la primera
+  return createPortal(
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-40 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
+        <div ref={ref} className="fixed inset-0 z-40 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
           <motion.div
             className="absolute inset-0 bg-black/40"
             initial={{ opacity: 0 }}
@@ -82,7 +94,7 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
             onClick={onClose}
           />
           <motion.div
-            className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[28px] bg-surface px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3"
+            className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-[28px] bg-surface px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
             initial={reduce ? { opacity: 0 } : { y: "100%" }}
             animate={reduce ? { opacity: 1 } : { y: 0 }}
             exit={reduce ? { opacity: 0 } : { y: "100%" }}
@@ -94,14 +106,22 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
             dragControls={controls}
             onDragEnd={(_, i) => (i.offset.y > 120 || i.velocity.y > 600) && onClose()}
           >
-            {/* arrastrar solo desde la manija para no pelear con el scroll interno */}
-            <div className="mx-auto mb-3 h-1.5 w-10 cursor-grab touch-none rounded-full bg-line" onPointerDown={(e) => controls.start(e)} />
-            <h2 className="mb-4 text-xl font-semibold">{title}</h2>
+            {/* cabecera fija: se arrastra para cerrar (no el contenido, para no pelear con su scroll) */}
+            <div className="sticky top-0 z-10 -mx-5 mb-4 cursor-grab touch-none bg-surface px-5 pt-3" onPointerDown={(e) => controls.start(e)}>
+              <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-line" />
+              <div className="flex items-center justify-between gap-3 pb-1">
+                <h2 className="text-xl font-semibold">{title}</h2>
+                <button type="button" onClick={onClose} aria-label={t.close} className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted hover:text-ink">
+                  <X size={20} weight="bold" />
+                </button>
+              </div>
+            </div>
             {children}
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 

@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, Copy, ShareNetwork, MagnifyingGlass } from "@phosphor-icons/react";
+import { CaretDown, Check, Copy, ShareNetwork, MagnifyingGlass } from "@phosphor-icons/react";
 import { COUNTRY_CURRENCY, CURRENCIES } from "../../shared/data";
 import { countryName, currencyName } from "../lib/format";
 import { useLocale, useT } from "../lib/i18n";
-import { Button, Flag, Sheet } from "./ui";
+import { Button, Flag, focusNoScroll, Sheet } from "./ui";
 
 export function useCopy() {
   const [copied, setCopied] = useState(false);
@@ -79,21 +79,63 @@ export function ShareCode({ code, tripName }: { code: string; tripName: string }
 }
 
 export function CurrencySelect({ value, onChange, label, id }: { value: string; onChange: (v: string) => void; label?: string; id?: string }) {
+  const t = useT();
   const locale = useLocale();
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const all = useMemo(() => CURRENCIES.map((c) => ({ c, name: currencyName(c, locale) })), [locale]);
+  const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+  const list = q ? all.filter((x) => norm(`${x.c} ${x.name}`).includes(norm(q))) : all;
+  const pick = (c: string) => {
+    onChange(c);
+    setOpen(false);
+  };
   return (
-    <select
-      id={id}
-      aria-label={label}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="h-12 w-full rounded-2xl border border-line bg-surface px-4 text-ink outline-none focus:border-accent"
-    >
-      {CURRENCIES.map((c) => (
-        <option key={c} value={c}>
-          {c} · {currencyName(c, locale)}
-        </option>
-      ))}
-    </select>
+    <>
+      <button
+        type="button"
+        id={id}
+        aria-label={label}
+        aria-haspopup="dialog"
+        onClick={() => (setQ(""), setOpen(true))}
+        className="flex h-12 w-full items-center gap-2 rounded-2xl border border-line bg-surface px-4 text-left text-ink outline-none focus:border-accent"
+      >
+        <span className="font-semibold">{value}</span>
+        <span className="min-w-0 flex-1 truncate text-muted">{currencyName(value, locale)}</span>
+        <CaretDown size={16} className="shrink-0 text-muted" />
+      </button>
+      <Sheet open={open} onClose={() => setOpen(false)} title={label ?? t.currency}>
+        <label className="flex h-12 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-4 focus-within:border-accent">
+          <MagnifyingGlass size={18} className="shrink-0 text-muted" />
+          <input
+            ref={focusNoScroll}
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && list.length === 1 && (e.preventDefault(), pick(list[0].c))}
+            placeholder={t.searchCurrency}
+            aria-label={t.searchCurrency}
+            className="min-w-0 flex-1 bg-transparent text-ink outline-none placeholder:text-muted/70"
+          />
+        </label>
+        <ul className="mt-3 flex flex-col gap-1">
+          {list.map((x) => (
+            <li key={x.c}>
+              <button
+                type="button"
+                onClick={() => pick(x.c)}
+                aria-pressed={x.c === value}
+                className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left ${x.c === value ? "bg-accent-soft text-accent-ink" : "hover:bg-surface-2"}`}
+              >
+                <span className="w-12 shrink-0 font-semibold">{x.c}</span>
+                <span className="min-w-0 flex-1 truncate">{x.name}</span>
+                {x.c === value && <Check size={18} weight="bold" className="shrink-0" />}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
+    </>
   );
 }
 

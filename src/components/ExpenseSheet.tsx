@@ -6,7 +6,7 @@ import { api, crossRate, useRates, type Expense, type TripData } from "../lib/ap
 import { useLocale, useT } from "../lib/i18n";
 import { money, parseAmount, today } from "../lib/format";
 import { CATEGORIES, type Category } from "../../shared/data";
-import { Avatar, Button, CATEGORY_META, Field, memberColor, Sheet, spring } from "./ui";
+import { Avatar, Button, CATEGORY_META, Field, focusNoScroll, memberColor, Sheet, spring } from "./ui";
 import { CurrencySelect } from "./bits";
 import { DateField } from "./DatePicker";
 
@@ -80,7 +80,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
           <input
             id="amount"
             inputMode="decimal"
-            autoFocus={!expense}
+            ref={expense ? undefined : focusNoScroll}
             value={amount}
             onChange={(e) => setAmount(e.target.value.replace(/[^\d.,]/g, ""))}
             placeholder="0"
@@ -109,7 +109,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
         </div>
         {otherCur && (
           <CurrencySelect
-            label={t.otherCurrency}
+            label={t.currency}
             value={currency}
             onChange={(c) => {
               setCurrency(c);
