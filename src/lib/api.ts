@@ -22,6 +22,7 @@ export type Trip = {
   createdBy: string;
   createdAt: number;
   demo: boolean;
+  solo: boolean;
 };
 export type Member = { id: string; name: string; userId: string | null; alias: string | null; color: number; image: string | null };
 export type Expense = {
@@ -93,11 +94,4 @@ export const useArsRates = (enabled: boolean) =>
   });
 
 /** Cotización from->to cuando uno de los dos es ARS, usando un dólar argentino específico. */
-export const arsCrossRate = (rates: Record<string, number> | undefined, arsPerUsd: number, from: string, to: string) => {
-  if (to === "ARS") return rates?.[from] ? arsPerUsd / rates[from] : undefined;
-  if (from === "ARS") return rates?.[to] ? rates[to] / arsPerUsd : undefined;
-};
-
-/** Cotización cruzada desde la tabla base USD. */
-export const crossRate = (rates: Record<string, number> | undefined, from: string, to: string) =>
-  from === to ? 1 : rates?.[from] && rates?.[to] ? rates[to] / rates[from] : undefined;
+export { arsCrossRate, crossRate } from "../../shared/tools";

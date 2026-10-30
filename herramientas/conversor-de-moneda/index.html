@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conversor de moneda para viajar: reales, dólares y euros a pesos | %BRAND%</title>
+    <meta name="description" content="Convertí lo que cuesta algo en el viaje a tu moneda, con la cotización del día. Para pesos argentinos, también con dólar tarjeta, MEP y blue. Tabla rápida para mirar en la calle. Gratis y sin cuenta." />
+    <link rel="canonical" href="%SITE%/herramientas/conversor-de-moneda/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/herramientas/conversor-de-moneda/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/tools/travel-currency-converter/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Conversor de moneda para viajar" />
+    <meta property="og:description" content="Cuánto es en tu moneda lo que cuesta algo en el viaje, con la cotización del día y, para pesos argentinos, con dólar tarjeta, MEP y blue." />
+    <meta property="og:url" content="%SITE%/herramientas/conversor-de-moneda/" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="module" src="/src/tools.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Conversor de moneda para viajar","description":"Cuánto es en tu moneda lo que cuesta algo en el viaje, con la cotización del día y, para pesos argentinos, con dólar tarjeta, MEP y blue.","url":"%SITE%/herramientas/conversor-de-moneda/","inLanguage":"es","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0"},"publisher":{"@type":"Organization","name":"%BRAND%","url":"%SITE%/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"%SITE%/"},{"@type":"ListItem","position":2,"name":"Conversor de moneda","item":"%SITE%/herramientas/conversor-de-moneda/"}]}]}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+        <h1>Conversor de moneda para viajar</h1>
+        <p class="lead">Poné cuánto cuesta algo en el destino y mirá cuánto es en tu moneda, con la cotización del día. Si convertís a pesos argentinos, también te mostramos el resultado con dólar tarjeta, MEP y blue.</p>
+      </article>
+
+      <section class="mx-auto mt-8 max-w-3xl px-5" aria-label="Conversor">
+        <form id="fx-tool" class="rounded-3xl bg-surface p-5 sm:p-7">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-end">
+            <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">Monto
+              <input name="amount" type="text" inputmode="decimal" value="100" autocomplete="off" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+            <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">De (moneda del destino)
+              <select name="from" data-default="BRL" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent"></select></label>
+            <button type="button" data-swap aria-label="Invertir monedas" class="inline-flex size-12 rotate-90 items-center justify-center justify-self-center rounded-full bg-accent-soft text-xl text-accent-ink transition-transform hover:scale-105 sm:rotate-0 sm:self-end">⇄</button>
+            <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">A (tu moneda)
+              <select name="to" data-default="ARS" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent"></select></label>
+          </div>
+          <div data-result class="mt-6 rounded-2xl bg-accent px-5 py-4 text-white" aria-live="polite"><p class="text-sm text-white/80">Cargando la cotización…</p></div>
+          <div data-ars class="mt-5" hidden></div>
+          <h3 class="mt-6 mb-1 font-semibold">Tabla rápida para la calle</h3>
+          <table class="w-full text-sm"><tbody data-table></tbody></table>
+        </form>
+        <p class="mt-3 text-sm text-muted">Cotización de referencia del mercado, actualizada una vez por día. Los dólares de Argentina se actualizan cada hora. Lo que te cobren la tarjeta o la casa de cambio puede ser un poco distinto.</p>
+      </section>
+
+      <article class="prose">
+        <h2>Cómo usarlo en el viaje</h2>
+        <ol>
+          <li><strong>Elegí la moneda del destino y la tuya.</strong> Si viajás a Brasil desde Argentina, de reales a pesos. Con ⇄ das vuelta la conversión.</li>
+          <li><strong>Escribí el precio que ves</strong> en el menú, la góndola o el cartel, y tenés el equivalente al instante.</li>
+          <li><strong>Sacale captura a la tabla rápida.</strong> Con los montos redondos ya convertidos, no necesitás internet para saber si algo es caro.</li>
+        </ol>
+
+        <h2>¿Qué cotización usar?</h2>
+        <p>La cotización de mercado es una referencia: es la que se usa entre bancos y la que ves en los buscadores. En la práctica, lo que pagás depende de cómo pagás:</p>
+        <ul>
+          <li><strong>Con tarjeta de crédito o débito</strong>, el banco convierte con su propia cotización y a veces suma una comisión. Para pesos argentinos, mirá el resultado con <strong>dólar tarjeta</strong>, que ya incluye los impuestos que se cobran a los consumos en el exterior.</li>
+          <li><strong>Con efectivo cambiado antes de viajar</strong>, la referencia es lo que pagaste por esos dólares o reales: si los compraste con dólar MEP o blue, usá esa fila.</li>
+          <li><strong>En casas de cambio del destino</strong> suele haber una diferencia entre compra y venta: lo que te dan es algo menos que la cotización de mercado.</li>
+        </ul>
+        <p>Un consejo que vale siempre: si la terminal de la tarjeta te pregunta si querés pagar en tu moneda o en la moneda local, elegí <strong>la moneda local</strong>. La conversión que ofrece el comercio suele ser peor que la de tu banco. En la guía sobre <a href="/guias/dolar-tarjeta-mep-blue-viajar/">dólar tarjeta, MEP y blue para viajar</a> explicamos cuándo conviene cada uno.</p>
+
+        <h2>Si querés llevar la cuenta de todo el viaje</h2>
+        <p>Convertir un precio sirve para decidir en el momento; saber cuánto llevás gastado en total es otra cosa. En <a href="/app/new">%BRAND%</a> anotás cada gasto en la moneda en que pagaste y la app te muestra el total del viaje en tu moneda, por día y por categoría. Funciona si viajás solo y también en grupo, donde además reparte los gastos y dice quién le paga a quién. Para el presupuesto antes de salir, está la guía de <a href="/guias/presupuesto-para-viajar-solo/">presupuesto para viajar solo</a>.</p>
+
+        <h2>Preguntas frecuentes</h2>
+        <h3>¿De dónde salen las cotizaciones?</h3>
+        <p>La cotización de mercado viene de un servicio público de tipos de cambio y se actualiza una vez por día. Los dólares de Argentina (oficial, tarjeta, MEP y blue) se toman del valor de venta publicado y se actualizan cada hora.</p>
+        <h3>¿Por qué mi banco me cobró otro número?</h3>
+        <p>Porque cada banco aplica su cotización del día en que procesa el consumo, que puede no ser el día en que pagaste, y a veces suma comisiones. La diferencia suele ser chica, pero existe.</p>
+        <h3>¿Conviene pagar con tarjeta o con efectivo?</h3>
+        <p>Depende del país y de la cotización que consigas. En muchos destinos la tarjeta es cómoda y segura; en otros, algunos comercios hacen descuento en efectivo. En la guía para <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">pagar en Brasil</a> comparamos las opciones con ejemplos.</p>
+      </article>
+      <div id="ad-landing" class="prose mt-10" hidden></div>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

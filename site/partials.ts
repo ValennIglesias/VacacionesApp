@@ -2,9 +2,9 @@
 type Lang = "es" | "en";
 
 const t = {
-  es: { home: "/", guides: "/guias/", guidesLabel: "Guías", other: "/en/guides/", otherLabel: "English", open: "Abrir app", privacy: "Privacidad", terms: "Términos", contact: "Contacto", about: "Sobre nosotros", aboutUrl: "/nosotros/", contactUrl: "/contacto/", tools: [["/herramientas/calculadora-dividir-gastos/", "Calculadora de gastos"], ["/herramientas/calculadora-de-nafta/", "Calculadora de nafta"]], theme: "Cambiar tema",
+  es: { home: "/", guides: "/guias/", guidesLabel: "Guías", other: "/en/guides/", otherLabel: "English", open: "Abrir app", privacy: "Privacidad", terms: "Términos", contact: "Contacto", about: "Sobre nosotros", aboutUrl: "/nosotros/", contactUrl: "/contacto/", tools: [["/herramientas/calculadora-dividir-gastos/", "Calculadora de gastos"], ["/herramientas/calculadora-de-nafta/", "Calculadora de nafta"], ["/herramientas/conversor-de-moneda/", "Conversor de moneda"]], theme: "Cambiar tema",
     ctaTitle: "Repartan los gastos sin hacer cuentas", ctaBody: "Anoten cada gasto en la moneda del destino y la app calcula quién le paga a quién, con la menor cantidad de transferencias.", ctaBtn: "Crear viaje gratis" },
-  en: { home: "/en/", guides: "/en/guides/", guidesLabel: "Guides", other: "/guias/", otherLabel: "Español", open: "Open app", privacy: "Privacy", terms: "Terms", contact: "Contact", about: "About", aboutUrl: "/en/about/", contactUrl: "/en/contact/", tools: [["/en/tools/split-expenses-calculator/", "Split calculator"], ["/en/tools/gas-cost-calculator/", "Gas calculator"]], theme: "Toggle theme",
+  en: { home: "/en/", guides: "/en/guides/", guidesLabel: "Guides", other: "/guias/", otherLabel: "Español", open: "Open app", privacy: "Privacy", terms: "Terms", contact: "Contact", about: "About", aboutUrl: "/en/about/", contactUrl: "/en/contact/", tools: [["/en/tools/split-expenses-calculator/", "Split calculator"], ["/en/tools/gas-cost-calculator/", "Gas calculator"], ["/en/tools/travel-currency-converter/", "Currency converter"]], theme: "Toggle theme",
     ctaTitle: "Split expenses without doing the math", ctaBody: "Log every expense in the local currency and the app works out who pays whom, with as few transfers as possible.", ctaBtn: "Create a free trip" },
 };
 

@@ -25,7 +25,7 @@
     <meta name="theme-color" content="#0e1015" media="(prefers-color-scheme: dark)" />
     <link rel="stylesheet" href="/src/site.css" />
     <script type="module" src="/src/landing.ts"></script>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "%BRAND%", "url": "%SITE%/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "es", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tiene costo?", "acceptedAnswer": {"@type": "Answer", "text": "No. %BRAND% es gratis y se sostiene con publicidad discreta."}}, {"@type": "Question", "name": "¿Todos tienen que crearse una cuenta?", "acceptedAnswer": {"@type": "Answer", "text": "No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código."}}, {"@type": "Question", "name": "¿En qué moneda se pagan las deudas?", "acceptedAnswer": {"@type": "Answer", "text": "Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar."}}, {"@type": "Question", "name": "¿Qué es una repartida parcial?", "acceptedAnswer": {"@type": "Answer", "text": "Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total."}}, {"@type": "Question", "name": "¿%BRAND% mueve dinero?", "acceptedAnswer": {"@type": "Answer", "text": "No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app."}}]}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "%BRAND%", "url": "%SITE%/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "es", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tiene costo?", "acceptedAnswer": {"@type": "Answer", "text": "No. %BRAND% es gratis y se sostiene con publicidad discreta."}}, {"@type": "Question", "name": "¿Todos tienen que crearse una cuenta?", "acceptedAnswer": {"@type": "Answer", "text": "No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código."}}, {"@type": "Question", "name": "¿En qué moneda se pagan las deudas?", "acceptedAnswer": {"@type": "Answer", "text": "Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar."}}, {"@type": "Question", "name": "¿Qué es una repartida parcial?", "acceptedAnswer": {"@type": "Answer", "text": "Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total."}}, {"@type": "Question", "name": "¿%BRAND% mueve dinero?", "acceptedAnswer": {"@type": "Answer", "text": "No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app."}}, {"@type": "Question", "name": "¿Sirve si viajo solo?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Al crear el viaje elegí «Solo»: anotás tus gastos en la moneda del destino y ves cuánto llevás gastado en tu moneda, por día y por categoría. No hay código ni repartida, y si después se suma alguien, lo pasás a grupal en un toque."}}]}]}</script>
   </head>
   <body>
     <header class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
@@ -117,13 +117,18 @@
             <h3 class="mt-4 text-lg font-semibold">Resumen del viaje</h3>
             <p class="mt-1 text-muted">Cuánto se fue en comida, en alojamiento y en cada día, en tu moneda.</p>
           </article>
+          <article class="reveal-scroll flex flex-col gap-4 rounded-3xl bg-surface p-6 sm:flex-row sm:items-center md:col-span-6">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-user text-3xl"></i></span>
+            <div class="min-w-0 flex-1"><h3 class="text-lg font-semibold">¿Viajás solo? También sirve</h3><p class="mt-1 text-muted">Elegí «Solo» al crear el viaje y anotá tus gastos en la moneda del destino: ves cuánto llevás gastado en tu moneda, por día y por categoría. Sin código ni repartida.</p></div>
+            <a href="/guias/presupuesto-para-viajar-solo/" class="shrink-0 font-medium text-accent-ink">Armá tu presupuesto →</a>
+          </article>
         </div>
       </section>
 
       <section class="mx-auto max-w-6xl px-5 py-16">
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Calculadoras gratis, sin cuenta</h2>
         <p class="reveal-scroll mt-3 max-w-[56ch] text-lg text-muted">Para resolver una cuenta rápida antes o después del viaje, directo desde el navegador.</p>
-        <div class="mt-8 grid gap-4 md:grid-cols-2">
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
           <a href="/herramientas/calculadora-dividir-gastos/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-calculator text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Calculadora para dividir gastos</span><span class="mt-1 block text-muted">Anotá cuánto puso cada uno y te dice quién le paga a quién.</span></span>
@@ -132,6 +137,11 @@
           <a href="/herramientas/calculadora-de-nafta/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-gas-pump text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Calculadora de nafta</span><span class="mt-1 block text-muted">Cuánto cuesta el viaje en auto con peajes y cuánto pone cada uno.</span></span>
+            <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
+          </a>
+          <a href="/herramientas/conversor-de-moneda/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-currency-circle-dollar text-3xl"></i></span>
+            <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Conversor de moneda</span><span class="mt-1 block text-muted">Cuánto es en tu moneda lo que cuesta algo en el viaje, con dólar tarjeta, MEP y blue.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
         </div>
@@ -166,6 +176,7 @@
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿En qué moneda se pagan las deudas?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Qué es una repartida parcial?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿%BRAND% mueve dinero?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Sirve si viajo solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Sí. Al crear el viaje elegí «Solo»: anotás tus gastos en la moneda del destino y ves cuánto llevás gastado en tu moneda, por día y por categoría. No hay código ni repartida, y si después se suma alguien, lo pasás a grupal en un toque.</p></details>
         </div>
       </section>
 
@@ -180,7 +191,7 @@
     <footer class="border-t border-line">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-muted">
         <p>%BRAND%</p>
-        <nav class="flex flex-wrap gap-5"><a href="/guias/">Guías</a><a href="/herramientas/calculadora-dividir-gastos/">Calculadora de gastos</a><a href="/herramientas/calculadora-de-nafta/">Calculadora de nafta</a><a href="/privacy/">Privacidad</a><a href="/terms/">Términos</a><a href="/nosotros/">Sobre nosotros</a><a href="/contacto/">Contacto</a><a href="/en/" hreflang="en">English</a></nav>
+        <nav class="flex flex-wrap gap-5"><a href="/guias/">Guías</a><a href="/herramientas/calculadora-dividir-gastos/">Calculadora de gastos</a><a href="/herramientas/calculadora-de-nafta/">Calculadora de nafta</a><a href="/herramientas/conversor-de-moneda/">Conversor de moneda</a><a href="/privacy/">Privacidad</a><a href="/terms/">Términos</a><a href="/nosotros/">Sobre nosotros</a><a href="/contacto/">Contacto</a><a href="/en/" hreflang="en">English</a></nav>
       </div>
     </footer>
   </body>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { ArrowRight, CalendarCheck, FlagCheckered, CaretRight, CheckCircle, Warning } from "@phosphor-icons/react";
@@ -23,6 +23,7 @@ export function Balances() {
   const max = Math.max(1, ...[...balances.values()].map(Math.abs));
   const rates = useRates();
   const settleK = crossRate(rates.data, trip.currency, trip.settleCurrency) ?? 1;
+  if (trip.solo) return <Navigate to={`/t/${trip.id}`} replace />;
 
   return (
     <div className="flex flex-col gap-6 pt-2">

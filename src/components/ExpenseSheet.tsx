@@ -46,6 +46,8 @@ function ExpenseDetail({ data, expense: e }: { data: TripData; expense: Expense 
           {t.categories[e.category]} · {formatDay(e.date, locale)}
         </p>
       </div>
+      {!trip.solo && (
+        <>
       <section>
         <h3 className="mb-2 text-sm font-medium text-muted">{t.whoPaid}</h3>
         <div className="flex items-center gap-3">
@@ -67,6 +69,8 @@ function ExpenseDetail({ data, expense: e }: { data: TripData; expense: Expense 
           ))}
         </ul>
       </section>
+        </>
+      )}
       <p className="flex items-start gap-2 rounded-2xl bg-surface-2 p-3 text-sm text-muted">
         <LockSimple size={18} className="mt-0.5 shrink-0" />
         {e.settlementId ? t.settledLocked : t.onlyCreatorEdits.replace("{name}", creator)}
@@ -97,6 +101,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
   const autoRate = crossRate(rates.data, currency, trip.currency);
   const rate = currency === trip.currency ? 1 : Number(manualRate.replace(",", ".")) || autoRate;
   const valid = cents && rate && description.trim() && participants.length > 0;
+  const homeK = crossRate(rates.data, trip.currency, trip.settleCurrency);
 
   const done = () => {
     qc.invalidateQueries({ queryKey: ["trip", trip.id] });
@@ -162,6 +167,11 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
             </motion.button>
           ))}
         </div>
+        {cents && rate && homeK && currency !== trip.settleCurrency ? (
+          <p className="-mt-1 text-sm text-muted tabular">
+            ≈ <b className="text-ink">{money(Math.round(cents * rate * homeK), trip.settleCurrency, locale)}</b> {t.inYourCurrency}
+          </p>
+        ) : null}
         <CurrencyPicker
           open={picking}
           onClose={() => setPicking(false)}
@@ -230,6 +240,9 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
         </div>
       </fieldset>
 
+      {/* viaje solo: pagás vos y es todo tuyo */}
+      {!trip.solo && (
+        <>
       {/* quién pagó */}
       <fieldset>
         <legend className="mb-2 text-sm font-medium text-muted">{t.whoPaid}</legend>
@@ -326,6 +339,8 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
           </p>
         ) : null}
       </fieldset>
+        </>
+      )}
 
       <DateField label={t.date} value={date} onChange={setDate} />
 

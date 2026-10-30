@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, Plus, X, Confetti, UsersThree, PencilSimple } from "@phosphor-icons/react";
+import { ArrowLeft, Plus, X, Confetti, UsersThree, PencilSimple, User, CaretRight } from "@phosphor-icons/react";
 import { api, ApiError, auth, useConfig, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName, currencyName, guessHomeCurrency } from "../lib/format";
@@ -35,6 +35,10 @@ export function NewTrip() {
   // "Otro viaje con este grupo": precarga los nombres (vos primero, con tu nombre de ese viaje) y la moneda de repartida
   const [params] = useSearchParams();
   const from = params.get("from");
+  // null = todavía no eligió; repetir un viaje grupal ya es grupal y saltea la pregunta
+  const [solo, setSolo] = useState<boolean | null>(from ? false : null);
+  const steps = [...(from ? [] : ["mode" as const]), "dest" as const, "dates" as const, ...(solo ? [] : ["members" as const])];
+  const cur = steps[step];
   const source = useQuery({ queryKey: ["trip", from], queryFn: () => api<TripData>(`/trips/${from}`), enabled: !!from });
   useEffect(() => {
     if (!source.data) return;
@@ -58,12 +62,15 @@ export function NewTrip() {
           settleCurrency,
           startDate: form.startDate,
           endDate: form.endDate || undefined,
-          members: [...form.members, draft].map((m) => m.trim()).filter(Boolean),
+          members: solo ? [form.members[0]?.trim() || t.you] : [...form.members, draft].map((m) => m.trim()).filter(Boolean),
+          solo: !!solo,
         },
       }),
     onSuccess: ({ id, inviteCode }) => {
       qc.invalidateQueries({ queryKey: ["trips"] });
-      setCreated({ id, code: inviteCode });
+      // solo: no hay código que compartir, directo al viaje
+      if (solo) nav(`/t/${id}`, { replace: true });
+      else setCreated({ id, code: inviteCode });
     },
   });
   const [created, setCreated] = useState<{ id: string; code: string } | null>(null);
@@ -79,8 +86,9 @@ export function NewTrip() {
     setDraft("");
   };
 
-  const canNext = [form.countryCode, form.startDate, form.members[0]?.trim()][step];
-  const titles = [t.stepDestination, t.stepDates, t.stepMembers];
+  const canNext = { mode: solo !== null, dest: form.countryCode, dates: form.startDate, members: form.members[0]?.trim() }[cur];
+  const titles = { mode: t.howTravel, dest: solo ? t.stepDestinationSolo : t.stepDestination, dates: t.stepDates, members: t.stepMembers };
+  const last = step === steps.length - 1;
 
   if (created)
     return (
@@ -117,7 +125,7 @@ export function NewTrip() {
           </button>
         )}
         <div className="flex flex-1 gap-1.5" aria-hidden>
-          {[0, 1, 2].map((i) => (
+          {steps.map((_, i) => (
             <span key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-line">
               <motion.span className="block h-full rounded-full bg-accent" initial={false} animate={{ width: i <= step ? "100%" : "0%" }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} />
             </span>
@@ -136,14 +144,49 @@ export function NewTrip() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-5"
           >
-            <h1 className="text-3xl font-semibold tracking-tight">{titles[step]}</h1>
-            {source.data && step === 0 && (
+            <h1 className="text-3xl font-semibold tracking-tight">{titles[cur]}</h1>
+            {source.data && cur === "dest" && (
               <p className="-mt-2 inline-flex items-center gap-2 self-start rounded-full bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent-ink">
                 <UsersThree size={16} weight="duotone" /> {t.sameGroupAs.replace("{trip}", source.data.trip.name).replace("{n}", String(source.data.members.length))}
               </p>
             )}
 
-            {step === 0 && (
+            {cur === "mode" && (
+              <>
+                <div className="flex flex-col gap-3">
+                  {[
+                    { v: true, icon: User, title: t.travelSolo, body: t.travelSoloBody },
+                    { v: false, icon: UsersThree, title: t.travelGroup, body: t.travelGroupBody },
+                  ].map((o) => {
+                    const on = solo === o.v;
+                    return (
+                      <button
+                        key={o.title}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => {
+                          setSolo(o.v);
+                          go(step + 1);
+                        }}
+                        className={`lift flex items-center gap-4 rounded-3xl p-5 text-left ${on ? "bg-accent text-white" : "bg-surface"}`}
+                      >
+                        <span className={`inline-flex size-14 shrink-0 items-center justify-center rounded-2xl ${on ? "bg-white/15" : "bg-accent-soft text-accent-ink"}`}>
+                          <o.icon size={30} weight="duotone" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-lg font-semibold">{o.title}</span>
+                          <span className={`block text-sm ${on ? "text-white/80" : "text-muted"}`}>{o.body}</span>
+                        </span>
+                        <CaretRight size={20} className={on ? "" : "text-muted"} />
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-sm text-muted">{t.howTravelHint}</p>
+              </>
+            )}
+
+            {cur === "dest" && (
               <>
                 <CountryPicker value={form.countryCode} onChange={(cc) => setForm({ ...form, countryCode: cc })} />
                 {currency && (
@@ -159,16 +202,16 @@ export function NewTrip() {
               </>
             )}
 
-            {step === 1 && (
+            {cur === "dates" && (
               <>
                 <DateRangeField start={form.startDate} end={form.endDate} onChange={(startDate, endDate) => setForm({ ...form, startDate, endDate })} />
                 <div className="flex flex-col gap-2">
                   <label htmlFor="settle-cur" className="text-sm font-medium text-muted">
-                    {t.settleCurrency}
+                    {solo ? t.homeCurrency : t.settleCurrency}
                   </label>
                   <CurrencySelect id="settle-cur" value={settleCurrency} onChange={(v) => setForm({ ...form, settleCurrency: v })} />
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs text-muted">{t.settleCurrencyHelp}</p>
+                    <p className="text-xs text-muted">{solo ? t.homeCurrencyHelp : t.settleCurrencyHelp}</p>
                     {currency && currency !== settleCurrency && (
                       <button type="button" onClick={() => setForm({ ...form, settleCurrency: currency })} className="shrink-0 rounded-full bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent-ink">
                         {t.useLocal} ({currency})
@@ -179,7 +222,7 @@ export function NewTrip() {
               </>
             )}
 
-            {step === 2 && (
+            {cur === "members" && (
               <>
                 <p className="-mt-2 text-sm text-muted">{t.pickAvatarHint}</p>
                 <ul className="flex flex-col gap-2">
@@ -261,9 +304,12 @@ export function NewTrip() {
           {(create.error as ApiError).code === "guest_limit" ? t.guestLimitBody.replace("{n}", String(GUEST_TRIP_LIMIT)) : t.genericError}
         </p>
       )}
-      <Button className="mt-6 w-full" disabled={!canNext} loading={create.isPending} onClick={() => (step < 2 ? go(step + 1) : create.mutate())}>
-        {step < 2 ? t.next : t.create}
-      </Button>
+      {/* en la pregunta de modo, tocar una tarjeta ya avanza */}
+      {cur !== "mode" && (
+        <Button className="mt-6 w-full" disabled={!canNext} loading={create.isPending} onClick={() => (last ? create.mutate() : go(step + 1))}>
+          {last ? t.create : t.next}
+        </Button>
+      )}
       <AvatarPicker open={picking} onClose={() => setPicking(false)} name={form.members[0] || "?"} color={0} current={session.data?.user.image ?? null} />
     </main>
   );

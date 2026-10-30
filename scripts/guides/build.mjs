@@ -17,8 +17,8 @@ const L = {
     updated: "Actualizado el", by: "Por", role: "creador de %BRAND%", about: "/nosotros/#autor", aboutTitle: "Sobre el autor",
     bio: "Valentin es de Buenos Aires y lidera proyectos de desarrollo enfocados en experiencia de usuario (UX). Después de más de cinco viajes en grupo a la costa argentina y a Brasil, creó %BRAND% porque recordar cada gasto y dividir día a día se volvía difícil. Escribe estas guías a partir de esos viajes y de cómo funciona la app.",
     indexTitle: "Guías para viajar en grupo y compartir gastos",
-    indexDesc: "Consejos prácticos para dividir gastos de viajes, convivencia y salidas: presupuestos, monedas, deudas y cómo hablar de plata con amigos.",
-    indexLead: "Todo lo que conviene saber para que la plata no sea un tema en el viaje, en la casa o con amigos.",
+    indexDesc: "Consejos prácticos para dividir gastos de viajes, convivencia y salidas, y para controlar tus gastos si viajás solo: presupuestos, monedas, deudas y cómo hablar de plata con amigos.",
+    indexLead: "Todo lo que conviene saber para que la plata no sea un tema en el viaje, en la casa o con amigos. Y si viajás solo, cómo armar tu presupuesto y controlar tus gastos.",
     locale: "es_AR", readMore: "Leer guía",
   },
   en: {
@@ -26,8 +26,8 @@ const L = {
     updated: "Updated", by: "By", role: "creator of %BRAND%", about: "/en/about/#author", aboutTitle: "About the author",
     bio: "Valentin is based in Buenos Aires and leads development projects focused on user experience (UX). After more than five group trips to the Argentine coast and Brazil, Valentin built %BRAND% because remembering every expense and splitting day by day kept getting harder. These guides come from those trips and from how the app works.",
     indexTitle: "Guides to group travel and shared expenses",
-    indexDesc: "Practical tips to split travel, household and night-out costs: budgets, currencies, debts and talking about money with friends.",
-    indexLead: "What's worth knowing so money never becomes the topic of the trip.",
+    indexDesc: "Practical tips to split travel, household and night-out costs, and to track your spending when you travel solo: budgets, currencies, debts and talking about money with friends.",
+    indexLead: "What's worth knowing so money never becomes the topic of the trip. And if you travel solo, how to budget and track what you spend.",
     locale: "en_US", readMore: "Read guide",
   },
 };

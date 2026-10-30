@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useParams } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, Receipt, Scales, ChartPieSlice, UsersThree, Plus, WifiSlash } from "@phosphor-icons/react";
+import { ArrowLeft, Receipt, Scales, ChartPieSlice, UsersThree, Plus, WifiSlash, Suitcase } from "@phosphor-icons/react";
 import { useTrip, type Expense, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { countryName } from "../lib/format";
@@ -34,11 +34,12 @@ export function TripLayout() {
 
   const { trip } = q.data;
   const base = `/t/${trip.id}`;
+  // viaje solo: sin saldos, y la pestaña del grupo queda como ajustes del viaje
   const tabs = [
     { to: base, label: t.tabExpenses, icon: Receipt, end: true },
-    { to: `${base}/balances`, label: t.tabBalances, icon: Scales },
+    ...(trip.solo ? [] : [{ to: `${base}/balances`, label: t.tabBalances, icon: Scales }]),
     { to: `${base}/summary`, label: t.tabSummary, icon: ChartPieSlice },
-    { to: `${base}/group`, label: t.tabGroup, icon: UsersThree, badge: q.data.requests.length },
+    trip.solo ? { to: `${base}/group`, label: t.tabTrip, icon: Suitcase } : { to: `${base}/group`, label: t.tabGroup, icon: UsersThree, badge: q.data.requests.length },
   ];
   const showFab = trip.status === "active" && (loc.pathname.endsWith(trip.id) || loc.pathname.endsWith("/balances"));
 
@@ -80,7 +81,7 @@ export function TripLayout() {
       </AnimatePresence>
 
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
-        <div className="mx-auto grid max-w-lg grid-cols-4">
+        <div className={`mx-auto grid max-w-lg ${trip.solo ? "grid-cols-3" : "grid-cols-4"}`}>
           {tabs.map(({ to, label, icon: I, end, badge }) => (
             <NavLink key={to} to={to} end={end} className="group relative flex flex-col items-center gap-1 py-2.5 text-xs font-medium">
               {({ isActive }) => (

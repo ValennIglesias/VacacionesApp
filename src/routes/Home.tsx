@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle, Trash } from "@phosphor-icons/react";
+import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle, Trash, User } from "@phosphor-icons/react";
 import { api, auth, useIsGuest, type Trip } from "../lib/api";
 import { useI18n, useLocale, useT } from "../lib/i18n";
 import { countryName, today, tripTiming } from "../lib/format";
@@ -145,7 +145,10 @@ export function Home() {
             >
 <Flag cc={trip.countryCode} size={44} />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold">{trip.name}</p>
+                <p className="flex items-center gap-1.5 font-semibold">
+                  <span className="truncate">{trip.name}</span>
+                  {trip.solo && <User size={15} weight="bold" className="shrink-0 text-muted" aria-label={t.soloTrip} />}
+                </p>
                 <p className="truncate text-sm text-muted">
                   {[trip.city, countryName(trip.countryCode, locale)].filter(Boolean).join(", ")}
                 </p>

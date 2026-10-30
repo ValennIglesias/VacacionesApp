@@ -111,6 +111,7 @@ export function Summary() {
         </section>
       )}
 
+      {!trip.solo && (
       <section className="rounded-3xl bg-surface p-4">
         <h2 className="mb-3 font-semibold">{t.byPerson}</h2>
         <table className="w-full text-sm">
@@ -137,6 +138,7 @@ export function Summary() {
           </tbody>
         </table>
       </section>
+      )}
 
       <AdSlot slot="summary" />
     </div>

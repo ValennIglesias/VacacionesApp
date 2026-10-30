@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, Plus, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette, Trash, DoorOpen, ArrowsClockwise, X, LinkBreak, FloppyDisk } from "@phosphor-icons/react";
+import { Check, Plus, UserPlus, FlagCheckered, PencilSimple, SignOut, Translate, LinkSimpleBreak, Palette, Trash, DoorOpen, ArrowsClockwise, X, LinkBreak, FloppyDisk } from "@phosphor-icons/react";
 import { useNavigate } from "react-router";
 import { useTripCtx } from "./TripLayout";
 import { api, auth, useIsGuest, type Member } from "../lib/api";
@@ -24,7 +24,7 @@ export function Group() {
   const session = auth.useSession();
   const isOwner = trip.createdBy === session.data?.user.id;
   const isGuest = useIsGuest();
-  type Action = { kind: "leave" } | { kind: "delete" } | { kind: "code" } | { kind: "remove"; member: Member } | { kind: "unlink"; member: Member };
+  type Action = { kind: "leave" } | { kind: "delete" } | { kind: "code" } | { kind: "end" } | { kind: "remove"; member: Member } | { kind: "unlink"; member: Member };
   const [confirm, setConfirm] = useState<Action | null>(null);
   // se puede quitar a alguien sin gastos ni pagos (para no romper las cuentas)
   const hasMovements = (id: string) =>
@@ -38,6 +38,9 @@ export function Group() {
           ? api(`/trips/${trip.id}`, { method: "DELETE" })
           : a.kind === "code"
             ? api(`/trips/${trip.id}/code`, { method: "POST" })
+            : a.kind === "end"
+              ? // viaje solo: la repartida final no genera transferencias, solo cierra el viaje
+                api(`/trips/${trip.id}/settle`, { body: { kind: "final", currency: trip.currency, rate: 1 } })
             : a.kind === "unlink"
               ? api(`/trips/${trip.id}/members/${a.member.id}/unlink`, { method: "POST" })
               : api(`/trips/${trip.id}/members/${a.member.id}`, { method: "DELETE" }),
@@ -53,6 +56,7 @@ export function Group() {
     leave: { title: t.leaveTrip, body: t.leaveTripBody, ok: t.leave },
     delete: { title: t.deleteTrip, body: t.deleteTripBody, ok: t.delete },
     code: { title: t.newCode, body: t.newCodeBody, ok: t.newCodeConfirm },
+    end: { title: t.endTrip, body: t.endTripBody, ok: t.endTrip },
     remove: { title: t.removeMember, body: t.removeMemberBody, ok: t.remove },
     unlink: { title: t.unlinkMember, body: t.unlinkMemberBody, ok: t.unlink },
   }[confirm.kind];
@@ -70,12 +74,27 @@ export function Group() {
     onSuccess: () => (setNewName(""), refresh()),
   });
   const updateTrip = useMutation({
-    mutationFn: (body: { name?: string; settleCurrency?: string; startDate?: string | null; endDate?: string | null }) => api(`/trips/${trip.id}`, { method: "PATCH", body }),
+    mutationFn: (body: { name?: string; settleCurrency?: string; startDate?: string | null; endDate?: string | null; solo?: false }) => api(`/trips/${trip.id}`, { method: "PATCH", body }),
     onSuccess: refresh,
   });
 
   return (
     <div className="flex flex-col gap-6 pt-2">
+      {trip.solo ? (
+        <section className="flex flex-col gap-4 rounded-3xl bg-accent-soft p-5 text-accent-ink">
+          <div className="flex items-start gap-3">
+            <UserPlus size={28} weight="duotone" className="shrink-0" />
+            <div>
+              <h2 className="font-semibold">{t.makeGroupTitle}</h2>
+              <p className="mt-1 text-sm opacity-80">{t.makeGroupBody}</p>
+            </div>
+          </div>
+          <Button loading={updateTrip.isPending && updateTrip.variables?.solo === false} onClick={() => updateTrip.mutate({ solo: false })}>
+            {t.makeGroup}
+          </Button>
+        </section>
+      ) : (
+        <>
       <section className="rounded-3xl bg-surface p-5 text-center">
         <h2 className="mb-4 font-semibold">{t.inviteCode}</h2>
         <ShareCode code={trip.inviteCode} tripName={trip.name} />
@@ -154,6 +173,8 @@ export function Group() {
           </form>
         )}
       </section>
+        </>
+      )}
 
       <section className="flex flex-col gap-4 rounded-3xl bg-surface p-5">
         <h2 className="font-semibold">{t.tripSettings}</h2>
@@ -180,7 +201,7 @@ export function Group() {
         </form>
         <div className="flex flex-col gap-2">
           <label htmlFor="g-cur" className="text-sm font-medium text-muted">
-            {t.settleCurrency}
+            {trip.solo ? t.homeCurrency : t.settleCurrency}
           </label>
           <CurrencySelect id="g-cur" value={trip.settleCurrency} onChange={(v) => updateTrip.mutate({ settleCurrency: v })} />
         </div>
@@ -198,6 +219,11 @@ export function Group() {
         </div>
       </section>
 
+      {trip.solo && trip.status === "active" && (
+        <Button variant="ghost" onClick={() => ask({ kind: "end" })}>
+          <FlagCheckered size={20} /> {t.endTrip}
+        </Button>
+      )}
       <Button variant="danger" onClick={() => ask({ kind: isOwner ? "delete" : "leave" })}>
         {isOwner ? <Trash size={20} /> : <DoorOpen size={20} />} {isOwner ? t.deleteTrip : t.leaveTrip}
       </Button>

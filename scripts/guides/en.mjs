@@ -165,6 +165,8 @@ export const GUIDES = [
 <li><strong>Ignoring card and ATM fees</strong>: if they're significant, they can justify using the card rate. More in <a href="/en/guides/paying-abroad-cards-cash-fees/">paying abroad without hidden fees</a>.</li>
 </ul>
 
+<p>To check prices on the street without mental math, the <a href="/en/tools/travel-currency-converter/">travel currency converter</a> builds a quick table of round amounts. And if you travel solo, <a href="/en/guides/track-travel-expenses/">how to track your travel expenses</a> explains how to keep a running total in your own currency.</p>
+
 <h2>FAQ</h2>
 <h3>What if everyone lives in a different country?</h3>
 <p>Pick one common settle-up currency (often dollars or euros) and let each person convert from there with their own payment method. You can also run separate splits in different currencies, but it usually complicates more than it helps.</p>
@@ -418,6 +420,8 @@ export const GUIDES = [
 <li>Note the approximate exchange rate so you can spot a bad deal.</li>
 <li>Decide with your group which currency you'll use to pay each other back.</li>
 </ul>
+
+<p>To see what a price abroad means in your own currency, use the <a href="/en/tools/travel-currency-converter/">travel currency converter</a>. To plan the trip before you go, see the <a href="/en/guides/solo-travel-budget/">solo travel budget guide</a>.</p>
 
 <h2>FAQ</h2>
 <h3>Do I still need to tell my bank I'm traveling?</h3>
@@ -944,6 +948,130 @@ export const GUIDES = [
 <h3>Can I use %BRAND% outside of travel?</h3>
 <p>Yes: a shared house or a night out works the same way, as a "trip" with its group. But it's designed for trips; for year-round household bills, Splitwise is still very convenient.</p>
 <p class="meta">Splitwise and Tricount are trademarks of their respective owners. %BRAND% is not affiliated with either. Information checked in October 2026.</p>
+`,
+  },
+  {
+    slug: "track-travel-expenses",
+    pair: "controlar-gastos-de-viaje",
+    published: "2026-10-30",
+    title: "How to track your travel expenses and know what you've spent in your own currency",
+    desc: "A simple method to log what you spend on a trip: what to write down, how to handle the local currency and card fees, and how to see the total in your own currency. Great for solo travel.",
+    lead: "By day three of a trip, almost nobody knows how much they've spent. Not out of carelessness: small purchases, mental currency math and card charges that show up later all make the real number slip away. A simple log fixes that in a few seconds a day.",
+    related: ["solo-travel-budget", "travel-expenses-multiple-currencies", "paying-abroad-cards-cash-fees"],
+    body: `
+<h2>Why the budget disappears without you noticing</h2>
+<p>The big costs of a trip (flights, accommodation, a tour) are easy to remember. What throws the numbers off is the small stuff: a coffee, a metro ride, a bottle of water, a tip. Each one feels insignificant, but ten a day for a week add up to a real share of the total.</p>
+<p>Then there's the currency. When everything is in euros or pesos, every price needs a mental conversion, and the mind rounds in your favor. And card charges land on your statement days or weeks later, at a different rate.</p>
+<p>The fix isn't a complicated spreadsheet. It's three habits: <strong>log it right away</strong>, <strong>in the currency you paid</strong>, and <strong>check the total in your own currency</strong> once a day.</p>
+
+<h2>1. Log every expense right away</h2>
+<p>The habit that makes the biggest difference is recording each expense as soon as you pay: amount, a short description and a category. It takes ten seconds with your phone in hand. Leave it for the evening and you've forgotten the tram ticket; leave it for the end of the trip and the number you reconstruct will be lower than the real one.</p>
+<p>You don't need accountant-level detail: "Lunch at Time Out Market, €14" is enough. What matters is that nothing is missing.</p>
+
+<h2>2. Use the currency you paid in, not yours</h2>
+<p>If you paid €14, log €14. Converting on the spot forces you to pick a rate, and if it moves, your log drifts. It's better to keep the original amount and convert the total with the day's rate.</p>
+<p>If you paid something in a different currency, log it in that currency: a good tool converts it into the trip's currency for you.</p>
+[[fig solo-expense | Adding an expense: the amount in the local currency and, below it, what it is in your currency]]
+
+<h2>3. Few categories, always the same ones</h2>
+<p>Seven or eight categories are enough: lodging, food, groceries, transport, activities, nights out, shopping and other. More than that makes logging harder without adding much. At the end of the trip, categories answer the question that matters: where did the money go?</p>
+
+<h2>4. Check the total in your currency once a day</h2>
+<p>A trip total in a currency you don't use every day means little. What helps is seeing the equivalent in your own currency and the <strong>average per day</strong>: if you planned to spend €60 a day and you're at €85, there's still time to adjust.</p>
+[[fig solo-trip | The trip with its total in euros, the equivalent in dollars and the average per day]]
+
+<h2>5. Keep pre-trip costs separate</h2>
+<p>Flights, the accommodation deposit or travel insurance get paid weeks before. Log them anyway, with their real dates: your trip total stays complete, while the daily average only reflects what you spend while you're there.</p>
+
+<h2>How to do it with %BRAND% when traveling solo</h2>
+<p>%BRAND% started as a way to split costs in a group, but it also has a solo mode built precisely for this kind of log:</p>
+<ol>
+<li><strong>Create the trip and choose "Solo".</strong> Pick the destination (the local currency fills in automatically), your dates and your home currency.</li>
+<li><strong>Add each expense with the + button.</strong> The amount goes in the local currency; if you paid in another one, pick it and it converts at the day's rate, which you can adjust.</li>
+<li><strong>Check the total, the daily average and the summary.</strong> The summary breaks spending down by category and by day, in the trip's currency or in yours.</li>
+</ol>
+[[fig solo-mode | When creating a trip you choose whether you're traveling solo or with others]]
+<p>You don't need an account to start, and if someone joins the trip later, you turn it into a group trip in one tap: you get an invite code and expense splitting.</p>
+[[fig solo-summary | The summary: where the money went, by category and by day]]
+
+<h2>Common mistakes</h2>
+<ul>
+<li><strong>Only logging the big stuff.</strong> The small things are exactly what breaks the budget.</li>
+<li><strong>Converting by eye.</strong> One rounding per purchase is nothing; fifty of them is not. For checking prices on the street, the <a href="/en/tools/travel-currency-converter/">travel currency converter</a> has a quick table.</li>
+<li><strong>Forgetting card fees.</strong> If your card charges a foreign transaction fee, add it to the expense or log it separately.</li>
+<li><strong>Only looking at the total after you're home.</strong> By then there's nothing left to adjust.</li>
+</ul>
+
+<h2>FAQ</h2>
+<h3>Do I need to create an account?</h3>
+<p>No. You can start without one and, if you want to keep the trip when you switch phones, save your access later with email or Google.</p>
+<h3>Which exchange rate does it use?</h3>
+<p>The day's mid-market rate. For an expense in another currency you can type the rate you actually paid.</p>
+<h3>Does it work for a couple?</h3>
+<p>Yes, but then choose "With others": each person logs what they pay and the app tells you who owes whom at the end. We explain it in <a href="/en/guides/split-expenses-as-a-couple/">how to split expenses as a couple</a>.</p>
+
+<p><strong>In short:</strong> log every expense right away and in the currency you paid, keep a short list of categories and check the total in your own currency once a day. You'll come home knowing exactly what you spent and on what.</p>
+`,
+  },
+  {
+    slug: "solo-travel-budget",
+    pair: "presupuesto-para-viajar-solo",
+    published: "2026-10-30",
+    title: "Solo travel budget: how to work out how much to spend per day",
+    desc: "How to build a budget for a solo trip: fixed and daily costs, a buffer for surprises, which currency to think in and how to track your daily spending while you travel.",
+    lead: "Traveling solo has one huge advantage for your budget: you decide everything. And one drawback: nothing gets split. With a simple daily spending number, you can enjoy the trip without constantly wondering whether you're overspending.",
+    related: ["track-travel-expenses", "travel-expenses-multiple-currencies", "paying-abroad-cards-cash-fees"],
+    body: `
+<h2>What changes when you travel alone</h2>
+<p>On a group trip, accommodation, a rental car or fuel get split. Traveling solo, those costs are entirely yours. That's why accommodation is usually the biggest part of a solo budget, and where you can save the most: hostels with private rooms, small apartments or longer stays with a discount.</p>
+<p>In exchange, everything else is flexible. You can eat at the market instead of a restaurant, walk instead of taking a taxi, or change plans without asking anyone. A daily budget gives you that freedom without losing control.</p>
+
+<h2>1. Separate fixed costs from daily costs</h2>
+<p><strong>Fixed costs</strong> are paid once and don't depend on what you do each day: flights, accommodation, travel insurance, a tour booked in advance. <strong>Daily costs</strong> are the ones you decide on the ground: meals, local transport, tickets, nights out, small purchases.</p>
+<p>An example with illustrative numbers, a week in Lisbon:</p>
+<table>
+<thead><tr><th>Item</th><th>Type</th><th>Amount</th></tr></thead>
+<tbody>
+<tr><td>Round-trip flight</td><td>Fixed</td><td>paid before</td></tr>
+<tr><td>Hostel, private room, 6 nights</td><td>Fixed</td><td>€420</td></tr>
+<tr><td>Day trip to Sintra, booked</td><td>Fixed</td><td>€45</td></tr>
+<tr><td>Meals, transport, nights out</td><td>Daily</td><td>whatever is left</td></tr>
+</tbody>
+</table>
+
+<h2>2. Work out your daily number</h2>
+<p>The formula is: <strong>(total budget − fixed costs − buffer) ÷ days of the trip</strong>.</p>
+<p>Following the example: if you have €1,000 for the stay, subtract the fixed costs (€465) and a 10% buffer (€100). That leaves €435 for seven days: about <strong>€62 a day</strong>.</p>
+<p>That number is your compass. A beach day with a cheap lunch will come in under; the night of the special dinner, over. What matters is the average.</p>
+
+<h2>3. Keep a buffer for surprises</h2>
+<p>Something always comes up: a late-night taxi, a pharmacy, a ticket that wasn't in the plan, a rainy day that ends in a museum. A practical rule is to set aside 10 to 15% of the budget. If you don't use it, it's a treat for the last day.</p>
+
+<h2>4. Think in one currency</h2>
+<p>Build the budget in the local currency, since that's what you'll see on price tags, and keep in mind what it means in your own. That's what the <a href="/en/tools/travel-currency-converter/">travel currency converter</a> is for: it has a quick table of round amounts you can save as a screenshot.</p>
+
+<h2>5. Track your spending during the trip</h2>
+<p>A budget only works if you compare it with what you actually spend. The simplest way is to log each expense right away and watch your daily average. In %BRAND%, if you create the trip in solo mode, the main screen shows the total, its equivalent in your currency and your average per day.</p>
+[[fig solo-trip | The trip total, its equivalent in your currency and the average per day]]
+<p>If by day three you're above your number, there's no need to cut everything: a couple of quieter days will bring the average back. We go through it step by step in <a href="/en/guides/track-travel-expenses/">how to track your travel expenses</a>.</p>
+
+<h2>Ways to stretch the budget</h2>
+<ul>
+<li><strong>One proper meal out per day</strong>, and the rest from the supermarket or a market stall.</li>
+<li><strong>Public transport and walking</strong> instead of taxis, except late at night or with luggage.</li>
+<li><strong>Free activities</strong>: beaches, viewpoints, free walking tours (tip-based).</li>
+<li><strong>Pay in the local currency</strong> when the card terminal asks: the merchant's conversion is usually worse.</li>
+</ul>
+
+<h2>FAQ</h2>
+<h3>How much cash should I bring?</h3>
+<p>It depends on the destination. In many places a card covers almost everything and cash is for small purchases; in others, cash is still king. Our guide to <a href="/en/guides/paying-abroad-cards-cash-fees/">paying abroad with cards and cash</a> covers the trade-offs.</p>
+<h3>Should I budget in my home currency?</h3>
+<p>For the overall total, yes: it's what you earn and save in. Day to day, it's more practical to think in the local currency, since that's what prices are in.</p>
+<h3>What if I go over budget?</h3>
+<p>Look at which category the difference came from. If it was nights out or meals, it's easy to balance out; if it was something unexpected, that's what the buffer is for.</p>
+
+<p><strong>In short:</strong> separate fixed from daily costs, work out your daily number, keep a buffer and track your average as you go. Traveling solo with a clear number in mind means traveling with peace of mind.</p>
 `,
   },
 ];

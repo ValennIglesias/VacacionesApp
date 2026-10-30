@@ -1,5 +1,7 @@
 // Calculadoras públicas (/herramientas, /en/tools): todo corre en el navegador, sin cuenta ni servidor.
-import { fuelCost, splitPaid, type FuelUnit } from "../shared/tools";
+import { arsCrossRate, crossRate, fuelCost, splitPaid, type FuelUnit } from "../shared/tools";
+import { COUNTRY_CURRENCY } from "../shared/data";
+import { parseAmount, typeAmount } from "./lib/format";
 
 const es = document.documentElement.lang !== "en";
 const t = es
@@ -97,4 +99,72 @@ if (fuel) {
     if (!r) return link;
     return [`${t.fuel}: ${fmt.format(r.fuel)} ${unit() === "mpg" ? t.gallons : t.litres}`, `${t.trip}: ${fmt.format(r.total)}`, `${t.perPerson} (${r.people}): ${fmt.format(r.perPerson)}`, "", `${t.by} ${link}`].join("\n");
   });
+}
+
+// --- conversor de moneda: cotización de mercado del día y, si hay pesos argentinos, los distintos dólares
+const fx = document.getElementById("fx-tool") as HTMLFormElement | null;
+if (fx) {
+  const locale = es ? "es-AR" : "en-US";
+  const L = es
+    ? { popular: "Más usadas", all: "Todas", market: "Cotización de mercado", ars: "Con los dólares de Argentina", arsNames: { tarjeta: "Tarjeta", bolsa: "MEP", blue: "Blue", oficial: "Oficial" }, error: "No pudimos traer la cotización. Probá de nuevo en un rato.", updated: "Actualizado" }
+    : { popular: "Most used", all: "All", market: "Market rate", ars: "With Argentina's dollar rates", arsNames: { tarjeta: "Card", bolsa: "MEP", blue: "Blue", oficial: "Official" }, error: "We couldn't load the rate. Try again in a bit.", updated: "Updated" };
+  const $ = (n: string) => fx.querySelector<HTMLInputElement & HTMLSelectElement>(`[name=${n}]`)!;
+  const [out, table, arsOut] = ["result", "table", "ars"].map((k) => fx.querySelector<HTMLElement>(`[data-${k}]`)!);
+  const names = new Intl.DisplayNames([locale], { type: "currency" });
+  const POPULAR = ["USD", "EUR", "ARS", "BRL", "CLP", "UYU", "MXN", "COP", "PEN", "GBP"];
+  const codes = [...new Set(Object.values(COUNTRY_CURRENCY))].sort((a, b) => (names.of(a) ?? a).localeCompare(names.of(b) ?? b, locale));
+  const opts = (list: string[]) => list.map((c) => `<option value="${c}">${c} · ${esc(names.of(c) ?? c)}</option>`).join("");
+  for (const name of ["from", "to"]) {
+    const sel = $(name);
+    sel.innerHTML = `<optgroup label="${L.popular}">${opts(POPULAR)}</optgroup><optgroup label="${L.all}">${opts(codes)}</optgroup>`;
+    sel.value = sel.dataset.default!;
+  }
+  const money = (n: number, cur: string) => new Intl.NumberFormat(locale, { style: "currency", currency: cur }).format(n);
+  // 1 peso en reales es 0,0035: con 2 decimales daría 0
+  const unit = (n: number, cur: string) => (n < 1 ? new Intl.NumberFormat(locale, { style: "currency", currency: cur, maximumSignificantDigits: 3 }).format(n) : money(n, cur));
+  let rates: Record<string, number> | undefined;
+  let ars: Partial<Record<keyof typeof L.arsNames, { venta: number; updated: string }>> | undefined;
+  const render = () => {
+    const [from, to] = [$("from").value, $("to").value];
+    const amount = (parseAmount($("amount").value) ?? 0) / 100;
+    const k = crossRate(rates, from, to);
+    if (!rates) return;
+    if (!k) return void (out.innerHTML = `<p class="text-neg">${L.error}</p>`);
+    out.innerHTML = `<p class="text-sm text-white/80">${L.market}</p><p class="text-3xl font-semibold tabular-nums">${money(amount * k, to)}</p><p class="mt-1 text-sm text-white/80 tabular-nums">1 ${from} = ${unit(k, to)} · 1 ${to} = ${unit(1 / k, from)}</p>`;
+    // montos redondos según cuánto vale la moneda de origen (1 a 500 reales, 1.000 a 500.000 pesos)
+    const step = 10 ** Math.max(0, Math.floor(Math.log10(rates[from] ?? 1)));
+    table.innerHTML = [1, 5, 10, 20, 50, 100, 200, 500]
+      .map((n) => `<tr class="border-t border-line"><td class="py-2 tabular-nums">${money(n * step, from)}</td><td class="py-2 text-right font-medium tabular-nums">${money(n * step * k, to)}</td></tr>`)
+      .join("");
+    const withArs = (from === "ARS") !== (to === "ARS");
+    arsOut.hidden = !withArs || !ars;
+    if (withArs && ars) {
+      const cards = (Object.keys(L.arsNames) as (keyof typeof L.arsNames)[])
+        .filter((t) => ars![t])
+        .map((t) => `<p class="rounded-2xl bg-bg px-4 py-3"><span class="block text-sm text-muted">${L.arsNames[t]}</span><strong class="text-lg tabular-nums">${money(amount * arsCrossRate(rates, ars![t]!.venta, from, to)!, to)}</strong></p>`)
+        .join("");
+      const when = Object.values(ars)[0]?.updated;
+      arsOut.innerHTML = `<h3 class="mb-3 font-semibold">${L.ars}</h3><div class="grid grid-cols-2 gap-3 sm:grid-cols-4">${cards}</div>${when ? `<p class="mt-2 text-xs text-muted">${L.updated}: ${new Intl.DateTimeFormat(locale, { dateStyle: "short", timeStyle: "short" }).format(new Date(when))}</p>` : ""}`;
+    }
+  };
+  $("amount").value = typeAmount($("amount").value, "", locale);
+  $("amount").addEventListener("input", (e) => {
+    const el = e.target as HTMLInputElement;
+    el.value = typeAmount(el.value, el.dataset.prev ?? "", locale);
+    el.dataset.prev = el.value;
+  });
+  fx.addEventListener("input", render);
+  fx.addEventListener("submit", (e) => e.preventDefault());
+  fx.querySelector("[data-swap]")?.addEventListener("click", () => {
+    [$("from").value, $("to").value] = [$("to").value, $("from").value];
+    render();
+  });
+  fetch("/api/rates")
+    .then((r) => (r.ok ? r.json() : Promise.reject()) as Promise<typeof rates>)
+    .then((r) => ((rates = r), render()))
+    .catch(() => (out.innerHTML = `<p>${L.error}</p>`));
+  fetch("/api/rates/ars")
+    .then((r) => (r.ok ? r.json() : Promise.reject()) as Promise<typeof ars>)
+    .then((r) => ((ars = r), render()))
+    .catch(() => {});
 }

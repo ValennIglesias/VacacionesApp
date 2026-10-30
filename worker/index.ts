@@ -49,7 +49,8 @@ const clientIp = (c: Context<AppEnv>) => c.req.header("cf-connecting-ip") ?? "lo
 // --- unirse con código: la vista previa es pública (se puede entrar sin cuenta), con límite por IP contra adivinar códigos ---
 const findByCode = async (c: Context<AppEnv>) => {
   const trip = await db(c).query.trips.findFirst({ where: eq(s.trips.inviteCode, c.req.param("code")!.toUpperCase()) });
-  if (!trip) throw new HttpError(404, "invalid_code");
+  // un viaje individual no se comparte aunque alguien tenga el código
+  if (!trip || trip.solo) throw new HttpError(404, "invalid_code");
   return trip;
 };
 
@@ -68,6 +69,45 @@ app.get("/api/join/:code", async (c) => {
     alreadyMember: !!session && members.some((m) => m.userId === session.user.id),
     request: request ? { status: request.status, name: request.name } : null,
   });
+});
+
+// --- cotizaciones: públicas (las usa también el conversor del sitio), cacheadas en D1 ---
+app.get("/api/rates", async (c) => {
+  const day = new Date().toISOString().slice(0, 10);
+  const d = db(c);
+  const cached = await d.query.rates.findFirst({ where: eq(s.rates.base, "USD") });
+  if (cached?.day === day) return c.json(JSON.parse(cached.json));
+  const res = await fetch("https://open.er-api.com/v6/latest/USD");
+  const data = (await res.json()) as { result: string; rates: Record<string, number> };
+  if (data.result !== "success") {
+    if (cached) return c.json(JSON.parse(cached.json)); // mejor una cotización de ayer que nada
+    return c.json({ error: "rates_unavailable" }, 502);
+  }
+  const json = JSON.stringify(data.rates);
+  await d.insert(s.rates).values({ base: "USD", day, json }).onConflictDoUpdate({ target: s.rates.base, set: { day, json } });
+  return c.json(data.rates);
+});
+
+// --- dólares de Argentina (DolarAPI), cache por hora: ARS por USD, valor de venta ---
+const ARS_TYPES = ["oficial", "bolsa", "blue", "tarjeta"] as const;
+app.get("/api/rates/ars", async (c) => {
+  const hour = new Date().toISOString().slice(0, 13);
+  const d = db(c);
+  const cached = await d.query.rates.findFirst({ where: eq(s.rates.base, "ARS_USD") });
+  if (cached?.day === hour) return c.json(JSON.parse(cached.json));
+  try {
+    const list = (await (await fetch("https://dolarapi.com/v1/dolares")).json()) as { casa: string; venta: number; fechaActualizacion: string }[];
+    const out = Object.fromEntries(
+      ARS_TYPES.map((k) => list.find((x) => x.casa === k)).filter(Boolean).map((x) => [x!.casa, { venta: x!.venta, updated: x!.fechaActualizacion }]),
+    );
+    if (!Object.keys(out).length) throw new Error("empty");
+    const json = JSON.stringify(out);
+    await d.insert(s.rates).values({ base: "ARS_USD", day: hour, json }).onConflictDoUpdate({ target: s.rates.base, set: { day: hour, json } });
+    return c.json(out);
+  } catch {
+    if (cached) return c.json(JSON.parse(cached.json));
+    return c.json({ error: "rates_unavailable" }, 502);
+  }
 });
 
 // Todo lo demás bajo /api requiere sesión (cuenta normal o invitada)
@@ -131,11 +171,13 @@ const tripInput = z.object({
   startDate: z.iso.date(), // obligatoria: el viaje se ordena por días a partir de acá
   endDate: z.iso.date().optional(),
   members: z.array(z.string().trim().min(1).max(30)).min(1).max(30), // members[0] = yo
+  solo: z.boolean().default(false),
 });
 
 app.post("/api/trips", async (c) => {
   const body = tripInput.parse(await c.req.json());
   if (body.endDate && body.endDate < body.startDate) throw new HttpError(400, "invalid_dates");
+  if (body.solo && body.members.length !== 1) throw new HttpError(400, "solo_one_member");
   await checkGuestLimit(c);
   const tripId = uid();
   const inviteCode = newCode();
@@ -155,7 +197,7 @@ app.post("/api/trips", async (c) => {
     ),
   ]);
   // invitado: su cuenta toma el nombre con el que se puso en el viaje
-  if (c.get("isGuest")) await nameGuest(c, body.members[0]);
+  if (c.get("isGuest") && !body.solo) await nameGuest(c, body.members[0]);
   return c.json({ id: tripId, inviteCode }, 201);
 });
 
@@ -256,7 +298,7 @@ app.patch("/api/trips/:id", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
   const body = tripInput
     .pick({ name: true, city: true, settleCurrency: true, startDate: true })
-    .extend({ endDate: z.iso.date().nullable() }) // el inicio se puede cambiar pero no borrar; el fin, sí
+    .extend({ endDate: z.iso.date().nullable(), solo: z.literal(false) }) // el inicio se puede cambiar pero no borrar; el fin, sí. Solo → grupal, no al revés
     .partial()
     .parse(await c.req.json());
   const start = body.startDate !== undefined ? body.startDate : trip.startDate;
@@ -301,6 +343,7 @@ app.post("/api/trips/:id/leave", async (c) => {
 app.post("/api/trips/:id/members", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
   const { name } = z.object({ name: z.string().trim().min(1).max(30) }).parse(await c.req.json());
+  if (trip.solo) throw new HttpError(409, "solo_trip");
   const count = (await db(c).query.members.findMany({ where: eq(s.members.tripId, trip.id) })).length;
   if (count >= MAX_MEMBERS) throw new HttpError(409, "trip_full");
   await db(c).insert(s.members).values({ id: uid(), tripId: trip.id, name, color: count % MEMBER_COLORS, createdAt: now() });
@@ -608,43 +651,6 @@ app.delete("/api/account", async (c) => {
 });
 
 // --- cotizaciones (base USD, cache diario en D1) ---
-app.get("/api/rates", async (c) => {
-  const day = new Date().toISOString().slice(0, 10);
-  const d = db(c);
-  const cached = await d.query.rates.findFirst({ where: eq(s.rates.base, "USD") });
-  if (cached?.day === day) return c.json(JSON.parse(cached.json));
-  const res = await fetch("https://open.er-api.com/v6/latest/USD");
-  const data = (await res.json()) as { result: string; rates: Record<string, number> };
-  if (data.result !== "success") {
-    if (cached) return c.json(JSON.parse(cached.json)); // mejor una cotización de ayer que nada
-    return c.json({ error: "rates_unavailable" }, 502);
-  }
-  const json = JSON.stringify(data.rates);
-  await d.insert(s.rates).values({ base: "USD", day, json }).onConflictDoUpdate({ target: s.rates.base, set: { day, json } });
-  return c.json(data.rates);
-});
-
-// --- dólares de Argentina (DolarAPI), cache por hora: ARS por USD, valor de venta ---
-const ARS_TYPES = ["oficial", "bolsa", "blue", "tarjeta"] as const;
-app.get("/api/rates/ars", async (c) => {
-  const hour = new Date().toISOString().slice(0, 13);
-  const d = db(c);
-  const cached = await d.query.rates.findFirst({ where: eq(s.rates.base, "ARS_USD") });
-  if (cached?.day === hour) return c.json(JSON.parse(cached.json));
-  try {
-    const list = (await (await fetch("https://dolarapi.com/v1/dolares")).json()) as { casa: string; venta: number; fechaActualizacion: string }[];
-    const out = Object.fromEntries(
-      ARS_TYPES.map((k) => list.find((x) => x.casa === k)).filter(Boolean).map((x) => [x!.casa, { venta: x!.venta, updated: x!.fechaActualizacion }]),
-    );
-    if (!Object.keys(out).length) throw new Error("empty");
-    const json = JSON.stringify(out);
-    await d.insert(s.rates).values({ base: "ARS_USD", day: hour, json }).onConflictDoUpdate({ target: s.rates.base, set: { day: hour, json } });
-    return c.json(out);
-  } catch {
-    if (cached) return c.json(JSON.parse(cached.json));
-    return c.json({ error: "rates_unavailable" }, 502);
-  }
-});
 
 app.all("/api/*", (c) => c.json({ error: "not_found" }, 404));
 

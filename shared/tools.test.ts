@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fuelCost, splitPaid } from "./tools";
+import { arsCrossRate, crossRate, fuelCost, splitPaid } from "./tools";
 
 describe("splitPaid", () => {
   it("uno puso todo: los demás le pagan su parte", () => {
@@ -39,5 +39,18 @@ describe("fuelCost", () => {
   it("litros cada 100 km y mpg", () => {
     expect(fuelCost({ distance: 200, roundTrip: false, consumption: 7, unit: "l100", price: 2, extras: 0, people: 2 }).fuel).toBe(14);
     expect(fuelCost({ distance: 300, roundTrip: false, consumption: 30, unit: "mpg", price: 3.5, extras: 0, people: 3 }).total).toBe(35);
+  });
+});
+
+describe("conversor", () => {
+  const usd = { USD: 1, BRL: 5, EUR: 0.9, ARS: 1000 };
+  it("cruza monedas pasando por el dólar", () => {
+    expect(crossRate(usd, "BRL", "EUR")).toBeCloseTo(0.18);
+    expect(crossRate(usd, "BRL", "BRL")).toBe(1);
+    expect(crossRate(usd, "BRL", "XYZ")).toBeUndefined();
+  });
+  it("con dólar tarjeta: 100 reales son 20 USD a 1500 pesos", () => {
+    expect(100 * arsCrossRate(usd, 1500, "BRL", "ARS")!).toBe(30000);
+    expect(30000 * arsCrossRate(usd, 1500, "ARS", "BRL")!).toBe(100);
   });
 });

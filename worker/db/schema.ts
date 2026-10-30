@@ -76,6 +76,8 @@ export const trips = sqliteTable("trips", {
   retentionNoticeAt: integer("retention_notice_at"),
   // viaje de ejemplo (POST /api/demo): uno por usuario, se puede borrar rápido desde Mis viajes
   demo: integer("demo", { mode: "boolean" }).notNull().default(false),
+  // viaje individual: sin código para compartir ni repartida; se puede pasar a grupal (no al revés)
+  solo: integer("solo", { mode: "boolean" }).notNull().default(false),
 });
 
 export const members = sqliteTable(

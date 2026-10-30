@@ -19,3 +19,13 @@ export function fuelCost(o: { distance: number; roundTrip: boolean; consumption:
   const total = fuel * o.price + o.extras;
   return { fuel, total, perPerson: total / o.people };
 }
+
+/** Cotización cruzada desde la tabla base USD (unidades de cada moneda por 1 USD). */
+export const crossRate = (rates: Record<string, number> | undefined, from: string, to: string) =>
+  from === to ? 1 : rates?.[from] && rates?.[to] ? rates[to] / rates[from] : undefined;
+
+/** Igual que crossRate pero con un dólar argentino puntual (oficial, tarjeta, MEP, blue) en lugar del de mercado. */
+export const arsCrossRate = (rates: Record<string, number> | undefined, arsPerUsd: number, from: string, to: string) => {
+  if (to === "ARS") return rates?.[from] ? arsPerUsd / rates[from] : undefined;
+  if (from === "ARS") return rates?.[to] ? rates[to] / arsPerUsd : undefined;
+};

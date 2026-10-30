@@ -1,0 +1,1 @@
+ALTER TABLE `trips` ADD `solo` integer DEFAULT false NOT NULL;

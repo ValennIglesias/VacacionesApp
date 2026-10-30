@@ -25,7 +25,7 @@
     <meta name="theme-color" content="#0e1015" media="(prefers-color-scheme: dark)" />
     <link rel="stylesheet" href="/src/site.css" />
     <script type="module" src="/src/landing.ts"></script>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "%BRAND%", "url": "%SITE%/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "en", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does it cost anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. %BRAND% is free and supported by unobtrusive ads."}}, {"@type": "Question", "name": "Does everyone need an account?", "acceptedAnswer": {"@type": "Answer", "text": "No. Whoever creates the trip adds everyone's names. People who join with the code pick their name; the rest stay in the group and someone logs their expenses. To mark or confirm their own payments, each person joins with the code."}}, {"@type": "Question", "name": "Which currency are debts paid in?", "acceptedAnswer": {"@type": "Answer", "text": "When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit."}}, {"@type": "Question", "name": "What is a partial split?", "acceptedAnswer": {"@type": "Answer", "text": "Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary."}}, {"@type": "Question", "name": "Does %BRAND% move money?", "acceptedAnswer": {"@type": "Answer", "text": "No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app."}}]}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "%BRAND%", "url": "%SITE%/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "en", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does it cost anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. %BRAND% is free and supported by unobtrusive ads."}}, {"@type": "Question", "name": "Does everyone need an account?", "acceptedAnswer": {"@type": "Answer", "text": "No. Whoever creates the trip adds everyone's names. People who join with the code pick their name; the rest stay in the group and someone logs their expenses. To mark or confirm their own payments, each person joins with the code."}}, {"@type": "Question", "name": "Which currency are debts paid in?", "acceptedAnswer": {"@type": "Answer", "text": "When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit."}}, {"@type": "Question", "name": "What is a partial split?", "acceptedAnswer": {"@type": "Answer", "text": "Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary."}}, {"@type": "Question", "name": "Does %BRAND% move money?", "acceptedAnswer": {"@type": "Answer", "text": "No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app."}}, {"@type": "Question", "name": "Does it work if I travel solo?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Choose “Solo” when creating the trip: you log your expenses in the local currency and see what you've spent in your own currency, by day and by category. There's no code and no splitting, and if someone joins later, you turn it into a group trip in one tap."}}]}]}</script>
   </head>
   <body>
     <header class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
@@ -116,13 +116,18 @@
             <h3 class="mt-4 text-lg font-semibold">Trip summary</h3>
             <p class="mt-1 text-muted">How much went on food, lodging and each day, in your currency.</p>
           </article>
+          <article class="reveal-scroll flex flex-col gap-4 rounded-3xl bg-surface p-6 sm:flex-row sm:items-center md:col-span-6">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-user text-3xl"></i></span>
+            <div class="min-w-0 flex-1"><h3 class="text-lg font-semibold">Traveling solo? It works too</h3><p class="mt-1 text-muted">Choose “Solo” when creating the trip and log your expenses in the local currency: see what you've spent in your own currency, by day and by category. No code, no splitting.</p></div>
+            <a href="/en/guides/solo-travel-budget/" class="shrink-0 font-medium text-accent-ink">Plan your budget →</a>
+          </article>
         </div>
       </section>
 
       <section class="mx-auto max-w-6xl px-5 py-16">
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Free calculators, no sign-up</h2>
         <p class="reveal-scroll mt-3 max-w-[56ch] text-lg text-muted">For a quick bit of math before or after the trip, right in your browser.</p>
-        <div class="mt-8 grid gap-4 md:grid-cols-2">
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
           <a href="/en/tools/split-expenses-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-calculator text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Split expenses calculator</span><span class="mt-1 block text-muted">Enter what each person paid and see who owes whom.</span></span>
@@ -131,6 +136,11 @@
           <a href="/en/tools/gas-cost-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-gas-pump text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Gas money calculator</span><span class="mt-1 block text-muted">What the drive costs with tolls, and how much each person chips in.</span></span>
+            <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
+          </a>
+          <a href="/en/tools/travel-currency-converter/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+            <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-currency-circle-dollar text-3xl"></i></span>
+            <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Travel currency converter</span><span class="mt-1 block text-muted">What something costs abroad in your own currency, at today's rate.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
         </div>
@@ -165,6 +175,7 @@
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Which currency are debts paid in?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">What is a partial split?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary.</p></details>
           <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does %BRAND% move money?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app.</p></details>
+          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it work if I travel solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Yes. Choose “Solo” when creating the trip: you log your expenses in the local currency and see what you've spent in your own currency, by day and by category. There's no code and no splitting, and if someone joins later, you turn it into a group trip in one tap.</p></details>
         </div>
       </section>
 
@@ -179,7 +190,7 @@
     <footer class="border-t border-line">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-muted">
         <p>%BRAND%</p>
-        <nav class="flex flex-wrap gap-5"><a href="/en/guides/">Guides</a><a href="/en/tools/split-expenses-calculator/">Split calculator</a><a href="/en/tools/gas-cost-calculator/">Gas calculator</a><a href="/privacy/#en">Privacy</a><a href="/terms/#en">Terms</a><a href="/en/about/">About</a><a href="/en/contact/">Contact</a><a href="/" hreflang="es">Español</a></nav>
+        <nav class="flex flex-wrap gap-5"><a href="/en/guides/">Guides</a><a href="/en/tools/split-expenses-calculator/">Split calculator</a><a href="/en/tools/gas-cost-calculator/">Gas calculator</a><a href="/en/tools/travel-currency-converter/">Currency converter</a><a href="/privacy/#en">Privacy</a><a href="/terms/#en">Terms</a><a href="/en/about/">About</a><a href="/en/contact/">Contact</a><a href="/" hreflang="es">Español</a></nav>
       </div>
     </footer>
   </body>

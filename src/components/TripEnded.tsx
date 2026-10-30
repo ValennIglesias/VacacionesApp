@@ -5,12 +5,13 @@ import { useIsGuest } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 
 /** Cierre del viaje: repetirlo con el mismo grupo y, si es invitado, guardar su acceso para no perderlo. */
-export function TripEnded({ tripId, deleteAt }: { tripId: string; deleteAt: number | null }) {
+export function TripEnded({ tripId, deleteAt, solo }: { tripId: string; deleteAt: number | null; solo?: boolean }) {
   const t = useT();
   const isGuest = useIsGuest();
   const locale = useLocale();
   return (
     <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col gap-2">
+      {!solo && (
       <Link to={`/new?from=${tripId}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4 lift">
         <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink">
           <ArrowsClockwise size={26} weight="duotone" />
@@ -21,6 +22,7 @@ export function TripEnded({ tripId, deleteAt }: { tripId: string; deleteAt: numb
         </span>
         <CaretRight size={18} className="text-muted" />
       </Link>
+      )}
       {deleteAt && (
         <p className="flex items-center gap-1.5 px-1 text-xs text-muted">
           <ClockCountdown size={14} /> {t.deletesOn.replace("{date}", new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(deleteAt))}

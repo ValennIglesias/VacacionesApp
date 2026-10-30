@@ -174,6 +174,8 @@ export const GUIDES = [
 <li><strong>Olvidar las comisiones</strong> de la tarjeta o del cajero: si son significativas, pueden justificar usar la cotización de tarjeta. Más detalle en la guía de <a href="/en/guides/paying-abroad-cards-cash-fees/">pagos en el exterior</a> (en inglés).</li>
 </ul>
 
+<p>Para mirar precios en la calle sin hacer cuentas de cabeza, el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a> arma una tabla rápida con montos redondos. Y si viajás solo, en <a href="/guias/controlar-gastos-de-viaje/">cómo controlar tus gastos de viaje</a> explicamos cómo llevar el total en tu moneda.</p>
+
 <h2>Preguntas frecuentes</h2>
 <h3>¿Y si cada integrante vive en un país distinto?</h3>
 <p>Elijan una moneda de repartida común (muchas veces dólares o euros) y que cada uno convierta desde ahí con su propio medio de pago. También pueden hacer repartidas separadas en monedas distintas, pero suele complicar más de lo que ayuda.</p>
@@ -420,6 +422,8 @@ export const GUIDES = [
 <h2>Cómo lo resuelve la app</h2>
 <p>Al repartir en pesos argentinos, TribuSplit muestra las cotizaciones del dólar oficial, MEP, blue y tarjeta del momento, además de la cotización internacional. Se elige una con un toque, se puede ajustar a mano, y queda fija en esa repartida aunque el dólar cambie después.</p>
 [[fig transfers | Cada transferencia en pesos, con su equivalente en reales y la cotización usada]]
+
+<p>Si querés ver cuánto es un precio del viaje con cada tipo de dólar, el <a href="/herramientas/conversor-de-moneda/">conversor de moneda</a> te lo muestra con tarjeta, MEP, blue y oficial lado a lado. Para armar el presupuesto antes de salir, está la guía de <a href="/guias/presupuesto-para-viajar-solo/">presupuesto para viajar solo</a>.</p>
 
 <h2>Preguntas frecuentes</h2>
 <h3>¿Por qué el dólar tarjeta es más caro?</h3>
@@ -791,6 +795,8 @@ export const GUIDES = [
 <li>Acordá con tu grupo en qué moneda y con qué cotización se van a saldar las deudas.</li>
 </ul>
 
+<p>Para saber cuánto es en pesos lo que cuesta algo en reales, con dólar tarjeta, MEP o blue, usá el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a>. Y si vas solo, en <a href="/guias/presupuesto-para-viajar-solo/">presupuesto para viajar solo</a> hay un ejemplo con números de Florianópolis.</p>
+
 <h2>Preguntas frecuentes</h2>
 <h3>¿Necesito una cuenta en Brasil para usar Pix?</h3>
 <p>No para pagar desde las billeteras argentinas que lo ofrecen: la billetera hace de intermediaria. Para recibir pagos por Pix sí hace falta una cuenta brasileña.</p>
@@ -1055,6 +1061,131 @@ export const GUIDES = [
 <h3>¿Puedo usar %BRAND% para gastos fuera de un viaje?</h3>
 <p>Sí: una casa compartida o una salida funcionan igual, como un "viaje" con su grupo. Pero está pensada para viajes; para gastos de la casa todo el año, Splitwise sigue siendo muy cómodo.</p>
 <p class="meta">Splitwise y Tricount son marcas de sus respectivos dueños. %BRAND% no está afiliada a ninguna de las dos. Información revisada en octubre de 2026.</p>
+`,
+  },
+  {
+    slug: "controlar-gastos-de-viaje",
+    pair: "track-travel-expenses",
+    published: "2026-10-30",
+    title: "Cómo controlar tus gastos de viaje y saber cuánto llevás gastado en tu moneda",
+    desc: "Un método simple para registrar los gastos de un viaje: qué anotar, cómo manejar la moneda local y las comisiones, y cómo ver el total en tu moneda. Ideal si viajás solo.",
+    lead: "Al tercer día de viaje casi nadie sabe cuánto lleva gastado. No por descuido: los gastos chicos, la cuenta mental de la cotización y los consumos con tarjeta que llegan después hacen que el número real se escape. Con un registro simple, eso se resuelve en segundos por día.",
+    related: ["presupuesto-para-viajar-solo", "gastos-en-distintas-monedas", "dolar-tarjeta-mep-blue-viajar"],
+    body: `
+<h2>Por qué el presupuesto se va sin que te des cuenta</h2>
+<p>Los gastos grandes del viaje (pasaje, alojamiento, alguna excursión) se recuerdan solos. Lo que desordena las cuentas es lo chico: un café, el colectivo, una botella de agua, la propina. Cada uno parece insignificante, pero diez por día durante una semana ya son una parte importante del total.</p>
+<p>A eso se suma la moneda. Cuando todo está en reales, euros o dólares, cada precio pide una conversión mental, y la mente redondea a favor: "son como cinco mil pesos" se convierte en "no es nada". Y los consumos con tarjeta aparecen en el resumen días o semanas después, con otra cotización.</p>
+<p>La solución no es una planilla complicada. Son tres hábitos: <strong>anotar en el momento</strong>, <strong>en la moneda en que pagaste</strong> y <strong>mirar el total en tu moneda</strong> una vez por día.</p>
+
+<h2>1. Anotá cada gasto en el momento</h2>
+<p>La regla que más diferencia hace es registrar apenas pagás: monto, una descripción corta y la categoría. Lleva diez segundos con el teléfono en la mano. Si lo dejás para la noche, ya no te acordás del colectivo ni del helado; si lo dejás para el final del viaje, el número que reconstruyas va a ser más bajo que el real.</p>
+<p>No hace falta precisión de contador: "Almuerzo en Lagoa, 95 reales" alcanza. Lo importante es que no falte nada.</p>
+
+<h2>2. Usá la moneda en que pagaste, no la tuya</h2>
+<p>Si pagaste 95 reales, anotá 95 reales. Convertir en el momento obliga a elegir una cotización, y si después cambia, el registro queda desfasado. Es mejor guardar el monto original y dejar que la conversión se haga sobre el total, con la cotización del día.</p>
+<p>Si un gasto lo pagaste en otra moneda (una excursión cobrada en dólares en Brasil, por ejemplo), anotalo en esa moneda: una buena herramienta lo convierte a la moneda del viaje.</p>
+[[fig solo-expense | Cargar un gasto: el monto en la moneda del destino y, debajo, cuánto es en tu moneda]]
+
+<h2>3. Pocas categorías, siempre las mismas</h2>
+<p>Con siete u ocho categorías alcanza: alojamiento, comida, súper, transporte, actividades, salidas, compras y otros. Más que eso complica el registro y no aporta. Al final del viaje, las categorías responden la pregunta que importa: ¿en qué se fue la plata?</p>
+
+<h2>4. Mirá el total en tu moneda una vez por día</h2>
+<p>El total del viaje en la moneda del destino dice poco si no estás acostumbrado a esa moneda. Lo que sirve es ver el equivalente en tu moneda y el <strong>promedio por día</strong>: si planeaste gastar 300 reales por día y vas en 420, todavía estás a tiempo de ajustar.</p>
+[[fig solo-trip | El viaje con el total en reales, su equivalente en pesos y el promedio por día]]
+
+<h2>5. Separá lo que pagaste antes de salir</h2>
+<p>Pasajes, la seña del alojamiento o el seguro se pagan semanas antes. Anotalos igual, con su fecha real: así el total del viaje es completo, pero el promedio por día refleja solo lo que gastás estando allá.</p>
+
+<h2>Cómo hacerlo con %BRAND% si viajás solo</h2>
+<p>%BRAND% nació para dividir gastos en grupo, pero también tiene un modo para viajar solo, pensado justamente para llevar este registro:</p>
+<ol>
+<li><strong>Creá el viaje y elegí "Solo".</strong> Indicás el destino (la moneda local se completa sola), las fechas y tu moneda.</li>
+<li><strong>Cargá cada gasto con el +.</strong> El monto va en la moneda del destino; si pagaste en otra, la elegís y se convierte con la cotización del día, que podés ajustar.</li>
+<li><strong>Mirá el total, el promedio por día y el resumen.</strong> El resumen muestra los gastos por categoría y por día, en la moneda del viaje o en la tuya.</li>
+</ol>
+[[fig solo-mode | Al crear el viaje elegís si viajás solo o con más gente]]
+<p>No hace falta crear una cuenta para empezar, y si en algún momento se suma alguien al viaje, lo pasás a viaje grupal en un toque: aparece el código para invitar y la repartida de gastos.</p>
+[[fig solo-summary | El resumen: en qué se fue la plata, por categoría y por día]]
+
+<h2>Errores comunes</h2>
+<ul>
+<li><strong>Anotar solo lo grande.</strong> Lo chico es justamente lo que se escapa del presupuesto.</li>
+<li><strong>Convertir todo a ojo.</strong> Un redondeo por gasto no es nada; cincuenta redondeos sí. Para mirar precios en la calle, el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a> tiene una tabla rápida.</li>
+<li><strong>Olvidarse de las comisiones.</strong> Si tu tarjeta cobra un porcentaje por consumos en el exterior, sumalo al gasto o anotalo aparte.</li>
+<li><strong>Mirar el total recién al volver.</strong> Ahí ya no hay nada que ajustar.</li>
+</ul>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Necesito crear una cuenta?</h3>
+<p>No. Podés empezar sin cuenta y, si querés no perder el viaje al cambiar de celular, guardar tu acceso después con tu email o Google.</p>
+<h3>¿Qué cotización usa para convertir?</h3>
+<p>La cotización de mercado del día. Para un gasto en otra moneda podés escribir la que realmente pagaste.</p>
+<h3>¿Sirve para un viaje en pareja?</h3>
+<p>Sí, pero en ese caso conviene elegir "Con más gente": cada uno anota lo que paga y al final la app dice quién le debe a quién. Lo explicamos en <a href="/guias/dividir-gastos-en-pareja/">cómo dividir gastos en pareja</a>.</p>
+
+<p><strong>En resumen:</strong> anotá cada gasto en el momento y en la moneda en que pagaste, usá pocas categorías y mirá el total en tu moneda una vez por día. Con eso, volvés del viaje sabiendo exactamente cuánto gastaste y en qué.</p>
+`,
+  },
+  {
+    slug: "presupuesto-para-viajar-solo",
+    pair: "solo-travel-budget",
+    published: "2026-10-30",
+    title: "Presupuesto para viajar solo: cómo calcular cuánto gastar por día",
+    desc: "Cómo armar el presupuesto de un viaje solo: gastos fijos y diarios, el colchón para imprevistos, en qué moneda pensar y cómo seguir el gasto por día durante el viaje.",
+    lead: "Viajar solo tiene una ventaja enorme para el presupuesto: decidís todo vos. Y una desventaja: nada se divide. Con un cálculo simple de cuánto podés gastar por día, el viaje se disfruta sin la duda constante de si te estás pasando.",
+    related: ["controlar-gastos-de-viaje", "gastos-en-distintas-monedas", "pagar-en-brasil-pix-tarjeta-efectivo"],
+    body: `
+<h2>Lo que cambia cuando viajás solo</h2>
+<p>En un viaje en grupo, el alojamiento, el auto o la nafta se dividen. Viajando solo, esos gastos son enteros tuyos. Por eso el alojamiento suele ser la parte más grande del presupuesto, y donde más se puede ahorrar: hostels con habitación privada, departamentos chicos o estadías más largas con descuento.</p>
+<p>A cambio, el resto es flexible. Podés comer en el mercado en lugar del restaurante, caminar en lugar del taxi o cambiar de plan sin consultar a nadie. Un presupuesto por día te da esa libertad sin perder el control.</p>
+
+<h2>1. Separá los gastos fijos de los diarios</h2>
+<p>Los <strong>gastos fijos</strong> se pagan una vez y no dependen de lo que hagas cada día: pasajes, alojamiento, seguro de viaje, algún tour reservado de antemano. Los <strong>gastos diarios</strong> son los que vas decidiendo allá: comidas, transporte local, entradas, salidas, compras chicas.</p>
+<p>Un ejemplo con números ilustrativos, una semana en Florianópolis:</p>
+<table>
+<thead><tr><th>Concepto</th><th>Tipo</th><th>Monto</th></tr></thead>
+<tbody>
+<tr><td>Pasaje ida y vuelta</td><td>Fijo</td><td>pagado antes</td></tr>
+<tr><td>Posada, 7 noches</td><td>Fijo</td><td>BRL 2.100</td></tr>
+<tr><td>Excursión en barco reservada</td><td>Fijo</td><td>BRL 180</td></tr>
+<tr><td>Comidas, transporte, salidas</td><td>Diario</td><td>lo que queda</td></tr>
+</tbody>
+</table>
+
+<h2>2. Calculá cuánto podés gastar por día</h2>
+<p>La cuenta es: <strong>(presupuesto total − gastos fijos − colchón) ÷ días de viaje</strong>.</p>
+<p>Siguiendo el ejemplo: si para la estadía tenés BRL 5.000, restás los fijos (BRL 2.280) y un colchón del 10 % (BRL 500). Quedan BRL 2.220 para siete días: unos <strong>BRL 317 por día</strong>.</p>
+<p>Ese número es tu brújula. Un día de playa con almuerzo barato vas a gastar menos; el día de la cena especial, más. Lo que importa es el promedio.</p>
+
+<h2>3. Dejá un colchón para imprevistos</h2>
+<p>Siempre aparece algo: un taxi a la noche, una farmacia, una entrada que no estaba en el plan, un día de lluvia que termina en un museo. Una regla práctica es reservar entre un 10 y un 15 % del presupuesto. Si al final no lo usás, es un gusto extra para el último día.</p>
+
+<h2>4. Pensá en una sola moneda</h2>
+<p>Armá el presupuesto en la moneda del destino, que es la que vas a ver en los precios, y tené presente cuánto es en tu moneda. Para eso sirve el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a>: tiene una tabla rápida con montos redondos que podés guardar como captura.</p>
+<p>Si viajás desde Argentina, la cotización que corresponde depende de cómo pagues: con tarjeta, con efectivo comprado antes o con MEP. Lo explicamos en <a href="/guias/dolar-tarjeta-mep-blue-viajar/">dólar tarjeta, MEP y blue para viajar</a>.</p>
+
+<h2>5. Seguí el gasto durante el viaje</h2>
+<p>El presupuesto sirve si lo comparás con lo que realmente gastás. La forma más simple es anotar cada gasto en el momento y mirar el promedio por día. En %BRAND%, si creás el viaje en modo solo, la pantalla principal muestra el total, su equivalente en tu moneda y el promedio por día del viaje.</p>
+[[fig solo-trip | El total del viaje, el equivalente en tu moneda y el promedio por día]]
+<p>Si al tercer día vas por encima del número que calculaste, no hace falta cortar todo: alcanza con un par de días más tranquilos para volver al promedio. Lo explicamos paso a paso en <a href="/guias/controlar-gastos-de-viaje/">cómo controlar tus gastos de viaje</a>.</p>
+
+<h2>Ideas para que el presupuesto rinda</h2>
+<ul>
+<li><strong>Una comida fuerte por día afuera</strong> y el resto con algo del súper o del mercado.</li>
+<li><strong>Transporte público y caminatas</strong> en lugar de taxis, salvo de noche o con equipaje.</li>
+<li><strong>Actividades gratis</strong>: playas, miradores, free walking tours (con propina).</li>
+<li><strong>Pagar en moneda local</strong> cuando la terminal de la tarjeta pregunta: la conversión del comercio suele ser peor.</li>
+</ul>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Cuánto efectivo conviene llevar?</h3>
+<p>Depende del destino. En muchos lugares la tarjeta alcanza para casi todo y el efectivo es para gastos chicos; en otros, algunos comercios hacen descuento en efectivo. Para Brasil, lo comparamos en <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">cómo pagar en Brasil: Pix, tarjeta o efectivo</a>.</p>
+<h3>¿Conviene armar el presupuesto en dólares?</h3>
+<p>Si tu moneda cambia mucho de valor, pensar el total en dólares ayuda a no perder la referencia. Pero en el día a día es más práctico pensar en la moneda del destino, que es la de los precios que ves.</p>
+<h3>¿Y si me paso del presupuesto?</h3>
+<p>Mirá en qué categoría se fue la diferencia. Si fue en salidas o comidas, es fácil compensar; si fue un imprevisto, para eso está el colchón.</p>
+
+<p><strong>En resumen:</strong> separá fijos de diarios, calculá cuánto podés gastar por día, dejá un colchón y seguí el promedio durante el viaje. Viajar solo con un número claro en la cabeza es viajar más tranquilo.</p>
 `,
   },
 ];

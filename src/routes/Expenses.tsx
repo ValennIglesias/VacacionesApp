@@ -61,7 +61,7 @@ export function Expenses() {
 
   return (
     <div className="flex flex-col gap-5 pt-2">
-      {trip.status === "closed" && <TripEnded tripId={trip.id} deleteAt={data.deleteAt} />}
+      {trip.status === "closed" && <TripEnded tripId={trip.id} deleteAt={data.deleteAt} solo={trip.solo} />}
       {trip.status === "active" && data.deleteAt && (
         <div role="status" className="flex items-start gap-3 rounded-3xl bg-[color-mix(in_srgb,var(--neg)_10%,transparent)] p-4">
           <ClockCountdown size={24} weight="duotone" className="shrink-0 text-neg" />
@@ -85,6 +85,7 @@ export function Expenses() {
           </p>
         )}
         <TripTiming start={trip.startDate} end={trip.endDate} extra={perDay} />
+        {!trip.solo && (
         <div className="mt-4 flex items-center justify-between rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-sm">
           <span className="text-sm text-white/80">{myBalance === 0 ? t.settledUp : myBalance > 0 ? t.theyOweYou : t.youOwe}</span>
           {myBalance !== 0 && (
@@ -94,6 +95,7 @@ export function Expenses() {
             </span>
           )}
         </div>
+        )}
       </section>
 
       {myDebt && (
@@ -121,7 +123,7 @@ export function Expenses() {
       )}
 
       {expenses.length === 0 ? (
-        <Empty icon={Receipt} title={t.noExpensesTitle} body={t.noExpensesBody} />
+        <Empty icon={Receipt} title={t.noExpensesTitle} body={trip.solo ? t.noExpensesBodySolo : t.noExpensesBody} />
       ) : (
         <div className="flex flex-col gap-6">
           {byDay.map(([date, list]) => (
@@ -150,7 +152,9 @@ export function Expenses() {
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-medium">{e.description}</p>
                           <p className="truncate text-xs text-muted">
-                            {e.paidBy === meId ? t.youPaid : `${t.paidBy} ${memberName(e.paidBy)}`} · {e.shares.length === members.length ? t.all.toLowerCase() : `${e.shares.length} ${t.people}`}
+                            {trip.solo
+                              ? t.categories[e.category]
+                              : `${e.paidBy === meId ? t.youPaid : `${t.paidBy} ${memberName(e.paidBy)}`} · ${e.shares.length === members.length ? t.all.toLowerCase() : `${e.shares.length} ${t.people}`}`}
                           </p>
                         </div>
                         <div className="text-right">
