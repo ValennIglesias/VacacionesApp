@@ -23,6 +23,24 @@ export function parseAmount(input: string): number | null {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
+/**
+ * Formatea el monto mientras se tipea, con separador de miles del idioma ("1234,5" → "1.234,5").
+ * Un separador recién tipeado con hasta 2 dígitos después es el decimal (en Android el teclado decimal solo trae "."),
+ * y con 3 es de miles: así quien tipea "1.000" a mano termina viendo 1.000 y no 1,00.
+ */
+export function typeAmount(value: string, prev: string, locale: string): string {
+  const parts = new Intl.NumberFormat(locale).formatToParts(12345.5);
+  const [g, d] = ["group", "decimal"].map((t) => parts.find((p) => p.type === t)!.value);
+  const v = value.replace(/[^\d.,]/g, "");
+  const count = (s: string, c: string) => s.split(c).length - 1;
+  // los separadores de miles los pone esta función: uno de más lo tipeó el usuario
+  const at = count(v, g) > count(prev, g) ? Math.max(v.lastIndexOf(g), v.lastIndexOf(d)) : v.lastIndexOf(d);
+  const dec = at >= 0 && v.length - at - 1 <= 2 ? v.slice(at + 1).replace(/\D/g, "") : null;
+  const int = (dec === null ? v : v.slice(0, at)).replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 12);
+  if (!int && dec === null) return "";
+  return new Intl.NumberFormat(locale).format(Number(int || 0)) + (dec === null ? "" : d + dec);
+}
+
 export const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;

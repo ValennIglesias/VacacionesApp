@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, LockSimple, Trash } from "@phosphor-icons/react";
 import { api, crossRate, useRates, type Expense, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
-import { formatDay, money, parseAmount, today } from "../lib/format";
+import { formatDay, money, parseAmount, today, typeAmount } from "../lib/format";
 import { CATEGORIES, type Category } from "../../shared/data";
 import { Avatar, Button, CATEGORY_META, CategoryIcon, Field, focusNoScroll, memberColor, Sheet, spring } from "./ui";
 import { CurrencyPicker } from "./bits";
@@ -81,7 +81,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
   const qc = useQueryClient();
   const { trip, members, meId } = data;
   const rates = useRates();
-  const [amount, setAmount] = useState(expense ? String(expense.amountCents / 100).replace(".", locale.startsWith("es") ? "," : ".") : "");
+  const [amount, setAmount] = useState(expense ? typeAmount((expense.amountCents / 100).toFixed(expense.amountCents % 100 ? 2 : 0).replace(".", locale.startsWith("es") ? "," : "."), "", locale) : "");
   const [currency, setCurrency] = useState(expense?.currency ?? trip.currency);
   const [otherCur, setOtherCur] = useState(![trip.currency, trip.settleCurrency].includes(currency));
   const [manualRate, setManualRate] = useState(expense && expense.currency !== trip.currency ? String(expense.rate) : "");
@@ -136,7 +136,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
             inputMode="decimal"
             ref={expense ? undefined : focusNoScroll}
             value={amount}
-            onChange={(e) => setAmount(e.target.value.replace(/[^\d.,]/g, ""))}
+            onChange={(e) => setAmount(typeAmount(e.target.value, amount, locale))}
             placeholder="0"
             className={`w-full min-w-0 max-w-64 bg-transparent text-center font-semibold ${amount.length > 7 ? "text-3xl" : "text-5xl"} tracking-tight tabular outline-none placeholder:text-muted/40`}
           />
