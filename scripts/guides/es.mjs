@@ -981,4 +981,78 @@ export const GUIDES = [
 <p>Puede sumarse con el código del viaje sin crear una cuenta, o alguien del grupo anota sus gastos en su nombre.</p>
 `,
   },
+  {
+    slug: "alternativa-a-splitwise",
+    pair: "splitwise-alternative",
+    published: "2026-10-29",
+    title: "Alternativa a Splitwise para viajes en grupo: Splitwise, Tricount y TribuSplit comparados",
+    desc: "Splitwise ahora limita cuántos gastos por día carga la versión gratis. Comparamos Splitwise, Tricount y TribuSplit para viajes en grupo: límites, monedas, cómo se liquida y cuándo conviene cada una.",
+    lead: "Si buscás una alternativa a Splitwise es probable que te hayas topado con el límite de gastos por día de la versión gratis, justo en el viaje, cuando más gastos hay. Acá va una comparación honesta, incluida la app que hice yo.",
+    related: ["como-dividir-gastos-de-un-viaje", "gastos-en-distintas-monedas", "minimizar-transferencias"],
+    body: `
+<h2>Antes de empezar: quién escribe esto</h2>
+<p>Soy Valentin y hice %BRAND%, así que no soy neutral. Por eso esta comparación dice también dónde %BRAND% se queda corta y en qué casos te conviene otra app. Usé Splitwise en varios viajes antes de armar la mía, y la información sobre las otras apps sale de sus propias páginas de ayuda y tiendas, revisadas en octubre de 2026. Las condiciones cambian: si algo te resulta clave, confirmalo en la app antes de decidir.</p>
+
+<h2>Por qué tanta gente busca una alternativa a Splitwise</h2>
+<p>Splitwise es la app más conocida para dividir gastos y lo hace bien. El cambio que generó la mayoría de las búsquedas fue en su versión gratuita: ahora limita la cantidad de gastos nuevos que se pueden cargar por día. En sus respuestas de soporte, Splitwise habla de <strong>cuatro gastos nuevos por día</strong> en la versión gratis; para cargar sin límite hay que pagar Splitwise Pro.</p>
+<p>Para una casa compartida, cuatro gastos por día alcanzan de sobra. En un viaje en grupo no: un solo día puede tener nafta, peaje, desayuno, súper, almuerzo, entradas y la cena. Si el límite es por persona, se puede repartir la carga entre varios del grupo, pero eso implica justamente lo que una app debería evitar: acordarse de anotar después.</p>
+<p>La versión gratis de Splitwise también muestra publicidad, y la conversión automática entre monedas está entre las funciones de Pro. En la versión gratis se pueden cargar gastos en distintas monedas, pero los saldos quedan separados por moneda.</p>
+
+<h2>Las tres opciones, en una tabla</h2>
+<table>
+<thead><tr><th></th><th>Splitwise (gratis)</th><th>Tricount</th><th>%BRAND%</th></tr></thead>
+<tbody>
+<tr><td>Precio</td><td>Gratis con límites; Pro pago</td><td>Gratis</td><td>Gratis, con publicidad</td></tr>
+<tr><td>Gastos por día</td><td>Limitados (4 según su soporte)</td><td>Sin límite</td><td>Sin límite</td></tr>
+<tr><td>Varias monedas</td><td>Sí; conversión automática solo en Pro</td><td>Sí</td><td>Sí, con cotización automática y editable</td></tr>
+<tr><td>Dólar oficial, MEP, blue o tarjeta</td><td>No</td><td>No</td><td>Sí, al cargar el gasto y al repartir</td></tr>
+<tr><td>División desigual (montos o porcentajes)</td><td>Sí</td><td>Sí</td><td>No: partes iguales entre quienes participan</td></tr>
+<tr><td>Repartir a mitad del viaje</td><td>Se salda en cualquier momento</td><td>Se salda en cualquier momento</td><td>Repartidas parciales que cierran lo anterior</td></tr>
+<tr><td>Confirmar pagos</td><td>Se registra el pago</td><td>Se registra el pago</td><td>"Ya pagué" y "Recibido", con alias para copiar</td></tr>
+<tr><td>Sumarse sin cuenta</td><td>Cada uno necesita cuenta para ver el grupo</td><td>Sí, con link</td><td>Sí, con código o link</td></tr>
+<tr><td>Fotos de tickets</td><td>Solo Pro</td><td>Sí</td><td>No</td></tr>
+<tr><td>Dónde funciona</td><td>App iOS, Android y web</td><td>App iOS y Android</td><td>Web instalable en el celular</td></tr>
+</tbody>
+</table>
+<p>Tricount hoy pertenece a bunq, un banco digital europeo. La app es gratis y se integra con una tarjeta de bunq que agrega los pagos solos al grupo. Según su centro de ayuda, con el cambio de app se quitaron algunas funciones de la versión anterior, como exportar a CSV o PDF y las estadísticas.</p>
+
+<h2>Cuándo conviene cada una</h2>
+<h3>Splitwise: si el grupo ya la usa o pagan Pro</h3>
+<p>Si tu grupo ya tiene años de saldos en Splitwise, o lo usan para la casa todo el año, cambiar tiene costo. Con Pro desaparecen el límite diario y la publicidad, y suma conversión de monedas y escaneo de tickets. También es la mejor opción si necesitan divisiones desiguales complejas: por ítem, por porcentaje o por partes.</p>
+
+<h3>Tricount: si viajan por Europa o quieren una app nativa gratis</h3>
+<p>Tricount no tiene límite de gastos y la gente se suma con un link, sin cuenta. Si alguien del grupo usa bunq, la tarjeta integrada ahorra cargar gastos a mano. Para viajes por Europa, en euros, es una opción muy sólida.</p>
+
+<h3>%BRAND%: si el viaje tiene muchos gastos por día, varias monedas o pesos argentinos</h3>
+<p>Lo hice para los viajes que hacía con amigos: una casa en la costa entre seis u ocho, o una semana en Brasil, con diez gastos por día y alguien que a mitad del viaje dice "hagamos cuentas de lo que llevamos". Lo que resuelve mejor:</p>
+<ul>
+<li><strong>Sin límite de gastos</strong> y sin necesidad de que todos se creen una cuenta: alguien crea el viaje, comparte el código y cada uno elige su nombre.</li>
+<li><strong>Repartidas parciales.</strong> "Repartir hasta hoy" calcula quién le paga a quién con lo cargado hasta ese momento, y los gastos que vengan después entran en la siguiente repartida o en la final.</li>
+<li><strong>Monedas y dólar argentino.</strong> Un gasto en reales o en dólares se convierte a la moneda del viaje con la cotización del día, y la repartida se puede hacer en otra moneda (por ejemplo, el viaje en reales y los pagos entre ustedes en pesos), eligiendo dólar oficial, MEP, blue o tarjeta.</li>
+<li><strong>Pocas transferencias y pagos confirmados.</strong> Calcula la menor cantidad de transferencias posible, muestra el alias de quien cobra para copiarlo, y el pago queda saldado cuando el que recibe confirma.</li>
+</ul>
+[[fig settle-fx | Repartida en otra moneda: la cotización se puede editar antes de confirmar]]
+<p>Dónde se queda corta, para que lo sepas antes: no permite montos o porcentajes distintos por persona (sí elegir quién participa de cada gasto), no tiene fotos de tickets ni exportación, y es una web que se instala en el celular, no una app de las tiendas. Es gratis porque muestra publicidad, nunca dentro del formulario de gastos ni al lado de los botones de pago.</p>
+
+<h2>Cómo pasarse a mitad de un viaje</h2>
+<p>Si ya empezaron en Splitwise y se quedaron sin cargas, no hace falta copiar gasto por gasto:</p>
+<ol>
+<li>En Splitwise, miren el saldo actual de cada persona del grupo.</li>
+<li>En la nueva app, creen el viaje y carguen un gasto por persona que represente su saldo previo, o directamente salden lo que había y arranquen de cero.</li>
+<li>De ahí en adelante, carguen todo en un solo lugar. Lo peor es tener la mitad en una app y la mitad en otra.</li>
+</ol>
+<p>Lo más prolijo, si se puede, es saldar todo lo anterior antes de cambiar. Así nadie arrastra cuentas de una app a otra.</p>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Cuántos gastos por día permite Splitwise gratis?</h3>
+<p>Splitwise habla de cuatro gastos nuevos por día en la versión gratuita, en sus respuestas de soporte. El límite se renueva al día siguiente. Con Splitwise Pro no hay límite.</p>
+<h3>¿Hay alguna alternativa a Splitwise completamente gratis?</h3>
+<p>Sí. Tricount es gratis y %BRAND% también (con publicidad). Las dos permiten gastos ilimitados y sumar gente sin que se cree una cuenta.</p>
+<h3>¿Cuál conviene para un viaje a Brasil desde Argentina?</h3>
+<p>Si quieren cargar en reales y pagarse entre ustedes en pesos con el dólar que usaron de verdad (tarjeta, MEP o blue), %BRAND% está pensada para eso. Lo explicamos en detalle en la guía sobre <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">cómo pagar en Brasil</a>.</p>
+<h3>¿Puedo usar %BRAND% para gastos fuera de un viaje?</h3>
+<p>Sí: una casa compartida o una salida funcionan igual, como un "viaje" con su grupo. Pero está pensada para viajes; para gastos de la casa todo el año, Splitwise sigue siendo muy cómodo.</p>
+<p class="meta">Splitwise y Tricount son marcas de sus respectivos dueños. %BRAND% no está afiliada a ninguna de las dos. Información revisada en octubre de 2026.</p>
+`,
+  },
 ];

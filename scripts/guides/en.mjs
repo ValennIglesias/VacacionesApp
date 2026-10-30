@@ -872,4 +872,77 @@ export const GUIDES = [
 <p class="meta">This guide is general information. Phone compatibility, prices and plan terms vary by carrier and change over time.</p>
 `,
   },
+  {
+    slug: "splitwise-alternative",
+    pair: "alternativa-a-splitwise",
+    published: "2026-10-29",
+    title: "Splitwise alternative for group trips: Splitwise, Tricount and TribuSplit compared",
+    desc: "Splitwise's free plan now caps how many expenses you can add per day. We compare Splitwise, Tricount and TribuSplit for group travel: limits, currencies, settling up and when each one makes sense.",
+    lead: "If you're looking for a Splitwise alternative, chances are you hit the free plan's daily expense limit in the middle of a trip, exactly when expenses pile up. Here is an honest comparison, including the app I built.",
+    related: ["how-to-split-travel-expenses", "travel-expenses-multiple-currencies", "settle-group-debts-fewer-transfers"],
+    body: `
+<h2>First, who is writing this</h2>
+<p>I'm Valentin and I built %BRAND%, so I'm not neutral. That's why this comparison also says where %BRAND% falls short and when another app is the better pick. I used Splitwise on several trips before building my own, and the details about the other apps come from their own help pages and store listings, checked in October 2026. Terms change, so if something is a deal-breaker for you, confirm it in the app before you decide.</p>
+
+<h2>Why so many people look for a Splitwise alternative</h2>
+<p>Splitwise is the best-known app for splitting expenses and it does the job well. What sent most people searching was a change to the free plan: it now limits how many new expenses you can add per day. In its support replies, Splitwise mentions <strong>four new expenses per day</strong> on the free plan; unlimited entry requires Splitwise Pro.</p>
+<p>For a shared flat, four a day is plenty. On a group trip it isn't: a single day can bring gas, tolls, breakfast, groceries, lunch, tickets and dinner. If the limit is per person you can spread the entries across the group, but that means exactly what an expense app should prevent: remembering to log things later.</p>
+<p>The free plan also shows ads, and automatic currency conversion is a Pro feature. On the free plan you can record expenses in several currencies, but balances stay separate per currency.</p>
+
+<h2>The three options at a glance</h2>
+<table>
+<thead><tr><th></th><th>Splitwise (free)</th><th>Tricount</th><th>%BRAND%</th></tr></thead>
+<tbody>
+<tr><td>Price</td><td>Free with limits; Pro is paid</td><td>Free</td><td>Free, with ads</td></tr>
+<tr><td>Expenses per day</td><td>Limited (4 per its support)</td><td>Unlimited</td><td>Unlimited</td></tr>
+<tr><td>Multiple currencies</td><td>Yes; automatic conversion only in Pro</td><td>Yes</td><td>Yes, with an automatic, editable rate</td></tr>
+<tr><td>Uneven splits (amounts or percentages)</td><td>Yes</td><td>Yes</td><td>No: equal shares among the people involved</td></tr>
+<tr><td>Settling up mid-trip</td><td>Settle up any time</td><td>Settle up any time</td><td>Partial settle-ups that close everything so far</td></tr>
+<tr><td>Payment confirmation</td><td>The payment is recorded</td><td>The payment is recorded</td><td>"I paid" and "Received", with payment details to copy</td></tr>
+<tr><td>Join without an account</td><td>Everyone needs an account to see the group</td><td>Yes, with a link</td><td>Yes, with a code or link</td></tr>
+<tr><td>Receipt photos</td><td>Pro only</td><td>Yes</td><td>No</td></tr>
+<tr><td>Platforms</td><td>iOS, Android and web</td><td>iOS and Android apps</td><td>Web app you can install on your phone</td></tr>
+</tbody>
+</table>
+<p>Tricount is now owned by bunq, a European digital bank. The app is free and works with a bunq card that adds payments to the group automatically. According to its help center, the new app dropped some features of the old one, such as CSV and PDF export and statistics.</p>
+
+<h2>When each one makes sense</h2>
+<h3>Splitwise: if your group already uses it or pays for Pro</h3>
+<p>If your group has years of balances in Splitwise, or uses it for the household all year, switching has a cost. Pro removes the daily limit and the ads, and adds currency conversion and receipt scanning. It is also the best option if you need complex uneven splits: by item, by percentage or by shares.</p>
+
+<h3>Tricount: if you travel around Europe or want a free native app</h3>
+<p>Tricount has no expense limit and people join with a link, no account needed. If someone in the group banks with bunq, the built-in card saves manual entry. For trips around Europe, in euros, it's a very solid choice.</p>
+
+<h3>%BRAND%: for trips with many expenses a day or several currencies</h3>
+<p>I built it for the trips I took with friends: a beach house shared by six or eight people, or a week in Brazil, with ten expenses a day and someone saying halfway through "let's settle what we have so far". What it handles best:</p>
+<ul>
+<li><strong>No expense limit</strong>, and nobody has to create an account: one person creates the trip, shares the code and everyone picks their name.</li>
+<li><strong>Partial settle-ups.</strong> "Split up to today" works out who pays whom with everything logged so far, and anything added later goes into the next settle-up or the final one.</li>
+<li><strong>Currencies.</strong> An expense in another currency is converted to the trip currency at the day's rate, and you can settle in a different currency (say, the trip in euros and paying each other back in dollars or pounds), editing the rate if your bank or card used a different one.</li>
+<li><strong>Few transfers, confirmed payments.</strong> It works out the smallest number of transfers, shows the payee's payment details to copy, and a debt only counts as settled once the person receiving confirms it.</li>
+</ul>
+[[fig settle-fx | Settling in another currency: the rate can be edited before confirming]]
+<p>Where it falls short, so you know upfront: no different amounts or percentages per person (you can choose who takes part in each expense), no receipt photos or export, and it's a web app you install on your phone, not an app-store app. It's free because it shows ads, never inside the expense form or next to payment buttons.</p>
+
+<h2>How to switch in the middle of a trip</h2>
+<p>If you started in Splitwise and ran out of entries, you don't need to copy every expense:</p>
+<ol>
+<li>In Splitwise, check each person's current balance.</li>
+<li>In the new app, create the trip and add one expense per person that reflects their previous balance, or simply settle what you had and start fresh.</li>
+<li>From then on, log everything in one place. The worst setup is half the trip in one app and half in another.</li>
+</ol>
+<p>The cleanest option, if possible, is to settle everything before switching, so nobody carries balances from one app to the other.</p>
+
+<h2>FAQ</h2>
+<h3>How many expenses per day does free Splitwise allow?</h3>
+<p>In its support replies, Splitwise mentions four new expenses per day on the free plan. The limit resets the next day. Splitwise Pro has no limit.</p>
+<h3>Is there a completely free Splitwise alternative?</h3>
+<p>Yes. Tricount is free, and so is %BRAND% (with ads). Both allow unlimited expenses and let people join without creating an account.</p>
+<h3>Which one is best for a trip abroad with several currencies?</h3>
+<p>If you'll pay in several currencies and want to settle in your home currency at the rate you actually got, %BRAND% is built for that. See the guide on <a href="/en/guides/travel-expenses-multiple-currencies/">travel expenses in multiple currencies</a>.</p>
+<h3>Can I use %BRAND% outside of travel?</h3>
+<p>Yes: a shared house or a night out works the same way, as a "trip" with its group. But it's designed for trips; for year-round household bills, Splitwise is still very convenient.</p>
+<p class="meta">Splitwise and Tricount are trademarks of their respective owners. %BRAND% is not affiliated with either. Information checked in October 2026.</p>
+`,
+  },
 ];
