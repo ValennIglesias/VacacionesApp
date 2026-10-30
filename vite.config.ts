@@ -73,7 +73,7 @@ ${urls.map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
 
 // todas las páginas del sitio: landing, legales, app y guías (cada carpeta con su index.html)
 const pages = Object.fromEntries(
-  ["index.html", "app/index.html", ...globSync("{en,privacy,terms,guias,nosotros,contacto}/**/index.html")].map((f) => [
+  ["index.html", "app/index.html", ...globSync("{en,privacy,terms,guias,nosotros,contacto,herramientas}/**/index.html")].map((f) => [
     f.replace(/\\/g, "/").replace(/\/?index\.html$/, "") || "landing",
     f,
   ]),

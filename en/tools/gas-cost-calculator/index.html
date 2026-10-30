@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gas money calculator: split fuel costs on a road trip | %BRAND%</title>
+    <meta name="description" content="Work out how much fuel your road trip needs, what it costs with tolls and parking, and how much gas money each person owes. Miles per gallon or litres per 100 km. Free, no sign-up." />
+    <link rel="canonical" href="%SITE%/en/tools/gas-cost-calculator/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/tools/gas-cost-calculator/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/herramientas/calculadora-de-nafta/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Gas money calculator: split fuel costs on a road trip" />
+    <meta property="og:description" content="How much fuel your road trip needs, what it costs with tolls, and how much gas money each person owes." />
+    <meta property="og:url" content="%SITE%/en/tools/gas-cost-calculator/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="module" src="/src/tools.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Gas money calculator","description":"How much fuel your road trip needs, what it costs with tolls, and how much gas money each person owes.","url":"%SITE%/en/tools/gas-cost-calculator/","inLanguage":"en","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0"},"publisher":{"@type":"Organization","name":"%BRAND%","url":"%SITE%/en/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"%SITE%/en/"},{"@type":"ListItem","position":2,"name":"Gas money calculator","item":"%SITE%/en/tools/gas-cost-calculator/"}]}]}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+        <h1>Gas money calculator: split fuel costs on a road trip</h1>
+        <p class="lead">Enter the distance, your car's fuel economy and the price of fuel. We'll tell you how much fuel you'll use, what the drive costs with tolls, and how much each person chips in.</p>
+      </article>
+
+      <section class="mx-auto mt-8 max-w-3xl px-5" aria-label="Calculator">
+        <form id="fuel-tool" class="rounded-3xl bg-surface p-5 sm:p-7">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="flex flex-col gap-1.5 text-sm text-muted"><span data-km="Distance (km)" data-mi="Distance (miles)">Distance (km)</span>
+              <input name="distance" type="number" inputmode="decimal" min="0" step="any" value="300" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+            <label class="flex items-center gap-3 self-end pb-3 text-ink"><input name="roundTrip" type="checkbox" checked class="size-5 accent-[#2f5bff]" /> Round trip</label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Fuel economy
+              <input name="consumption" type="number" inputmode="decimal" min="0" step="any" value="7" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Unit
+              <select name="unit" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent">
+                <option value="l100">litres per 100 km</option>
+                <option value="mpg">miles per gallon (mpg)</option>
+                <option value="kmpl">km per litre</option>
+              </select></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted"><span data-km="Price per litre" data-mi="Price per gallon">Price per litre</span>
+              <input name="price" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 1.80" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Tolls and parking (total)
+              <input name="extras" type="number" inputmode="decimal" min="0" step="any" placeholder="0" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">People in the car
+              <input name="people" type="number" inputmode="numeric" min="1" step="1" value="4" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+          </div>
+          <div data-result class="mt-6" aria-live="polite"></div>
+          <button type="button" data-copy class="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 font-medium text-white">Copy result to share</button>
+        </form>
+        <p class="mt-3 text-sm text-muted">Everything runs in your browser: nothing is sent or stored.</p>
+      </section>
+
+      <article class="prose">
+        <h2>How it's calculated</h2>
+        <p>The math is simple, and worth knowing so you can double-check it:</p>
+        <ol>
+          <li><strong>Fuel:</strong> the distance (doubled for a round trip) divided by your miles per gallon. With litres per 100 km, it's the distance times that number, divided by 100.</li>
+          <li><strong>Cost:</strong> fuel used times the price per gallon or litre, plus tolls and parking.</li>
+          <li><strong>Per person:</strong> the cost divided by the number of people riding in that car.</li>
+        </ol>
+        <p>An example: a 200-mile drive to the lake, round trip, is 400 miles. A car that gets 30 mpg uses about 13.3 gallons. At $3.50 a gallon that's $46.67, plus $12 in tolls: $58.67. Split four ways, each person chips in about $14.67.</p>
+
+        <h2>How to find your car's fuel economy</h2>
+        <ul>
+          <li><strong>The trip computer</strong>, if your car has one, shows average consumption. Highway figures are usually better than city ones.</li>
+          <li><strong>The full-tank method:</strong> fill up, reset the trip meter, and at the next full fill-up divide the miles driven by the gallons you added (or litres by km, times 100).</li>
+          <li><strong>The manufacturer's rating</strong> is a useful reference, though real-world numbers tend to be a bit worse.</li>
+        </ul>
+        <p>A loaded car, air conditioning and high speeds all push consumption up. To be safe, assume a little worse than your usual figure.</p>
+
+        <h2>Should the driver pay the same as everyone else?</h2>
+        <p>There's no single right answer, so agree on it before you leave. The most common options:</p>
+        <ul>
+          <li><strong>Everyone splits fuel equally</strong>, driver included. The simplest option.</li>
+          <li><strong>The driver doesn't pay for fuel</strong>, as compensation for providing the car and the wear and tear.</li>
+          <li><strong>Passengers add a little extra</strong> for wear and tear, for example 10 to 20% on top of fuel.</li>
+        </ul>
+        <p>For the second option, put only the passengers in "People in the car".</p>
+
+        <h2>If you're taking more than one car</h2>
+        <p>Run the numbers once per car. If both cars are heading to the same place for the same trip, the fairest approach is usually to add up all the fuel and split it across the whole group, so nobody pays more just for riding in the thirstier car.</p>
+        <p>On a longer trip, fuel is just one expense among many: groceries, meals, nights out, tickets. To keep track, everyone in <a href="/app/new">%BRAND%</a> logs what they pay as it happens, and at the end the app tells you who pays whom. If you just need to settle up what each person already paid, use the <a href="/en/tools/split-expenses-calculator/">split expenses calculator</a>. For planning the rest of the trip, see the <a href="/en/guides/group-trip-budget/">group trip budget guide</a>.</p>
+
+        <h2>FAQ</h2>
+        <h3>How do I calculate gas money for a road trip?</h3>
+        <p>Divide the total miles by your car's mpg to get gallons, multiply by the price per gallon, add tolls and parking, and divide by the number of people. The calculator above does exactly that.</p>
+        <h3>Does it work with litres and kilometres?</h3>
+        <p>Yes. Choose "litres per 100 km" or "km per litre" and the calculator asks for the distance in km and the price per litre.</p>
+        <h3>Should I count the drive back?</h3>
+        <p>If everyone is coming back in the same car, yes: keep "Round trip" checked. If some people are only riding one way, run the calculation for each leg separately.</p>
+      </article>
+      <div id="ad-landing" class="prose mt-10" hidden></div>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

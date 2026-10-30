@@ -58,6 +58,7 @@ export const GUIDES = [
 </tbody>
 </table>
 <p>La suma de los saldos da cero: lo que unos deben es exactamente lo que otros tienen que cobrar. Si no da cero, falta un gasto o hay uno mal dividido.</p>
+<p>Si todos los gastos se repartieron entre todos, podés hacer esta cuenta en un minuto con la <a href="/herramientas/calculadora-dividir-gastos/">calculadora para dividir gastos</a>: anotás cuánto puso cada uno y te dice quién le paga a quién.</p>
 [[fig balances | Saldos pendientes: en verde a quién le deben, en rojo quién debe]]
 
 <h2>5. En viajes largos, hagan cuentas por etapas</h2>
@@ -923,6 +924,7 @@ export const GUIDES = [
 </table>
 <p>Ejemplo ilustrativo con dos autos de cuatro personas: el auto A gastó $120.000 entre nafta y peajes y el auto B $100.000. Con "cada auto lo suyo", los del auto A pagan $30.000 y los del B $25.000. Con "todo junto", todos pagan $27.500.</p>
 <p>Algunos grupos suman algo para el dueño del auto por el desgaste. No es obligatorio, pero si se hace, que se acuerde antes de salir.</p>
+<p>Para estimar antes de salir cuánto va a gastar cada auto, usá la <a href="/herramientas/calculadora-de-nafta/">calculadora de nafta</a>: con la distancia, el consumo y el precio del litro te dice cuánto pone cada uno.</p>
 <p>Durante la estadía, la nafta de las salidas en auto (ir a otra playa, a cenar al centro) se divide entre quienes fueron en ese viaje.</p>
 
 <h2>5. Súper, asados y salidas: el día a día</h2>

@@ -58,6 +58,7 @@ export const GUIDES = [
 </tbody>
 </table>
 <p>The balances add up to zero: what some owe is exactly what others are owed. If yours don't, an expense is missing or split wrong.</p>
+<p>If every expense was shared by everyone, the <a href="/en/tools/split-expenses-calculator/">split expenses calculator</a> does this in a minute: enter what each person paid and it tells you who pays whom.</p>
 [[fig balances | Pending balances: green is owed money, red owes money]]
 
 <h2>5. On long trips, settle in stages</h2>
@@ -449,7 +450,7 @@ export const GUIDES = [
 <p>Picture a typical day on the trip and estimate:</p>
 <ul>
 <li><strong>Food</strong>: breakfast, lunch, dinner and snacks. Cooking a few meals at your rental lowers this a lot.</li>
-<li><strong>Local transport</strong>: taxis, ride-hailing, public transport, fuel, parking, tolls.</li>
+<li><strong>Local transport</strong>: taxis, ride-hailing, public transport, fuel, parking, tolls. For a road trip, the <a href="/en/tools/gas-cost-calculator/">gas money calculator</a> estimates fuel per person.</li>
 <li><strong>Activities</strong>: tickets, equipment rentals, tips.</li>
 <li><strong>Going out</strong>: bars, cafés, treats.</li>
 </ul>

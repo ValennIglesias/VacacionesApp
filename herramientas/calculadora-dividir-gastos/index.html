@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora para dividir gastos entre amigos | %BRAND%</title>
+    <meta name="description" content="Anotá cuánto puso cada uno y la calculadora te dice quién le paga a quién, con la menor cantidad de transferencias. Gratis, sin cuenta y lista para copiar al grupo de WhatsApp." />
+    <link rel="canonical" href="%SITE%/herramientas/calculadora-dividir-gastos/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/herramientas/calculadora-dividir-gastos/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/tools/split-expenses-calculator/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Calculadora para dividir gastos entre amigos" />
+    <meta property="og:description" content="Anotá cuánto puso cada uno y te dice quién le paga a quién, con la menor cantidad de transferencias." />
+    <meta property="og:url" content="%SITE%/herramientas/calculadora-dividir-gastos/" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="module" src="/src/tools.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora para dividir gastos entre amigos","description":"Anotá cuánto puso cada uno y te dice quién le paga a quién, con la menor cantidad de transferencias.","url":"%SITE%/herramientas/calculadora-dividir-gastos/","inLanguage":"es","applicationCategory":"FinanceApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0"},"publisher":{"@type":"Organization","name":"%BRAND%","url":"%SITE%/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"%SITE%/"},{"@type":"ListItem","position":2,"name":"Calculadora para dividir gastos","item":"%SITE%/herramientas/calculadora-dividir-gastos/"}]}]}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+        <h1>Calculadora para dividir gastos entre amigos</h1>
+        <p class="lead">Anotá cuánto puso cada uno y te decimos quién le paga a quién, con la menor cantidad de transferencias posible. Sin cuenta, y lista para copiar al grupo.</p>
+      </article>
+
+      <section id="split-tool" class="mx-auto mt-8 max-w-3xl px-5" aria-label="Calculadora">
+        <div class="rounded-3xl bg-surface p-5 sm:p-7">
+          <div class="flex justify-between gap-2 pr-12 text-sm text-muted"><span>Nombre</span><span>Cuánto puso</span></div>
+          <div data-rows class="mt-2 flex flex-col gap-2"></div>
+          <button type="button" data-add class="mt-3 inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-accent-ink hover:bg-accent-soft"><i class="ph-duotone ph-user-plus text-lg"></i> Agregar persona</button>
+          <div data-result class="mt-6" aria-live="polite"></div>
+          <button type="button" data-copy class="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 font-medium text-white">Copiar resultado para WhatsApp</button>
+        </div>
+        <p class="mt-3 text-sm text-muted">Todo se calcula en tu navegador: los nombres y montos no se envían ni se guardan.</p>
+      </section>
+
+      <article class="prose">
+        <h2>Cómo usarla</h2>
+        <ol>
+          <li>Escribí el nombre de cada persona y cuánto puso en total. Si alguien no puso nada, dejá el monto vacío.</li>
+          <li>La calculadora suma todo, lo divide en partes iguales y calcula el saldo de cada uno: cuánto puso menos cuánto le toca.</li>
+          <li>Con esos saldos arma la lista de transferencias: quién le paga a quién y cuánto.</li>
+          <li>Tocá "Copiar resultado" y pegalo en el grupo. Al final va el link a esta página, por si alguien quiere revisar la cuenta.</li>
+        </ol>
+
+        <h2>Un ejemplo</h2>
+        <p>Cuatro amigos pasan un fin de semana en una casa. Ana pagó el alquiler, Tomás hizo el súper, Juan compró el carbón y Lucía no puso nada todavía (los montos son de ejemplo):</p>
+        <table>
+          <thead><tr><th>Persona</th><th>Puso</th><th>Le toca</th><th>Saldo</th></tr></thead>
+          <tbody>
+            <tr><td>Ana</td><td>$60.000</td><td>$22.500</td><td>le deben $37.500</td></tr>
+            <tr><td>Tomás</td><td>$24.000</td><td>$22.500</td><td>le deben $1.500</td></tr>
+            <tr><td>Juan</td><td>$6.000</td><td>$22.500</td><td>debe $16.500</td></tr>
+            <tr><td>Lucía</td><td>$0</td><td>$22.500</td><td>debe $22.500</td></tr>
+          </tbody>
+        </table>
+        <p>El total es $90.000, así que a cada uno le tocan $22.500. Con tres transferencias queda todo saldado: Lucía le paga $22.500 a Ana, Juan le paga $15.000 a Ana y Juan le paga $1.500 a Tomás.</p>
+
+        <h2>Por qué "la menor cantidad de transferencias"</h2>
+        <p>Si cada uno le devolviera a cada persona su parte de cada gasto, con cuatro personas podrían ser hasta doce transferencias, muchas de ida y vuelta. La calculadora mira solo el saldo final de cada uno y empareja al que más debe con al que más le deben, una y otra vez. Así nunca hacen falta más transferencias que personas menos una. Lo explicamos en detalle en la guía sobre <a href="/guias/minimizar-transferencias/">cómo saldar deudas con menos transferencias</a>.</p>
+
+        <h2>Cuándo conviene usar la app</h2>
+        <p>La calculadora sirve cuando todo se reparte entre todos y ya saben cuánto puso cada uno. Para un viaje de varios días suele no alcanzar:</p>
+        <ul>
+          <li><strong>No todos participan de cada gasto:</strong> la cena a la que fueron tres, o la excursión que hicieron dos.</li>
+          <li><strong>Son muchos gastos por día</strong> y nadie se acuerda al final quién pagó qué.</li>
+          <li><strong>Hay varias monedas</strong>, por ejemplo reales y pesos en un viaje a Brasil.</li>
+          <li><strong>Quieren hacer cuentas a mitad del viaje</strong> y seguir sumando gastos después.</li>
+        </ul>
+        <p>Para eso está <a href="/app/new">%BRAND%</a>: cada uno carga sus gastos en el momento, desde su celular, y la app hace estas mismas cuentas sola. Es gratis y nadie necesita crear una cuenta para sumarse.</p>
+
+        <h2>Preguntas frecuentes</h2>
+        <h3>¿Se guardan los datos que cargo?</h3>
+        <p>No. La cuenta se hace en tu navegador y nada se envía a ningún servidor. Si cerrás la página, se borra.</p>
+        <h3>¿Sirve para cualquier moneda?</h3>
+        <p>Sí, siempre que todos los montos estén en la misma moneda. Si hay gastos en monedas distintas, primero hay que pasarlos a una sola; en <a href="/guias/gastos-en-distintas-monedas/">esta guía</a> explicamos cómo hacerlo sin que nadie pierda con la cotización.</p>
+        <h3>¿Y si alguien no participó de un gasto?</h3>
+        <p>La calculadora reparte todo en partes iguales. Si un gasto fue solo de algunos, lo más simple es anotarlo en la app, donde se elige quién participa de cada gasto.</p>
+        <h3>¿Qué pasa con los centavos que no se dividen exacto?</h3>
+        <p>Se reparten de a uno entre las primeras personas de la lista, así la suma da exacta y no se pierde ni sobra nada.</p>
+      </article>
+      <div id="ad-landing" class="prose mt-10" hidden></div>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

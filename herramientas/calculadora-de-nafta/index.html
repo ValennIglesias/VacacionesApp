@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de nafta: cuánto pone cada uno en el viaje | %BRAND%</title>
+    <meta name="description" content="Calculá cuánta nafta gasta el auto en el viaje, cuánto cuesta con peajes y cuánto pone cada uno. Por km por litro o litros cada 100 km, ida o ida y vuelta. Gratis y sin cuenta." />
+    <link rel="canonical" href="%SITE%/herramientas/calculadora-de-nafta/" />
+    <link rel="alternate" hreflang="es" href="%SITE%/herramientas/calculadora-de-nafta/" />
+    <link rel="alternate" hreflang="en" href="%SITE%/en/tools/gas-cost-calculator/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="%BRAND%" />
+    <meta property="og:title" content="Calculadora de nafta: cuánto pone cada uno en el viaje" />
+    <meta property="og:description" content="Cuánta nafta gasta el auto en el viaje, cuánto cuesta con peajes y cuánto pone cada uno." />
+    <meta property="og:url" content="%SITE%/herramientas/calculadora-de-nafta/" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content="%SITE%/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+    <script type="module" src="/src/tools.ts"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Calculadora de nafta por persona","description":"Cuánta nafta gasta el auto en el viaje, cuánto cuesta con peajes y cuánto pone cada uno.","url":"%SITE%/herramientas/calculadora-de-nafta/","inLanguage":"es","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0"},"publisher":{"@type":"Organization","name":"%BRAND%","url":"%SITE%/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"%SITE%/"},{"@type":"ListItem","position":2,"name":"Calculadora de nafta","item":"%SITE%/herramientas/calculadora-de-nafta/"}]}]}</script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main>
+      <article class="prose">
+        <h1>Calculadora de nafta: cuánto pone cada uno en el viaje</h1>
+        <p class="lead">Cargá la distancia, lo que gasta el auto y el precio del litro. Te decimos cuánta nafta van a usar, cuánto cuesta el viaje con peajes y cuánto pone cada uno.</p>
+      </article>
+
+      <section class="mx-auto mt-8 max-w-3xl px-5" aria-label="Calculadora">
+        <form id="fuel-tool" class="rounded-3xl bg-surface p-5 sm:p-7">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="flex flex-col gap-1.5 text-sm text-muted"><span data-km="Distancia (km)" data-mi="Distancia (millas)">Distancia (km)</span>
+              <input name="distance" type="number" inputmode="decimal" min="0" step="any" value="350" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+            <label class="flex items-center gap-3 self-end pb-3 text-ink"><input name="roundTrip" type="checkbox" checked class="size-5 accent-[#2f5bff]" /> Ida y vuelta</label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Consumo del auto
+              <input name="consumption" type="number" inputmode="decimal" min="0" step="any" value="12" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Unidad
+              <select name="unit" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent">
+                <option value="kmpl">km por litro</option>
+                <option value="l100">litros cada 100 km</option>
+                <option value="mpg">millas por galón (mpg)</option>
+              </select></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted"><span data-km="Precio del litro" data-mi="Precio del galón">Precio del litro</span>
+              <input name="price" type="number" inputmode="decimal" min="0" step="any" placeholder="Ej.: 1500" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Peajes y estacionamiento (total)
+              <input name="extras" type="number" inputmode="decimal" min="0" step="any" placeholder="0" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+            <label class="flex flex-col gap-1.5 text-sm text-muted">Personas en el auto
+              <input name="people" type="number" inputmode="numeric" min="1" step="1" value="4" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
+          </div>
+          <div data-result class="mt-6" aria-live="polite"></div>
+          <button type="button" data-copy class="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 font-medium text-white">Copiar resultado para WhatsApp</button>
+        </form>
+        <p class="mt-3 text-sm text-muted">Todo se calcula en tu navegador: no se envía ni se guarda nada.</p>
+      </section>
+
+      <article class="prose">
+        <h2>Cómo se calcula</h2>
+        <p>La cuenta es simple, y conviene entenderla para poder chequearla:</p>
+        <ol>
+          <li><strong>Litros:</strong> la distancia (por dos si es ida y vuelta) dividida por los km que hace el auto con un litro. Si el consumo está en litros cada 100 km, es la distancia por ese número, dividido 100.</li>
+          <li><strong>Costo:</strong> los litros por el precio del litro, más peajes y estacionamiento.</li>
+          <li><strong>Por persona:</strong> el costo dividido por la cantidad de personas que viajan en ese auto.</li>
+        </ol>
+        <p>Un ejemplo con números ilustrativos: un viaje de 350 km a la costa, ida y vuelta, son 700 km. Un auto que hace 12 km por litro usa unos 58 litros. Con el litro a $1.500 son $87.500, más $12.000 de peajes: $99.500. Entre cuatro, cada uno pone $24.875.</p>
+
+        <h2>Cómo saber cuánto gasta tu auto</h2>
+        <ul>
+          <li><strong>La computadora de a bordo</strong>, si el auto tiene, muestra el consumo promedio. En ruta suele ser mejor que en ciudad.</li>
+          <li><strong>El método del tanque lleno:</strong> llená el tanque, poné el parcial en cero, y en la próxima carga completa dividí los km recorridos por los litros que cargaste.</li>
+          <li><strong>El manual o la ficha técnica</strong> dan un valor de referencia, que en la práctica suele ser algo optimista.</li>
+        </ul>
+        <p>Si vas cargado, con aire acondicionado o a más de 120 km/h, el consumo sube. Para no quedarse cortos, conviene restarle uno o dos km por litro al número habitual.</p>
+
+        <h2>¿El dueño del auto paga igual que el resto?</h2>
+        <p>No hay una sola respuesta, y lo mejor es hablarlo antes de salir. Las opciones más comunes en los grupos:</p>
+        <ul>
+          <li><strong>Todos pagan la nafta en partes iguales</strong>, incluido el dueño. Es lo más simple.</li>
+          <li><strong>El dueño no paga la nafta</strong>, como compensación por poner el auto y el desgaste.</li>
+          <li><strong>Se le suma un extra al dueño</strong> por desgaste, por ejemplo un 10 o 20 % sobre la nafta.</li>
+        </ul>
+        <p>Para la segunda opción, poné en "Personas en el auto" la cantidad de pasajeros sin contar al dueño.</p>
+
+        <h2>Si viajan en varios autos</h2>
+        <p>Hagan la cuenta una vez por auto. Si los dos autos llevan gente a lo mismo, lo más justo suele ser sumar la nafta de todos y dividirla entre todo el grupo, así nadie paga más por haber ido en el auto que gasta más. En la <a href="/guias/alquiler-costa-atlantica-en-grupo/">guía para alquilar en la Costa Atlántica en grupo</a> contamos cómo lo resolvimos en nuestros viajes.</p>
+        <p>En un viaje largo la nafta es solo uno de muchos gastos: súper, comidas, salidas, entradas. Para no perder la cuenta, en <a href="/app/new">%BRAND%</a> cada uno anota lo que paga en el momento y al final la app dice quién le paga a quién. Si solo necesitan repartir lo que ya pagó cada uno, está la <a href="/herramientas/calculadora-dividir-gastos/">calculadora para dividir gastos</a>.</p>
+
+        <h2>Preguntas frecuentes</h2>
+        <h3>¿Cuántos km hace un auto por litro?</h3>
+        <p>Depende del auto y de cómo se maneje, pero como referencia, un auto chico o mediano a nafta suele hacer entre 11 y 16 km por litro en ruta, y menos en la ciudad. Una camioneta o un auto grande, bastante menos.</p>
+        <h3>¿Conviene cargar en la ruta o antes de salir?</h3>
+        <p>En general, salir con el tanque lleno desde la ciudad evita cargar en estaciones de ruta, que a veces son más caras o tienen filas en temporada. Igual, guarden los tickets o anoten el monto apenas cargan.</p>
+        <h3>¿Sirve en millas y galones?</h3>
+        <p>Sí: elegí "millas por galón" y la calculadora pide la distancia en millas y el precio por galón.</p>
+      </article>
+      <div id="ad-landing" class="prose mt-10" hidden></div>
+      %GUIDE_CTA%
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>
