@@ -68,12 +68,12 @@ export function Balances() {
           <button
             disabled={!hasPending}
             onClick={() => setKind("partial")}
-            className="flex flex-col gap-5 rounded-3xl bg-surface p-4 text-left transition-transform active:scale-[0.98] disabled:opacity-50"
+            className="flex flex-col gap-5 rounded-3xl bg-surface p-4 text-left lift disabled:opacity-50"
           >
             <CalendarCheck size={28} weight="duotone" className="text-accent-ink" />
             <span className="font-medium">{t.settlePartial}</span>
           </button>
-          <button onClick={() => setKind("final")} className="flex flex-col gap-5 rounded-3xl bg-strong p-4 text-left text-strong-ink transition-transform active:scale-[0.98]">
+          <button onClick={() => setKind("final")} className="flex flex-col gap-5 rounded-3xl bg-strong p-4 text-left text-strong-ink lift">
             <FlagCheckered size={28} weight="duotone" />
             <span className="font-medium">{t.settleFinal}</span>
           </button>
@@ -89,7 +89,7 @@ export function Balances() {
               const done = s.transfers.every((x) => x.status === "confirmed");
               return (
                 <li key={s.id}>
-                  <Link to={`/t/${trip.id}/s/${s.id}`} className="flex items-center gap-3 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+                  <Link to={`/t/${trip.id}/s/${s.id}`} className="flex items-center gap-3 rounded-3xl bg-surface p-4 lift">
                     <span className={`inline-flex size-11 items-center justify-center rounded-2xl ${done ? "bg-[rgba(11,138,94,0.12)] text-pos" : "bg-accent-soft text-accent-ink"}`}>
                       {done ? <CheckCircle size={24} weight="duotone" /> : s.kind === "final" ? <FlagCheckered size={24} weight="duotone" /> : <CalendarCheck size={24} weight="duotone" />}
                     </span>

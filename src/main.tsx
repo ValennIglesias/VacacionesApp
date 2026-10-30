@@ -17,6 +17,22 @@ import { Balances } from "./routes/Balances";
 import { SettlementView } from "./routes/SettlementView";
 import { Group } from "./routes/Group";
 
+// tras un deploy, una versión vieja de la app (cacheada) puede pedir un chunk que ya no existe:
+// recargar una vez trae la versión nueva; si vuelve a fallar enseguida, se muestra el error
+const freshImport =
+  <T,>(load: () => Promise<T>) =>
+  () =>
+    load().catch((e) => {
+      let last = 0;
+      try {
+        last = Number(sessionStorage.getItem("chunk-reload")) || 0;
+        sessionStorage.setItem("chunk-reload", String(Date.now()));
+      } catch {}
+      if (Date.now() - last < 10_000) throw e;
+      location.reload();
+      return new Promise<T>(() => {});
+    });
+
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: true } } });
 
 function RequireAuth() {
@@ -46,7 +62,7 @@ const router = createBrowserRouter(
             { path: "balances", element: <Balances /> },
             { path: "s/:settlementId", element: <SettlementView /> },
             // recharts es pesado: se carga solo al abrir el resumen
-            { path: "summary", lazy: () => import("./routes/Summary").then((m) => ({ Component: m.Summary })) },
+            { path: "summary", lazy: freshImport(() => import("./routes/Summary").then((m) => ({ Component: m.Summary }))) },
             { path: "group", element: <Group /> },
           ],
         },

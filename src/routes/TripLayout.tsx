@@ -45,7 +45,7 @@ export function TripLayout() {
   return (
     <div className="mx-auto min-h-[100dvh] max-w-lg pb-44">
       <header className="sticky top-0 z-20 flex items-center gap-3 bg-bg/85 px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md">
-        <Link to="/" className="inline-flex size-10 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
+        <Link to="/" className="lift inline-flex size-10 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
           <ArrowLeft size={20} />
         </Link>
 <Flag cc={trip.countryCode} size={36} />
@@ -69,6 +69,7 @@ export function TripLayout() {
             exit={{ scale: 0, opacity: 0 }}
             transition={spring}
             whileTap={{ scale: 0.92 }}
+            whileHover={{ scale: 1.06 }}
             onClick={() => setSheet({ open: true })}
             className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-[max(1.25rem,calc(50vw-14rem))] z-30 inline-flex size-16 items-center justify-center rounded-full bg-accent text-white shadow-[0_14px_32px_-10px_rgba(47,91,255,0.85)]"
             aria-label={t.addExpense}
@@ -81,11 +82,11 @@ export function TripLayout() {
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
         <div className="mx-auto grid max-w-lg grid-cols-4">
           {tabs.map(({ to, label, icon: I, end, badge }) => (
-            <NavLink key={to} to={to} end={end} className="relative flex flex-col items-center gap-1 py-2.5 text-xs font-medium">
+            <NavLink key={to} to={to} end={end} className="group relative flex flex-col items-center gap-1 py-2.5 text-xs font-medium">
               {({ isActive }) => (
                 <>
                   {isActive && <motion.span layoutId="tab-pill" className="absolute top-1.5 h-8 w-14 rounded-full bg-accent-soft" transition={spring} />}
-                  <I size={24} weight={isActive ? "fill" : "regular"} className={`relative ${isActive ? "text-accent-ink" : "text-muted"}`} />
+                  <I size={24} weight={isActive ? "fill" : "regular"} className={`relative transition-[color,translate] duration-200 group-hover:-translate-y-0.5 ${isActive ? "text-accent-ink" : "text-muted group-hover:text-ink"}`} />
                   {!!badge && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -97,7 +98,7 @@ export function TripLayout() {
                       {badge}
                     </motion.span>
                   )}
-                  <span className={isActive ? "text-ink" : "text-muted"}>{label}</span>
+                  <span className={`transition-colors duration-200 ${isActive ? "text-ink" : "text-muted group-hover:text-ink"}`}>{label}</span>
                 </>
               )}
             </NavLink>

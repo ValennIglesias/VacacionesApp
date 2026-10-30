@@ -25,14 +25,14 @@ export const spring = { type: "spring", stiffness: 420, damping: 34, mass: 0.8 }
 type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "soft" | "danger"; loading?: boolean };
 export function Button({ variant = "primary", loading, className = "", children, disabled, ...rest }: BtnProps) {
   const styles = {
-    primary: "bg-accent text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)]",
-    soft: "bg-accent-soft text-accent-ink",
-    ghost: "bg-transparent text-ink border border-line",
-    danger: "bg-transparent text-neg border border-line",
+    primary: "bg-accent text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] enabled:hover:brightness-110 enabled:hover:shadow-[0_12px_28px_-10px_rgba(47,91,255,0.85)]",
+    soft: "bg-accent-soft text-accent-ink enabled:hover:shadow-[0_10px_24px_-14px_rgba(47,91,255,0.6)]",
+    ghost: "bg-transparent text-ink border border-line enabled:hover:bg-surface-2",
+    danger: "bg-transparent text-neg border border-line enabled:hover:border-neg/50 enabled:hover:bg-neg/5",
   }[variant];
   return (
     <button
-      className={`inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 font-medium transition-[transform,opacity] duration-150 ease-out active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 ${styles} ${className}`}
+      className={`inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 font-medium transition-[translate,scale,opacity,filter,box-shadow,background-color,border-color] duration-200 ease-out enabled:hover:-translate-y-0.5 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 ${styles} ${className}`}
       disabled={disabled || loading}
       {...rest}
     >

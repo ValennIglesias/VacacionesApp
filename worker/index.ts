@@ -481,6 +481,8 @@ app.post("/api/trips/:id/expenses", async (c) => {
 async function editableExpense(c: Context<AppEnv>, tripId: string) {
   const e = await db(c).query.expenses.findFirst({ where: and(eq(s.expenses.id, c.req.param("eid")!), eq(s.expenses.tripId, tripId)) });
   if (!e) throw new HttpError(404, "expense_not_found");
+  // cada uno edita o borra solo los gastos que cargó; el resto del grupo los ve en modo lectura
+  if (e.createdBy !== c.get("userId")) throw new HttpError(403, "not_expense_owner");
   if (e.settlementId) throw new HttpError(409, "expense_settled");
   return e;
 }

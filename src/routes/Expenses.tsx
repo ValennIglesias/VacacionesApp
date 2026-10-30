@@ -97,7 +97,7 @@ export function Expenses() {
       </section>
 
       {myDebt && (
-        <Link to={`/t/${trip.id}/s/${myDebt.s.id}`} className="flex items-center gap-3 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+        <Link to={`/t/${trip.id}/s/${myDebt.s.id}`} className="flex items-center gap-3 rounded-3xl bg-surface p-4 lift">
           <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-[rgba(214,52,58,0.12)] text-neg">
             <HandCoins size={24} weight="duotone" />
           </span>
@@ -143,14 +143,14 @@ export function Expenses() {
                   {list.map((e) => (
                     <motion.li key={e.id} layout initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
                       <button
-                        onClick={() => !e.settlementId && trip.status === "active" && openExpense(e)}
-                        className="flex w-full items-center gap-3 rounded-3xl bg-surface p-3 text-left transition-transform active:scale-[0.98]"
+                        onClick={() => openExpense(e)}
+                        className="flex w-full items-center gap-3 rounded-3xl bg-surface p-3 text-left lift"
                       >
                         <CategoryIcon category={e.category} />
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-medium">{e.description}</p>
                           <p className="truncate text-xs text-muted">
-                            {t.paidBy} {memberName(e.paidBy)} · {e.shares.length === members.length ? t.all.toLowerCase() : `${e.shares.length} ${t.people}`}
+                            {e.paidBy === meId ? t.youPaid : `${t.paidBy} ${memberName(e.paidBy)}`} · {e.shares.length === members.length ? t.all.toLowerCase() : `${e.shares.length} ${t.people}`}
                           </p>
                         </div>
                         <div className="text-right">

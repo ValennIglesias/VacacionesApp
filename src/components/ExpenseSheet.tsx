@@ -1,24 +1,77 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, Trash } from "@phosphor-icons/react";
+import { Check, LockSimple, Trash } from "@phosphor-icons/react";
 import { api, crossRate, useRates, type Expense, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
-import { money, parseAmount, today } from "../lib/format";
+import { formatDay, money, parseAmount, today } from "../lib/format";
 import { CATEGORIES, type Category } from "../../shared/data";
-import { Avatar, Button, CATEGORY_META, Field, focusNoScroll, memberColor, Sheet, spring } from "./ui";
-import { CurrencySelect } from "./bits";
+import { Avatar, Button, CATEGORY_META, CategoryIcon, Field, focusNoScroll, memberColor, Sheet, spring } from "./ui";
+import { CurrencyPicker } from "./bits";
 import { DateField } from "./DatePicker";
 
 type Props = { data: TripData; open: boolean; expense?: Expense; onClose: () => void };
 
 export function ExpenseSheet({ data, open, expense, onClose }: Props) {
   const t = useT();
+  const myUserId = data.members.find((m) => m.id === data.meId)?.userId;
+  // solo quien lo cargó lo edita (el servidor también lo exige); liquidados o viaje cerrado: solo lectura
+  const readOnly = !!expense && (expense.createdBy !== myUserId || !!expense.settlementId || data.trip.status !== "active");
   return (
-    <Sheet open={open} onClose={onClose} title={expense ? t.editExpense : t.addExpense}>
+    <Sheet open={open} onClose={onClose} title={readOnly ? t.expenseDetail : expense ? t.editExpense : t.addExpense}>
       {/* key: reinicia el formulario cada vez que se abre */}
-      <ExpenseForm key={expense?.id ?? "new"} data={data} expense={expense} onDone={onClose} />
+      {readOnly ? <ExpenseDetail data={data} expense={expense} /> : <ExpenseForm key={expense?.id ?? "new"} data={data} expense={expense} onDone={onClose} />}
     </Sheet>
+  );
+}
+
+function ExpenseDetail({ data, expense: e }: { data: TripData; expense: Expense }) {
+  const t = useT();
+  const locale = useLocale();
+  const { trip, members, meId } = data;
+  const name = (id: string) => (id === meId ? t.you : (members.find((m) => m.id === id)?.name ?? "?"));
+  const creator = members.find((m) => m.userId === e.createdBy)?.name ?? t.creatorFallback;
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col items-center gap-2 rounded-3xl bg-surface-2 px-4 py-5 text-center">
+        <CategoryIcon category={e.category} />
+        <p className="font-medium">{e.description}</p>
+        <p className="text-4xl font-semibold tracking-tight tabular">{money(e.amountCents, e.currency, locale)}</p>
+        {e.currency !== trip.currency && (
+          <p className="text-sm text-muted">
+            {t.equals} <b className="text-ink">{money(e.amountTripCents, trip.currency, locale)}</b>
+          </p>
+        )}
+        <p className="text-sm capitalize text-muted">
+          {t.categories[e.category]} · {formatDay(e.date, locale)}
+        </p>
+      </div>
+      <section>
+        <h3 className="mb-2 text-sm font-medium text-muted">{t.whoPaid}</h3>
+        <div className="flex items-center gap-3">
+          {(() => {
+            const m = members.find((x) => x.id === e.paidBy);
+            return m && <Avatar name={m.name} color={m.color} image={m.image} size={36} />;
+          })()}
+          <span className="font-medium">{e.paidBy === meId ? t.youPaid : name(e.paidBy)}</span>
+        </div>
+      </section>
+      <section>
+        <h3 className="mb-2 text-sm font-medium text-muted">{t.splitBetween}</h3>
+        <ul className="flex flex-col divide-y divide-line rounded-3xl bg-surface-2 px-4">
+          {e.shares.map((s) => (
+            <li key={s.memberId} className="flex items-center justify-between py-2.5 text-sm">
+              <span>{name(s.memberId)}</span>
+              <span className="font-medium tabular">{money(s.shareCents, trip.currency, locale)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <p className="flex items-start gap-2 rounded-2xl bg-surface-2 p-3 text-sm text-muted">
+        <LockSimple size={18} className="mt-0.5 shrink-0" />
+        {e.settlementId ? t.settledLocked : t.onlyCreatorEdits.replace("{name}", creator)}
+      </p>
+    </div>
   );
 }
 
@@ -38,6 +91,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
   const [participants, setParticipants] = useState<string[]>(expense?.shares.map((s) => s.memberId) ?? members.map((m) => m.id));
   const [date, setDate] = useState(expense?.date ?? today());
   const [confirmDel, setConfirmDel] = useState(false);
+  const [picking, setPicking] = useState(false);
 
   const cents = parseAmount(amount);
   const autoRate = crossRate(rates.data, currency, trip.currency);
@@ -88,14 +142,15 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
           />
         </div>
         <div className="flex flex-wrap justify-center gap-2">
-          {[...curChips.map((c) => ({ key: c, label: c, on: currency === c && !otherCur })), { key: "other", label: t.otherCurrency, on: otherCur }].map((o) => (
+          {[...curChips.map((c) => ({ key: c, label: c, on: currency === c && !otherCur })), { key: "other", label: otherCur ? `${currency} ▾` : t.otherCurrency, on: otherCur }].map((o) => (
             <motion.button
               key={o.key}
               type="button"
               whileTap={{ scale: 0.92 }}
+              whileHover={{ y: -2 }}
               aria-pressed={o.on}
               onClick={() => {
-                if (o.key === "other") return setOtherCur(true);
+                if (o.key === "other") return setPicking(true);
                 setCurrency(o.key);
                 setOtherCur(false);
                 setManualRate("");
@@ -107,16 +162,16 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
             </motion.button>
           ))}
         </div>
-        {otherCur && (
-          <CurrencySelect
-            label={t.currency}
-            value={currency}
-            onChange={(c) => {
-              setCurrency(c);
-              setManualRate("");
-            }}
-          />
-        )}
+        <CurrencyPicker
+          open={picking}
+          onClose={() => setPicking(false)}
+          value={currency}
+          onChange={(c) => {
+            setCurrency(c);
+            setOtherCur(!curChips.includes(c));
+            setManualRate("");
+          }}
+        />
         {currency !== trip.currency && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="flex w-full flex-col gap-1 text-sm">
             <div className="flex items-center justify-center gap-2 text-muted">
@@ -140,7 +195,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
         )}
       </div>
 
-      <Field label={t.description} placeholder={t.descriptionPh} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={80} required />
+      <Field label={t.description} placeholder={t.descriptionPh[category]} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={80} required />
 
       {/* categoría */}
       <fieldset className="flex flex-col gap-2">
@@ -155,6 +210,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
                 type="button"
                 aria-pressed={on}
                 whileTap={{ scale: 0.92 }}
+                whileHover={{ y: -2 }}
                 onClick={() => setCategory(c)}
                 className="relative flex flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-[11px] font-medium"
                 style={{ background: bg, color: on ? color : undefined }}
@@ -188,6 +244,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
                 role="radio"
                 aria-checked={on}
                 whileTap={{ scale: 0.92 }}
+                whileHover={{ y: -2 }}
                 onClick={() => setPaidBy(m.id)}
                 className="relative flex min-w-0 flex-col items-center gap-1.5 rounded-2xl bg-surface-2 px-1 pb-2 pt-2.5"
               >
@@ -243,6 +300,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
                 layout
                 aria-pressed={on}
                 whileTap={{ scale: 0.92 }}
+                whileHover={{ y: -2 }}
                 transition={spring}
                 onClick={() => setParticipants(on ? participants.filter((p) => p !== m.id) : [...participants, m.id])}
                 className={`flex h-10 items-center gap-2 rounded-full pl-1 pr-3 text-sm font-medium transition-colors duration-200 ${on ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-muted line-through"}`}

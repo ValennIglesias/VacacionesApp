@@ -57,7 +57,7 @@ export function Home() {
         </div>
         <div className="flex items-center gap-1">
         {isGuest && (
-          <Link to="/login?save=1" className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-sm font-medium text-white transition-transform active:scale-95">
+          <Link to="/login?save=1" className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-sm font-medium text-white lift">
             {t.createAccount}
           </Link>
         )}
@@ -74,11 +74,11 @@ export function Home() {
       </header>
 
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <Link to={atGuestLimit ? "/login?save=1&reason=limit" : "/new"} className="flex flex-col gap-6 rounded-3xl bg-accent p-4 text-white transition-transform active:scale-[0.98]">
+        <Link to={atGuestLimit ? "/login?save=1&reason=limit" : "/new"} className="flex flex-col gap-6 rounded-3xl bg-accent p-4 text-white lift">
           <Plus size={28} weight="bold" />
           <span className="font-medium">{t.newTrip}</span>
         </Link>
-        <Link to="/join" className="flex flex-col gap-6 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+        <Link to="/join" className="flex flex-col gap-6 rounded-3xl bg-surface p-4 lift">
           <Ticket size={28} weight="duotone" className="text-accent-ink" />
           <span className="font-medium">{t.joinTrip}</span>
         </Link>
@@ -97,7 +97,7 @@ export function Home() {
       )}
 
       {isGuest && (
-        <Link to="/login?save=1" className="mt-6 flex items-center gap-3 rounded-3xl bg-accent-soft p-4 text-accent-ink transition-transform active:scale-[0.98]">
+        <Link to="/login?save=1" className="mt-6 flex items-center gap-3 rounded-3xl bg-accent-soft p-4 text-accent-ink lift">
           <FloppyDisk size={28} weight="duotone" className="shrink-0" />
           <span className="flex-1">
             <span className="block font-semibold">{t.guestBannerTitle}</span>
@@ -111,7 +111,7 @@ export function Home() {
         <section className="mt-8 flex flex-col gap-2">
           <h2 className="px-1 text-sm font-medium text-muted">{t.myRequests}</h2>
           {requests.data.map((r) => (
-            <Link key={r.id} to={`/join/${r.code}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4">
+            <Link key={r.id} to={`/join/${r.code}`} className="lift flex items-center gap-4 rounded-3xl bg-surface p-4">
               <Flag cc={r.countryCode} size={36} />
               <span className="min-w-0 flex-1 truncate font-medium">{r.tripName}</span>
               <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${r.status === "pending" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-neg"}`}>
@@ -141,7 +141,7 @@ export function Home() {
           >
             <Link
               to={`/t/${trip.id}`}
-              className={`flex items-center gap-4 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98] ${trip.demo ? "border border-dashed border-line pr-16" : ""}`}
+              className={`flex items-center gap-4 rounded-3xl bg-surface p-4 lift ${trip.demo ? "border border-dashed border-line pr-16" : ""}`}
             >
 <Flag cc={trip.countryCode} size={44} />
               <div className="min-w-0 flex-1">

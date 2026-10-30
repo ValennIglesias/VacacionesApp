@@ -35,6 +35,7 @@ export type Expense = {
   rate: number;
   amountTripCents: number;
   settlementId: string | null;
+  createdBy: string;
   shares: { memberId: string; shareCents: number }[];
 };
 export type TransferRow = {

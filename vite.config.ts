@@ -108,7 +108,8 @@ export default defineConfig({
         navigateFallback: "/app/index.html",
         navigateFallbackAllowlist: [/^\/app/],
         navigateFallbackDenylist: [/^\/api/],
-        globPatterns: ["app/**/*.html", "assets/app-*.{js,css}", "assets/*.woff2", "*.{png,svg}"],
+        // todos los chunks: la app importa algunos compartidos (settle) y el resumen se carga aparte
+        globPatterns: ["app/**/*.html", "assets/*.{js,css}", "assets/*.woff2", "*.{png,svg}"],
         globIgnores: ["**/Phosphor-*", "og.png"],
       },
     }),

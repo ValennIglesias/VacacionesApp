@@ -11,7 +11,7 @@ export function TripEnded({ tripId, deleteAt }: { tripId: string; deleteAt: numb
   const locale = useLocale();
   return (
     <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col gap-2">
-      <Link to={`/new?from=${tripId}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4 transition-transform active:scale-[0.98]">
+      <Link to={`/new?from=${tripId}`} className="flex items-center gap-4 rounded-3xl bg-surface p-4 lift">
         <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink">
           <ArrowsClockwise size={26} weight="duotone" />
         </span>
@@ -27,7 +27,7 @@ export function TripEnded({ tripId, deleteAt }: { tripId: string; deleteAt: numb
         </p>
       )}
       {isGuest && (
-        <Link to="/login?save=1" className="flex items-center gap-4 rounded-3xl bg-accent-soft p-4 text-accent-ink transition-transform active:scale-[0.98]">
+        <Link to="/login?save=1" className="flex items-center gap-4 rounded-3xl bg-accent-soft p-4 text-accent-ink lift">
           <FloppyDisk size={26} weight="duotone" className="shrink-0" />
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{t.saveTripTitle}</span>
