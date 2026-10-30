@@ -24,7 +24,8 @@
     { "name": "WRITE_LIMITER", "namespace_id": "1002", "simple": { "limit": 60, "period": 60 } }
   ],
   "vars": {
-    "BETTER_AUTH_URL": "https://tribusplit.com"
+    "BETTER_AUTH_URL": "https://tribusplit.com",
+    "VITE_ADSENSE_CLIENT": "ca-pub-2261714480132826"
   },
   // limpieza diaria de invitados viejos sin uso (worker/index.ts: cleanupGuests)
   "triggers": { "crons": ["0 4 * * *"] },

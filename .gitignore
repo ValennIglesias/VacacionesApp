@@ -4,5 +4,5 @@ dist
 .dev.vars
 *.local
 dev-dist
-.env
+.env*
 *.tsbuildinfo
