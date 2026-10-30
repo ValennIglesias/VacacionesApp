@@ -1,5 +1,11 @@
 @import "./styles.css";
-@import "@phosphor-icons/web/duotone";
+
+/* íconos de Phosphor, inlineados como SVG en el build (vite.config.ts) */
+.ph {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {

@@ -4,6 +4,9 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import * as Icons from "@phosphor-icons/react/ssr";
 import { BRAND, CONTACT } from "./shared/brand.ts";
 import { cta, footer, header } from "./site/partials.ts";
 
@@ -15,15 +18,21 @@ const SITE = (process.env.SITE_URL || "https://tribusplit.com").replace(/\/$/, "
 const ADSENSE = loadEnv("production", process.cwd(), "VITE_").VITE_ADSENSE_CLIENT || "";
 if (ADSENSE && !/^ca-pub-\d+$/.test(ADSENSE)) throw new Error(`VITE_ADSENSE_CLIENT inválido: ${ADSENSE}`);
 
+// <i class="ph-duotone ph-caret-down extra"></i> → SVG inline: la fuente de íconos pesaba 160 KB para ~16 íconos
+const icons = (html: string) =>
+  html.replace(/<i class="ph-duotone ph-([a-z-]+)([^"]*)"([^>]*)><\/i>/g, (_, name: string, extra: string, attrs: string) => {
+    const Icon = (Icons as Record<string, Icons.Icon>)[name.replace(/(^|-)([a-z])/g, (_m, _d, c: string) => c.toUpperCase())];
+    if (!Icon) throw new Error(`Ícono de Phosphor inexistente: ${name}`);
+    const svg = renderToStaticMarkup(createElement(Icon, { weight: "duotone", className: `ph${extra}`, "aria-hidden": true }));
+    return svg.replace("<svg", `<svg${attrs}`);
+  });
+
 // %BRAND% y %SITE% en las páginas estáticas
 const brand = (): Plugin => ({
   name: "brand",
   transformIndexHtml: (html) => {
     const lang = html.includes('<html lang="en"') ? "en" : "es";
-    return html
-      .replace("%GUIDE_HEADER%", header(lang))
-      .replace("%GUIDE_CTA%", cta(lang))
-      .replace("%GUIDE_FOOTER%", footer(lang))
+    return icons(html.replace("%GUIDE_HEADER%", header(lang)).replace("%GUIDE_CTA%", cta(lang)).replace("%GUIDE_FOOTER%", footer(lang)))
       .replaceAll("%BRAND%", BRAND)
       .replaceAll("%CONTACT%", CONTACT)
       .replaceAll("%SITE%", SITE)
@@ -74,6 +83,8 @@ export default defineConfig({
     cloudflare(),
     VitePWA({
       registerType: "autoUpdate",
+      // con defer no bloquea el primer render (PageSpeed lo marcaba en la landing)
+      injectRegister: "script-defer",
       manifest: {
         name: BRAND,
         short_name: BRAND,
