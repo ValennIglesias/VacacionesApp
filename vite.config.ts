@@ -40,7 +40,8 @@ const brand = (): Plugin => ({
       .replaceAll("%BRAND%", BRAND)
       .replaceAll("%CONTACT%", CONTACT)
       .replaceAll("%SITE%", SITE)
-      .replace("</head>", ADSENSE ? `${adsHead(ctx.path.startsWith("/app/"))}  </head>` : "</head>");
+      .replace("</head>", `${ADSENSE ? adsHead(ctx.path.startsWith("/app/")) : ""}  <script src="/registerSW.js" defer></script>
+  </head>`);
   },
   // robots.txt y sitemap.xml con las páginas públicas (la app y los legales no suman para buscadores)
   generateBundle() {
@@ -87,8 +88,8 @@ export default defineConfig({
     cloudflare(),
     VitePWA({
       registerType: "autoUpdate",
-      // con defer no bloquea el primer render (PageSpeed lo marcaba en la landing)
-      injectRegister: "script-defer",
+      // public/registerSW.js propio, inyectado con defer en brand: además de registrar, destraba apps viejas en caché
+      injectRegister: false,
       manifest: {
         name: BRAND,
         short_name: BRAND,
