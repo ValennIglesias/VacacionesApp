@@ -46,9 +46,9 @@
                 <option value="mpg">millas por galón (mpg)</option>
               </select></label>
             <label class="flex flex-col gap-1.5 text-sm text-muted"><span data-km="Precio del litro" data-mi="Precio del galón">Precio del litro</span>
-              <input name="price" type="number" inputmode="decimal" min="0" step="any" placeholder="Ej.: 1500" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+              <input name="price" type="text" inputmode="decimal" autocomplete="off" data-money placeholder="Ej.: 1500" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
             <label class="flex flex-col gap-1.5 text-sm text-muted">Peajes y estacionamiento (total)
-              <input name="extras" type="number" inputmode="decimal" min="0" step="any" placeholder="0" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
+              <input name="extras" type="text" inputmode="decimal" autocomplete="off" data-money placeholder="0" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none placeholder:text-muted/70 focus:border-accent" /></label>
             <label class="flex flex-col gap-1.5 text-sm text-muted">Personas en el auto
               <input name="people" type="number" inputmode="numeric" min="1" step="1" value="4" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
           </div>

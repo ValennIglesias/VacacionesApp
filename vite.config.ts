@@ -105,11 +105,18 @@ export default defineConfig({
         ],
       },
       workbox: {
-        navigateFallback: "/app/index.html",
-        navigateFallbackAllowlist: [/^\/app/],
-        navigateFallbackDenylist: [/^\/api/],
+        // el HTML de la app siempre de la red (la caché solo sin conexión): uno viejo pide chunks que tras un deploy ya no existen
+        navigateFallback: null,
+        runtimeCaching: [
+          {
+            urlPattern: ({ request, url }) => request.mode === "navigate" && url.pathname.startsWith("/app"),
+            handler: "NetworkFirst",
+            options: { cacheName: "app-html", networkTimeoutSeconds: 4 },
+          },
+        ],
+        clientsClaim: true,
         // todos los chunks: la app importa algunos compartidos (settle) y el resumen se carga aparte
-        globPatterns: ["app/**/*.html", "assets/*.{js,css}", "assets/*.woff2", "*.{png,svg}"],
+        globPatterns: ["assets/*.{js,css}", "assets/*.woff2", "*.{png,svg}"],
         globIgnores: ["**/Phosphor-*", "og.png"],
       },
     }),

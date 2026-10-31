@@ -9,6 +9,20 @@ const t = es
   : { person: "Person", name: "Name", paid: "Amount paid", remove: "Remove", total: "Total", each: "Each person", settled: "You're even: nobody owes anybody.", pays: "pays", copied: "Copied!", title: "Shared expenses", fuel: "Fuel", litres: "litres", gallons: "gallons", trip: "Total cost", perPerson: "Per person", by: "Worked out with" };
 const fmt = new Intl.NumberFormat(es ? "es-AR" : "en-US", { maximumFractionDigits: 2 });
 const num = (el: Element | null) => Math.max(0, Number((el as HTMLInputElement | null)?.value) || 0);
+const amountOf = (el: Element | null) => (parseAmount((el as HTMLInputElement | null)?.value ?? "") ?? 0) / 100;
+const locale = es ? "es-AR" : "en-US";
+
+// montos de plata con separador de miles mientras se tipea; en captura, para formatear antes de que cada calculadora recalcule
+document.addEventListener(
+  "input",
+  (e) => {
+    const el = e.target as HTMLInputElement;
+    if (!el.matches?.("[data-money]")) return;
+    el.value = typeAmount(el.value, el.dataset.prev ?? "", locale);
+    el.dataset.prev = el.value;
+  },
+  true,
+);
 const ENT: Record<string, string> = { "&": "amp", "<": "lt", ">": "gt", '"': "quot" };
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&${ENT[c]};`);
 const link = location.origin + location.pathname;
@@ -34,11 +48,11 @@ if (split) {
     const n = rows.children.length + 1;
     rows.insertAdjacentHTML(
       "beforeend",
-      `<div class="flex items-center gap-2"><input aria-label="${t.name} ${n}" placeholder="${t.person} ${n}" class="${field} flex-1" maxlength="30" /><input aria-label="${t.paid} ${n}" type="number" inputmode="decimal" min="0" step="any" placeholder="0" class="${field} w-32 text-right" /><button type="button" data-remove aria-label="${t.remove}" class="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-muted hover:text-neg">✕</button></div>`,
+      `<div class="flex items-center gap-2"><input aria-label="${t.name} ${n}" placeholder="${t.person} ${n}" class="${field} flex-1" maxlength="30" /><input aria-label="${t.paid} ${n}" type="text" inputmode="decimal" autocomplete="off" data-money placeholder="0" class="${field} w-32 text-right" /><button type="button" data-remove aria-label="${t.remove}" class="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-muted hover:text-neg">✕</button></div>`,
     );
   };
   const people = () =>
-    [...rows.children].map((r, i) => ({ name: (r.querySelector("input") as HTMLInputElement).value.trim() || `${t.person} ${i + 1}`, cents: Math.round(num(r.querySelector("input[type=number]")) * 100) }));
+    [...rows.children].map((r, i) => ({ name: (r.querySelector("input") as HTMLInputElement).value.trim() || `${t.person} ${i + 1}`, cents: Math.round(amountOf(r.querySelector("[data-money]")) * 100) }));
   const calc = () => {
     const p = people();
     const r = splitPaid(p.map((x) => x.cents));
@@ -79,9 +93,9 @@ if (fuel) {
     const consumption = num($("consumption"));
     const people = Math.max(1, Math.round(num($("people"))));
     const distance = num($("distance"));
-    const price = num($("price"));
+    const price = amountOf($("price"));
     if (!consumption || !distance || !price) return null;
-    return { people, ...fuelCost({ distance, roundTrip: $("roundTrip").checked, consumption, unit: unit(), price, extras: num($("extras")), people }) };
+    return { people, ...fuelCost({ distance, roundTrip: $("roundTrip").checked, consumption, unit: unit(), price, extras: amountOf($("extras")), people }) };
   };
   const render = () => {
     const mpg = unit() === "mpg";
@@ -104,7 +118,6 @@ if (fuel) {
 // --- conversor de moneda: cotización de mercado del día y, si hay pesos argentinos, los distintos dólares
 const fx = document.getElementById("fx-tool") as HTMLFormElement | null;
 if (fx) {
-  const locale = es ? "es-AR" : "en-US";
   const L = es
     ? { popular: "Más usadas", all: "Todas", market: "Cotización de mercado", ars: "Con los dólares de Argentina", arsNames: { tarjeta: "Tarjeta", bolsa: "MEP", blue: "Blue", oficial: "Oficial" }, error: "No pudimos traer la cotización. Probá de nuevo en un rato.", updated: "Actualizado" }
     : { popular: "Most used", all: "All", market: "Market rate", ars: "With Argentina's dollar rates", arsNames: { tarjeta: "Card", bolsa: "MEP", blue: "Blue", oficial: "Official" }, error: "We couldn't load the rate. Try again in a bit.", updated: "Updated" };
@@ -126,7 +139,7 @@ if (fx) {
   let ars: Partial<Record<keyof typeof L.arsNames, { venta: number; updated: string }>> | undefined;
   const render = () => {
     const [from, to] = [$("from").value, $("to").value];
-    const amount = (parseAmount($("amount").value) ?? 0) / 100;
+    const amount = amountOf($("amount"));
     const k = crossRate(rates, from, to);
     if (!rates) return;
     if (!k) return void (out.innerHTML = `<p class="text-neg">${L.error}</p>`);
@@ -147,12 +160,7 @@ if (fx) {
       arsOut.innerHTML = `<h3 class="mb-3 font-semibold">${L.ars}</h3><div class="grid grid-cols-2 gap-3 sm:grid-cols-4">${cards}</div>${when ? `<p class="mt-2 text-xs text-muted">${L.updated}: ${new Intl.DateTimeFormat(locale, { dateStyle: "short", timeStyle: "short" }).format(new Date(when))}</p>` : ""}`;
     }
   };
-  $("amount").value = typeAmount($("amount").value, "", locale);
-  $("amount").addEventListener("input", (e) => {
-    const el = e.target as HTMLInputElement;
-    el.value = typeAmount(el.value, el.dataset.prev ?? "", locale);
-    el.dataset.prev = el.value;
-  });
+  $("amount").value = $("amount").dataset.prev = typeAmount($("amount").value, "", locale);
   fx.addEventListener("input", render);
   fx.addEventListener("submit", (e) => e.preventDefault());
   fx.querySelector("[data-swap]")?.addEventListener("click", () => {
