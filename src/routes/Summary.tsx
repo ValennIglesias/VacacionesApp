@@ -64,7 +64,8 @@ export function Summary() {
 
       <section className="rounded-3xl bg-surface p-4">
         <h2 className="font-semibold">{t.byCategory}</h2>
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
+        {/* siempre apilado: al lado del gráfico la leyenda no tiene ancho para montos largos */}
+        <div className="flex flex-col items-center gap-4">
           <div className="h-48 w-48 shrink-0">
             <ResponsiveContainer>
               <PieChart>
