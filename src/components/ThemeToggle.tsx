@@ -12,7 +12,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={() => setTheme(dark ? "light" : "dark")}
-      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-muted active:scale-90 ${className}`}
+      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-muted tap ${className}`}
       aria-label={dark ? t.themes.light : t.themes.dark}
     >
       <motion.span key={String(dark)} initial={{ rotate: -90, scale: 0.4, opacity: 0 }} animate={{ rotate: 0, scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 400, damping: 18 }} className="inline-flex">

@@ -140,7 +140,7 @@ ${body.trim()}
   const cards = guides
     .map(
       (g) => `
-          <a href="${path}${g.slug}/" class="flex flex-col gap-3 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="${path}${g.slug}/" class="flex flex-col gap-3 rounded-3xl bg-surface p-6 lift">
             <h2 class="text-lg font-semibold leading-snug">${esc(g.title)}</h2>
             <p class="text-sm text-muted">${esc(g.desc)}</p>
             <span class="mt-auto text-sm font-medium text-accent-ink">${t.readMore} →</span>

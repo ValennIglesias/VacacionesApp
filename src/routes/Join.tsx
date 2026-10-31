@@ -74,7 +74,7 @@ export function Join() {
 
   return (
     <main className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))]">
-      <Link to="/" className="inline-flex size-11 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
+      <Link to="/" className="inline-flex size-11 items-center justify-center rounded-full bg-surface tap" aria-label={t.back}>
         <ArrowLeft size={20} />
       </Link>
 

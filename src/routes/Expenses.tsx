@@ -36,6 +36,7 @@ export function Expenses() {
   const memberName = (id: string) => (id === meId ? t.you : (members.find((m) => m.id === id)?.name ?? "?"));
 
   const total = expenses.reduce((a, e) => a + e.amountTripCents, 0);
+  const totalText = money(total, trip.currency, locale);
   const rates = useRates();
   const settleK = crossRate(rates.data, trip.currency, trip.settleCurrency) ?? 1;
   // promedio por día: días transcurridos del viaje (en curso) o el total (terminado)
@@ -76,8 +77,14 @@ export function Expenses() {
         <div className="pointer-events-none absolute -right-10 -top-16 size-48 rounded-full bg-white/10" />
         <div className="pointer-events-none absolute -bottom-20 right-16 size-40 rounded-full bg-white/5" />
         <p className="text-sm text-white/75">{t.tripTotal}</p>
-        <motion.p key={total} initial={{ opacity: 0.4, y: 4 }} animate={{ opacity: 1, y: 0 }} className="mt-1 text-4xl font-semibold tracking-tight tabular">
-          {money(total, trip.currency, locale)}
+        {/* montos largos (millones de pesos) achican la letra para no salirse de la tarjeta */}
+        <motion.p
+          key={total}
+          initial={{ opacity: 0.4, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`mt-1 break-words font-semibold tracking-tight tabular ${totalText.length > 18 ? "text-2xl" : totalText.length > 14 ? "text-3xl" : "text-4xl"}`}
+        >
+          {totalText}
         </motion.p>
         {settleK !== 1 && total > 0 && (
           <p className="mt-0.5 text-sm text-white/75 tabular">
@@ -157,8 +164,8 @@ export function Expenses() {
                               : `${e.paidBy === meId ? t.youPaid : `${t.paidBy} ${memberName(e.paidBy)}`} · ${e.shares.length === members.length ? t.all.toLowerCase() : `${e.shares.length} ${t.people}`}`}
                           </p>
                         </div>
-                        <div className="text-right">
-                          <p className="font-semibold tabular">{money(e.amountTripCents, trip.currency, locale)}</p>
+                        <div className="shrink-0 text-right">
+                          <p className="whitespace-nowrap font-semibold tabular">{money(e.amountTripCents, trip.currency, locale)}</p>
                           {e.currency !== trip.currency ? (
                             <p className="text-xs text-muted tabular">{money(e.amountCents, e.currency, locale)}</p>
                           ) : e.settlementId ? (
@@ -186,7 +193,7 @@ function FilterChip({ on, onClick, label, color }: { on: boolean; onClick: () =>
     <button
       onClick={onClick}
       aria-pressed={on}
-      className={`h-9 shrink-0 rounded-full px-4 text-sm font-medium transition-colors ${on ? "bg-ink text-bg" : "bg-surface text-muted"}`}
+      className={`lift h-9 shrink-0 rounded-full px-4 text-sm font-medium ${on ? "bg-ink text-bg" : "bg-surface text-muted hover:text-ink"}`}
     >
       {color && <span className="mr-1.5 inline-block size-2 rounded-full align-middle" style={{ background: color }} />}
       {label}

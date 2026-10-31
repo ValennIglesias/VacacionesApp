@@ -34,10 +34,10 @@
         %BRAND%
       </a>
       <nav class="flex items-center gap-1 text-sm font-medium">
-        <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted hover:text-ink" aria-label="Cambiar tema"><i class="ph-duotone ph-circle-half text-xl"></i></button>
-        <a href="/guias/" class="rounded-full px-2 py-2 text-muted hover:text-ink sm:px-3">Guías</a>
-        <a href="/en/" class="hidden rounded-full px-3 py-2 text-muted hover:text-ink sm:inline" hreflang="en">English</a>
-        <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2">Entrar</a>
+        <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted transition-colors hover:text-ink" aria-label="Cambiar tema"><i class="ph-duotone ph-circle-half text-xl"></i></button>
+        <a href="/guias/" class="rounded-full px-2 py-2 text-muted transition-colors hover:text-ink sm:px-3">Guías</a>
+        <a href="/en/" class="hidden rounded-full px-3 py-2 text-muted transition-colors hover:text-ink sm:inline" hreflang="en">English</a>
+        <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2 transition-colors hover:bg-surface-2">Entrar</a>
       </nav>
     </header>
 
@@ -47,8 +47,8 @@
           <h1 class="reveal text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl" style="--i: 0">Viajen juntos.<br />Las cuentas, claras.</h1>
           <p class="reveal mt-5 max-w-[46ch] text-lg text-muted" style="--i: 1">Anoten cada gasto en la moneda del destino y %BRAND% les dice quién le paga a quién, con la menor cantidad de transferencias.</p>
           <div class="reveal mt-8 flex flex-wrap gap-3" style="--i: 2">
-            <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] transition-transform active:scale-[0.97]">Crear viaje gratis <i class="ph-duotone ph-arrow-right"></i></a>
-            <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium transition-transform active:scale-[0.97]"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> Tengo un código</a>
+            <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] lift hover:brightness-110">Crear viaje gratis <i class="ph-duotone ph-arrow-right"></i></a>
+            <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium lift hover:bg-surface-2"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> Tengo un código</a>
           </div>
         </div>
 
@@ -129,17 +129,17 @@
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Calculadoras gratis, sin cuenta</h2>
         <p class="reveal-scroll mt-3 max-w-[56ch] text-lg text-muted">Para resolver una cuenta rápida antes o después del viaje, directo desde el navegador.</p>
         <div class="mt-8 grid gap-4 md:grid-cols-3">
-          <a href="/herramientas/calculadora-dividir-gastos/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/herramientas/calculadora-dividir-gastos/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-calculator text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Calculadora para dividir gastos</span><span class="mt-1 block text-muted">Anotá cuánto puso cada uno y te dice quién le paga a quién.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/herramientas/calculadora-de-nafta/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/herramientas/calculadora-de-nafta/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-gas-pump text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Calculadora de nafta</span><span class="mt-1 block text-muted">Cuánto cuesta el viaje en auto con peajes y cuánto pone cada uno.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/herramientas/conversor-de-moneda/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/herramientas/conversor-de-moneda/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-currency-circle-dollar text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Conversor de moneda</span><span class="mt-1 block text-muted">Cuánto es en tu moneda lo que cuesta algo en el viaje, con dólar tarjeta, MEP y blue.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
@@ -150,15 +150,15 @@
       <section class="mx-auto max-w-6xl px-5 py-16">
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Guías para que la plata no sea un tema</h2>
         <div class="mt-8 grid gap-4 md:grid-cols-3">
-          <a href="/guias/como-dividir-gastos-de-un-viaje/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/guias/como-dividir-gastos-de-un-viaje/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">Cómo dividir los gastos de un viaje entre amigos sin peleas</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/guias/gastos-en-distintas-monedas/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/guias/gastos-en-distintas-monedas/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">Cómo manejar gastos en distintas monedas</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/guias/dolar-tarjeta-mep-blue-viajar/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/guias/dolar-tarjeta-mep-blue-viajar/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">Dólar oficial, MEP, blue o tarjeta: cuál usar para repartir</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
@@ -171,19 +171,19 @@
       <section class="mx-auto max-w-3xl px-5 py-16">
         <h2 id="faq" class="scroll-mt-6 text-3xl font-semibold tracking-tight">Preguntas frecuentes</h2>
         <div class="mt-8 flex flex-col gap-3">
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Tiene costo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. %BRAND% es gratis y se sostiene con publicidad discreta.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Todos tienen que crearse una cuenta?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿En qué moneda se pagan las deudas?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Qué es una repartida parcial?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿%BRAND% mueve dinero?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Sirve si viajo solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Sí. Al crear el viaje elegí «Solo»: anotás tus gastos en la moneda del destino y ves cuánto llevás gastado en tu moneda, por día y por categoría. No hay código ni repartida, y si después se suma alguien, lo pasás a grupal en un toque.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Tiene costo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. %BRAND% es gratis y se sostiene con publicidad discreta.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Todos tienen que crearse una cuenta?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Quien crea el viaje carga los nombres de todos. Los que se suman con el código eligen su nombre; el resto puede seguir en el grupo y alguien anota sus gastos. Para marcar o confirmar sus propios pagos, cada uno se suma con el código.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿En qué moneda se pagan las deudas?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Al crear el viaje eligen en qué moneda se van a pagar entre ustedes (por ejemplo, pesos argentinos en un viaje a Brasil). Al repartir, las deudas se convierten con la cotización del día, que pueden editar.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Qué es una repartida parcial?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Es hacer cuentas en cualquier momento del viaje. Esos gastos quedan saldados y no vuelven a contar en la repartida final, pero sí aparecen en el resumen total.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿%BRAND% mueve dinero?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Solo calcula y registra. Los pagos los hacen ustedes por su banco o billetera, y los confirman en la app.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">¿Sirve si viajo solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Sí. Al crear el viaje elegí «Solo»: anotás tus gastos en la moneda del destino y ves cuánto llevás gastado en tu moneda, por día y por categoría. No hay código ni repartida, y si después se suma alguien, lo pasás a grupal en un toque.</p></details>
         </div>
       </section>
 
       <section class="mx-auto max-w-6xl px-5 pb-20">
         <div class="flex flex-col items-start justify-between gap-6 rounded-3xl bg-strong p-8 text-strong-ink md:flex-row md:items-center">
           <h2 class="max-w-[24ch] text-2xl font-semibold tracking-tight md:text-3xl">¿Ya tienen fecha? Armen el grupo hoy.</h2>
-          <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white">Crear viaje gratis <i class="ph-duotone ph-arrow-right"></i></a>
+          <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white lift hover:brightness-110">Crear viaje gratis <i class="ph-duotone ph-arrow-right"></i></a>
         </div>
       </section>
     </main>

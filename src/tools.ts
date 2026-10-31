@@ -1,13 +1,13 @@
 // Calculadoras públicas (/herramientas, /en/tools): todo corre en el navegador, sin cuenta ni servidor.
 import { arsCrossRate, crossRate, fuelCost, splitPaid, type FuelUnit } from "../shared/tools";
 import { COUNTRY_CURRENCY } from "../shared/data";
-import { parseAmount, typeAmount } from "./lib/format";
+import { currencyName, parseAmount, typeAmount } from "./lib/format";
 
 const es = document.documentElement.lang !== "en";
 const t = es
   ? { person: "Persona", name: "Nombre", paid: "Cuánto puso", remove: "Quitar", total: "Total", each: "Cada uno", settled: "Están a mano: nadie le debe a nadie.", pays: "le paga a", copied: "¡Copiado!", title: "Gastos compartidos", fuel: "Combustible", litres: "litros", gallons: "galones", trip: "Costo total", perPerson: "Por persona", by: "Calculado con" }
   : { person: "Person", name: "Name", paid: "Amount paid", remove: "Remove", total: "Total", each: "Each person", settled: "You're even: nobody owes anybody.", pays: "pays", copied: "Copied!", title: "Shared expenses", fuel: "Fuel", litres: "litres", gallons: "gallons", trip: "Total cost", perPerson: "Per person", by: "Worked out with" };
-const fmt = new Intl.NumberFormat(es ? "es-AR" : "en-US", { maximumFractionDigits: 2 });
+const fmt = new Intl.NumberFormat(es ? "es-AR" : "en-US", { maximumFractionDigits: 2, useGrouping: "always" });
 const num = (el: Element | null) => Math.max(0, Number((el as HTMLInputElement | null)?.value) || 0);
 const amountOf = (el: Element | null) => (parseAmount((el as HTMLInputElement | null)?.value ?? "") ?? 0) / 100;
 const locale = es ? "es-AR" : "en-US";
@@ -119,20 +119,70 @@ if (fuel) {
 const fx = document.getElementById("fx-tool") as HTMLFormElement | null;
 if (fx) {
   const L = es
-    ? { popular: "Más usadas", all: "Todas", market: "Cotización de mercado", ars: "Con los dólares de Argentina", arsNames: { tarjeta: "Tarjeta", bolsa: "MEP", blue: "Blue", oficial: "Oficial" }, error: "No pudimos traer la cotización. Probá de nuevo en un rato.", updated: "Actualizado" }
-    : { popular: "Most used", all: "All", market: "Market rate", ars: "With Argentina's dollar rates", arsNames: { tarjeta: "Card", bolsa: "MEP", blue: "Blue", oficial: "Official" }, error: "We couldn't load the rate. Try again in a bit.", updated: "Updated" };
-  const $ = (n: string) => fx.querySelector<HTMLInputElement & HTMLSelectElement>(`[name=${n}]`)!;
+    ? { popular: "Más usadas", all: "Todas", pick: "Elegí la moneda", search: "Buscar moneda (ej.: real o BRL)", none: "No encontramos esa moneda.", close: "Cerrar", market: "Cotización de mercado", ars: "Con los dólares de Argentina", arsNames: { tarjeta: "Tarjeta", bolsa: "MEP", blue: "Blue", oficial: "Oficial" }, error: "No pudimos traer la cotización. Probá de nuevo en un rato.", updated: "Actualizado" }
+    : { popular: "Most used", all: "All", pick: "Choose a currency", search: "Search currency (e.g. euro or EUR)", none: "No currency matches that.", close: "Close", market: "Market rate", ars: "With Argentina's dollar rates", arsNames: { tarjeta: "Card", bolsa: "MEP", blue: "Blue", oficial: "Official" }, error: "We couldn't load the rate. Try again in a bit.", updated: "Updated" };
+  const $ = (n: string) => fx.querySelector<HTMLInputElement>(`[name=${n}]`)!;
   const [out, table, arsOut] = ["result", "table", "ars"].map((k) => fx.querySelector<HTMLElement>(`[data-${k}]`)!);
-  const names = new Intl.DisplayNames([locale], { type: "currency" });
+  const names = { of: (c: string) => currencyName(c, locale) };
   const POPULAR = ["USD", "EUR", "ARS", "BRL", "CLP", "UYU", "MXN", "COP", "PEN", "GBP"];
-  const codes = [...new Set(Object.values(COUNTRY_CURRENCY))].sort((a, b) => (names.of(a) ?? a).localeCompare(names.of(b) ?? b, locale));
-  const opts = (list: string[]) => list.map((c) => `<option value="${c}">${c} · ${esc(names.of(c) ?? c)}</option>`).join("");
-  for (const name of ["from", "to"]) {
-    const sel = $(name);
-    sel.innerHTML = `<optgroup label="${L.popular}">${opts(POPULAR)}</optgroup><optgroup label="${L.all}">${opts(codes)}</optgroup>`;
-    sel.value = sel.dataset.default!;
-  }
-  const money = (n: number, cur: string) => new Intl.NumberFormat(locale, { style: "currency", currency: cur }).format(n);
+  const codes = [...new Set(Object.values(COUNTRY_CURRENCY))].sort((a, b) => names.of(a).localeCompare(names.of(b) ?? b, locale));
+  // selector con búsqueda, como el de la app: por sigla, nombre o país, sin acentos
+  const norm = (x: string) => x.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+  const regions = new Intl.DisplayNames([locale], { type: "region" });
+  const hay = new Map(codes.map((c) => [c, norm(`${c} ${names.of(c)} ${Object.keys(COUNTRY_CURRENCY).filter((cc) => COUNTRY_CURRENCY[cc] === c).map((cc) => regions.of(cc)).join(" ")}`)]));
+  const show = () =>
+    fx.querySelectorAll<HTMLButtonElement>("[data-pick]").forEach((b) => {
+      const c = $(b.dataset.pick!).value;
+      b.innerHTML = `<span class="font-semibold">${c}</span><span class="min-w-0 flex-1 truncate text-muted">${esc(names.of(c))}</span><span aria-hidden class="text-muted">▾</span>`;
+    });
+  for (const n of ["from", "to"]) $(n).value = $(n).dataset.default!;
+  show();
+  const dlg = document.createElement("dialog");
+  dlg.className = "fixed inset-x-0 bottom-0 top-auto m-0 flex max-h-[85dvh] w-full max-w-none flex-col rounded-t-[28px] bg-surface p-0 text-ink backdrop:bg-black/40 open:flex sm:inset-0 sm:m-auto sm:max-w-lg sm:rounded-[28px] [&:not([open])]:hidden";
+  dlg.innerHTML = `<div class="px-5 pb-3 pt-4"><div class="flex items-center justify-between gap-3"><h2 class="text-xl font-semibold">${L.pick}</h2><button type="button" data-close aria-label="${L.close}" class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted transition-colors hover:text-ink">✕</button></div><label class="mt-3 flex h-12 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-4 transition-colors focus-within:border-accent"><svg aria-hidden width="18" height="18" viewBox="0 0 256 256" fill="currentColor" class="shrink-0 text-muted"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg><input type="text" enterkeyhint="search" autocomplete="off" placeholder="${L.search}" aria-label="${L.search}" class="min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-muted/70" /></label></div><ul class="min-h-[50dvh] flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]"></ul>`;
+  document.body.appendChild(dlg);
+  const [q, list] = [dlg.querySelector("input")!, dlg.querySelector("ul")!];
+  let target = "from";
+  const item = (c: string) => {
+    const on = c === $(target).value;
+    return `<li><button type="button" data-cur="${c}" aria-pressed="${on}" class="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors duration-150 ${on ? "bg-accent-soft text-accent-ink" : "hover:bg-surface-2"}"><span class="w-12 shrink-0 font-semibold">${c}</span><span class="min-w-0 flex-1 truncate">${esc(names.of(c))}</span>${on ? "<span aria-hidden>✓</span>" : ""}</button></li>`;
+  };
+  const head = (x: string) => `<li class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted">${x}</li>`;
+  const fill = () => {
+    const words = norm(q.value).split(/\s+/).filter(Boolean);
+    const found = codes.filter((c) => words.every((w) => hay.get(c)!.includes(w)));
+    list.innerHTML = words.length
+      ? found.map(item).join("") || `<li class="px-3 py-6 text-center text-muted">${L.none}</li>`
+      : head(L.popular) + POPULAR.map(item).join("") + head(L.all) + codes.map(item).join("");
+  };
+  const choose = (c: string) => {
+    $(target).value = c;
+    dlg.close();
+    show();
+    render();
+  };
+  fx.addEventListener("click", (e) => {
+    const b = (e.target as Element).closest<HTMLButtonElement>("[data-pick]");
+    if (!b) return;
+    target = b.dataset.pick!;
+    q.value = "";
+    fill();
+    dlg.showModal();
+    q.focus();
+    list.scrollTop = 0;
+  });
+  q.addEventListener("input", fill);
+  q.addEventListener("keydown", (e) => {
+    const first = list.querySelector<HTMLElement>("[data-cur]");
+    if (e.key === "Enter" && first) e.preventDefault(), choose(first.dataset.cur!);
+  });
+  dlg.addEventListener("click", (e) => {
+    const el = e.target as Element;
+    if (el === dlg || el.closest("[data-close]")) return dlg.close();
+    const c = el.closest<HTMLElement>("[data-cur]");
+    if (c) choose(c.dataset.cur!);
+  });
+  const money = (n: number, cur: string) => new Intl.NumberFormat(locale, { style: "currency", currency: cur, useGrouping: "always" }).format(n);
   // 1 peso en reales es 0,0035: con 2 decimales daría 0
   const unit = (n: number, cur: string) => (n < 1 ? new Intl.NumberFormat(locale, { style: "currency", currency: cur, maximumSignificantDigits: 3 }).format(n) : money(n, cur));
   let rates: Record<string, number> | undefined;
@@ -165,6 +215,7 @@ if (fx) {
   fx.addEventListener("submit", (e) => e.preventDefault());
   fx.querySelector("[data-swap]")?.addEventListener("click", () => {
     [$("from").value, $("to").value] = [$("to").value, $("from").value];
+    show();
     render();
   });
   fetch("/api/rates")

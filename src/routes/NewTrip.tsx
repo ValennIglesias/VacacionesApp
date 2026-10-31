@@ -116,11 +116,11 @@ export function NewTrip() {
     <main className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))]">
       <header className="flex items-center gap-3">
         {step === 0 ? (
-          <Link to="/" className="inline-flex size-11 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
+          <Link to="/" className="inline-flex size-11 items-center justify-center rounded-full bg-surface tap" aria-label={t.back}>
             <ArrowLeft size={20} />
           </Link>
         ) : (
-          <button onClick={() => go(step - 1)} className="inline-flex size-11 items-center justify-center rounded-full bg-surface" aria-label={t.back}>
+          <button onClick={() => go(step - 1)} className="inline-flex size-11 items-center justify-center rounded-full bg-surface tap" aria-label={t.back}>
             <ArrowLeft size={20} />
           </button>
         )}
@@ -264,7 +264,7 @@ export function NewTrip() {
                           <button
                             type="button"
                             onClick={() => setForm({ ...form, members: form.members.filter((_, j) => j !== i) })}
-                            className="inline-flex size-9 items-center justify-center rounded-full text-muted"
+                            className="inline-flex size-9 items-center justify-center rounded-full text-muted tap"
                             aria-label={`${t.delete} ${m}`}
                           >
                             <X size={18} />

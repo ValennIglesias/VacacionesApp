@@ -34,10 +34,10 @@
         %BRAND%
       </a>
       <nav class="flex items-center gap-1 text-sm font-medium">
-        <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted hover:text-ink" aria-label="Toggle theme"><i class="ph-duotone ph-circle-half text-xl"></i></button>
-        <a href="/en/guides/" class="rounded-full px-2 py-2 text-muted hover:text-ink sm:px-3">Guides</a>
-        <a href="/" class="hidden rounded-full px-3 py-2 text-muted hover:text-ink sm:inline" hreflang="es">Español</a>
-        <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2">Sign in</a>
+        <button id="theme-toggle" type="button" class="inline-flex size-9 items-center justify-center rounded-full text-muted transition-colors hover:text-ink" aria-label="Toggle theme"><i class="ph-duotone ph-circle-half text-xl"></i></button>
+        <a href="/en/guides/" class="rounded-full px-2 py-2 text-muted transition-colors hover:text-ink sm:px-3">Guides</a>
+        <a href="/" class="hidden rounded-full px-3 py-2 text-muted transition-colors hover:text-ink sm:inline" hreflang="es">Español</a>
+        <a href="/app/login" class="rounded-full border border-line bg-surface px-4 py-2 transition-colors hover:bg-surface-2">Sign in</a>
       </nav>
     </header>
 
@@ -47,8 +47,8 @@
           <h1 class="reveal text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl" style="--i: 0">Travel together.<br />Keep the money clear.</h1>
           <p class="reveal mt-5 max-w-[46ch] text-lg text-muted" style="--i: 1">Log every expense in the local currency and %BRAND% tells you who pays whom, with as few transfers as possible.</p>
           <div class="reveal mt-8 flex flex-wrap gap-3" style="--i: 2">
-            <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] transition-transform active:scale-[0.97]">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
-            <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium transition-transform active:scale-[0.97]"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> I have a code</a>
+            <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white shadow-[0_8px_24px_-10px_rgba(47,91,255,0.7)] lift hover:brightness-110">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
+            <a href="/app/join" class="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-surface px-6 font-medium lift hover:bg-surface-2"><i class="ph-duotone ph-ticket text-lg text-accent-ink"></i> I have a code</a>
           </div>
         </div>
 
@@ -128,17 +128,17 @@
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Free calculators, no sign-up</h2>
         <p class="reveal-scroll mt-3 max-w-[56ch] text-lg text-muted">For a quick bit of math before or after the trip, right in your browser.</p>
         <div class="mt-8 grid gap-4 md:grid-cols-3">
-          <a href="/en/tools/split-expenses-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/tools/split-expenses-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-calculator text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Split expenses calculator</span><span class="mt-1 block text-muted">Enter what each person paid and see who owes whom.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/en/tools/gas-cost-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/tools/gas-cost-calculator/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-gas-pump text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Gas money calculator</span><span class="mt-1 block text-muted">What the drive costs with tolls, and how much each person chips in.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/en/tools/travel-currency-converter/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/tools/travel-currency-converter/" class="reveal-scroll flex items-center gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent-ink"><i class="ph-duotone ph-currency-circle-dollar text-3xl"></i></span>
             <span class="min-w-0 flex-1"><span class="block text-lg font-semibold leading-snug">Travel currency converter</span><span class="mt-1 block text-muted">What something costs abroad in your own currency, at today's rate.</span></span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
@@ -149,15 +149,15 @@
       <section class="mx-auto max-w-6xl px-5 py-16">
         <h2 class="reveal-scroll text-3xl font-semibold tracking-tight md:text-4xl">Guides so money never becomes the topic</h2>
         <div class="mt-8 grid gap-4 md:grid-cols-3">
-          <a href="/en/guides/how-to-split-travel-expenses/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/guides/how-to-split-travel-expenses/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">How to split travel expenses with friends</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/en/guides/travel-expenses-multiple-currencies/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/guides/travel-expenses-multiple-currencies/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">Handling expenses in multiple currencies</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
-          <a href="/en/guides/paying-abroad-cards-cash-fees/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 transition-transform active:scale-[0.99]">
+          <a href="/en/guides/paying-abroad-cards-cash-fees/" class="reveal-scroll flex items-start justify-between gap-4 rounded-3xl bg-surface p-6 lift">
             <span class="text-lg font-semibold leading-snug">Paying abroad without hidden fees</span>
             <i class="ph-duotone ph-arrow-up-right shrink-0 text-xl text-accent-ink"></i>
           </a>
@@ -170,19 +170,19 @@
       <section class="mx-auto max-w-3xl px-5 py-16">
         <h2 id="faq" class="scroll-mt-6 text-3xl font-semibold tracking-tight">Frequently asked questions</h2>
         <div class="mt-8 flex flex-col gap-3">
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it cost anything?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. %BRAND% is free and supported by unobtrusive ads.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does everyone need an account?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Whoever creates the trip adds everyone's names. People who join with the code pick their name; the rest stay in the group and someone logs their expenses. To mark or confirm their own payments, each person joins with the code.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Which currency are debts paid in?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">What is a partial split?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does %BRAND% move money?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app.</p></details>
-          <details class="rounded-3xl bg-surface p-5"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it work if I travel solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Yes. Choose “Solo” when creating the trip: you log your expenses in the local currency and see what you've spent in your own currency, by day and by category. There's no code and no splitting, and if someone joins later, you turn it into a group trip in one tap.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it cost anything?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. %BRAND% is free and supported by unobtrusive ads.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">Does everyone need an account?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. Whoever creates the trip adds everyone's names. People who join with the code pick their name; the rest stay in the group and someone logs their expenses. To mark or confirm their own payments, each person joins with the code.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">Which currency are debts paid in?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">When creating the trip you choose the currency you'll pay each other in. When splitting, debts are converted at the day's rate, which you can edit.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">What is a partial split?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Settling up at any point during the trip. Those expenses are closed and don't count again in the final split, but they still show in the overall summary.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">Does %BRAND% move money?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">No. It only calculates and keeps records. You pay through your own bank or wallet and confirm it in the app.</p></details>
+          <details class="rounded-3xl bg-surface p-5 transition-colors hover:bg-surface-2"><summary class="flex cursor-pointer items-center justify-between font-medium">Does it work if I travel solo?<i class="ph-duotone ph-caret-down chev transition-transform"></i></summary><p class="mt-3 text-muted">Yes. Choose “Solo” when creating the trip: you log your expenses in the local currency and see what you've spent in your own currency, by day and by category. There's no code and no splitting, and if someone joins later, you turn it into a group trip in one tap.</p></details>
         </div>
       </section>
 
       <section class="mx-auto max-w-6xl px-5 pb-20">
         <div class="flex flex-col items-start justify-between gap-6 rounded-3xl bg-strong p-8 text-strong-ink md:flex-row md:items-center">
           <h2 class="max-w-[24ch] text-2xl font-semibold tracking-tight md:text-3xl">Got dates? Set up the group today.</h2>
-          <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
+          <a href="/app/new" class="inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 font-medium text-white lift hover:brightness-110">Create a free trip <i class="ph-duotone ph-arrow-right"></i></a>
         </div>
       </section>
     </main>

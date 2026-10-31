@@ -44,11 +44,11 @@ export function Calendar({ start, end, min, onPick }: CalendarProps) {
   return (
     <div className="select-none rounded-3xl bg-surface-2 p-3">
       <div className="mb-2 flex items-center justify-between">
-        <button type="button" onClick={() => move(-1)} className="inline-flex size-9 items-center justify-center rounded-full active:scale-90" aria-label={t.back}>
+        <button type="button" onClick={() => move(-1)} className="inline-flex size-9 items-center justify-center rounded-full tap" aria-label={t.back}>
           <CaretLeft size={18} weight="bold" />
         </button>
         <span className="inline-block font-semibold first-letter:uppercase">{title}</span>
-        <button type="button" onClick={() => move(1)} className="inline-flex size-9 items-center justify-center rounded-full active:scale-90" aria-label={t.next}>
+        <button type="button" onClick={() => move(1)} className="inline-flex size-9 items-center justify-center rounded-full tap" aria-label={t.next}>
           <CaretRight size={18} weight="bold" />
         </button>
       </div>

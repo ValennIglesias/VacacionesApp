@@ -1,7 +1,8 @@
 import { COUNTRY_CURRENCY } from "../../shared/data";
 
+// en español Intl no agrupa los números de 4 cifras (1234): siempre separador de miles, también desde 1.000
 export const money = (cents: number, currency: string, locale: string) =>
-  new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100);
+  new Intl.NumberFormat(locale, { style: "currency", currency, useGrouping: "always" }).format(cents / 100);
 
 /** Monto compacto para ejes de gráficos. */
 export const moneyShort = (cents: number, currency: string, locale: string) =>
@@ -9,7 +10,11 @@ export const moneyShort = (cents: number, currency: string, locale: string) =>
 
 export const countryName = (cc: string, locale: string) => new Intl.DisplayNames([locale], { type: "region" }).of(cc) ?? cc;
 
-export const currencyName = (code: string, locale: string) => new Intl.DisplayNames([locale], { type: "currency" }).of(code) ?? code;
+// en español Intl las da en minúscula ("peso argentino"): como título de la opción, con mayúscula
+export const currencyName = (code: string, locale: string) => {
+  const n = new Intl.DisplayNames([locale], { type: "currency" }).of(code) ?? code;
+  return n.charAt(0).toLocaleUpperCase(locale) + n.slice(1);
+};
 
 /** Parse de lo que tipea el usuario ("1.234,50" o "1234.5") a cents. */
 export function parseAmount(input: string): number | null {
@@ -38,7 +43,7 @@ export function typeAmount(value: string, prev: string, locale: string): string 
   const dec = at >= 0 && v.length - at - 1 <= 2 ? v.slice(at + 1).replace(/\D/g, "") : null;
   const int = (dec === null ? v : v.slice(0, at)).replace(/\D/g, "").replace(/^0+(?=\d)/, "").slice(0, 12);
   if (!int && dec === null) return "";
-  return new Intl.NumberFormat(locale).format(Number(int || 0)) + (dec === null ? "" : d + dec);
+  return new Intl.NumberFormat(locale, { useGrouping: "always" }).format(Number(int || 0)) + (dec === null ? "" : d + dec);
 }
 
 export const today = () => {

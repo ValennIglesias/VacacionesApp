@@ -44,10 +44,10 @@ export function Summary() {
 
   return (
     <div className="flex flex-col gap-5 pt-2">
-      <div className="flex items-center justify-between gap-3">
-        <div>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="min-w-0">
           <p className="text-sm text-muted">{t.tripTotal}</p>
-          <p className="text-3xl font-semibold tracking-tight tabular">{fmt(stats.total)}</p>
+          <p className="break-words text-3xl font-semibold tracking-tight tabular">{fmt(stats.total)}</p>
         </div>
         {trip.settleCurrency !== trip.currency && (
           <Segmented
@@ -83,10 +83,10 @@ export function Summary() {
               const { icon: I, color } = CATEGORY_META[x.c];
               return (
                 <li key={x.c} className="flex items-center gap-2 text-sm">
-                  <I size={18} weight="fill" style={{ color }} />
-                  <span className="flex-1">{t.categories[x.c]}</span>
-                  <span className="text-muted tabular">{Math.round((x.v / stats.total) * 100)}%</span>
-                  <span className="w-28 text-right font-medium tabular">{fmt(x.v)}</span>
+                  <I size={18} weight="fill" className="shrink-0" style={{ color }} />
+                  <span className="min-w-0 flex-1 truncate">{t.categories[x.c]}</span>
+                  <span className="shrink-0 text-muted tabular">{Math.round((x.v / stats.total) * 100)}%</span>
+                  <span className="shrink-0 whitespace-nowrap text-right font-medium tabular">{fmt(x.v)}</span>
                 </li>
               );
             })}
@@ -113,30 +113,27 @@ export function Summary() {
 
       {!trip.solo && (
       <section className="rounded-3xl bg-surface p-4">
-        <h2 className="mb-3 font-semibold">{t.byPerson}</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-xs text-muted">
-              <th className="pb-2 font-medium" />
-              <th className="pb-2 text-right font-medium">{t.paid}</th>
-              <th className="pb-2 text-right font-medium">{t.consumed}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stats.byPerson.map(({ m, paid, consumed }) => (
-              <tr key={m.id}>
-                <td className="py-1.5">
-                  <span className="flex items-center gap-2">
-                    <Avatar name={m.name} color={m.color} image={m.image} size={28} />
-                    {m.id === meId ? t.you : m.name}
-                  </span>
-                </td>
-                <td className="py-1.5 text-right font-medium tabular">{fmt(paid)}</td>
-                <td className="py-1.5 text-right text-muted tabular">{fmt(consumed)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* lista y no tabla: con montos largos, pagado y consumido van uno sobre otro y el nombre se recorta */}
+        <div className="mb-3 flex items-end justify-between gap-3">
+          <h2 className="font-semibold">{t.byPerson}</h2>
+          <p className="text-right text-xs leading-tight text-muted">
+            <span className="font-medium text-ink">{t.paid}</span>
+            <br />
+            {t.consumed}
+          </p>
+        </div>
+        <ul className="flex flex-col gap-3 text-sm">
+          {stats.byPerson.map(({ m, paid, consumed }) => (
+            <li key={m.id} className="flex items-center gap-2">
+              <Avatar name={m.name} color={m.color} image={m.image} size={28} />
+              <span className="min-w-0 flex-1 truncate">{m.id === meId ? t.you : m.name}</span>
+              <span className="shrink-0 text-right leading-tight tabular">
+                <span className="block font-medium">{fmt(paid)}</span>
+                <span className="block text-xs text-muted">{fmt(consumed)}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
       )}
 

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { CaretDown, Check, Copy, ShareNetwork, MagnifyingGlass } from "@phosphor-icons/react";
+import { CaretDown, Check, Copy, ShareNetwork, MagnifyingGlass, X } from "@phosphor-icons/react";
 import { COUNTRY_CURRENCY, CURRENCIES } from "../../shared/data";
 import { countryName, currencyName } from "../lib/format";
 import { useLocale, useT } from "../lib/i18n";
@@ -104,27 +104,37 @@ export function CurrencyPicker({ open, onClose, value, onChange, title }: { open
   };
   return (
     <Sheet open={open} onClose={onClose} title={title ?? t.currency}>
-      <label className="flex h-12 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-4 focus-within:border-accent">
+      {/* fija bajo la cabecera de la hoja (70px): la búsqueda no se va con la lista */}
+      <div className="sticky top-[70px] z-[5] -mx-5 -mt-4 bg-surface px-5 pb-3 pt-4">
+      <label className="flex h-12 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-4 transition-colors focus-within:border-accent">
         <MagnifyingGlass size={18} className="shrink-0 text-muted" />
         <input
           ref={focusNoScroll}
-          type="search"
+          type="text"
+          enterKeyHint="search"
+          autoComplete="off"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && list.length > 0 && (e.preventDefault(), pick(list[0].c))}
           placeholder={t.searchCurrency}
           aria-label={t.searchCurrency}
-          className="min-w-0 flex-1 bg-transparent text-ink outline-none placeholder:text-muted/70"
+          className="min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-muted/70"
         />
+        {q && (
+          <button type="button" onClick={() => setQ("")} aria-label={t.clearSearch} className="-mr-2 inline-flex size-8 shrink-0 items-center justify-center rounded-full text-muted hover:bg-surface hover:text-ink">
+            <X size={16} weight="bold" />
+          </button>
+        )}
       </label>
-      <ul className="mt-3 flex flex-col gap-1">
+      </div>
+      <ul className="flex min-h-[50dvh] flex-col gap-1">
         {list.map((x) => (
           <li key={x.c}>
             <button
               type="button"
               onClick={() => pick(x.c)}
               aria-pressed={x.c === value}
-              className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left ${x.c === value ? "bg-accent-soft text-accent-ink" : "hover:bg-surface-2"}`}
+              className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors duration-150 ${x.c === value ? "bg-accent-soft text-accent-ink" : "hover:bg-surface-2 active:bg-surface-2"}`}
             >
               <span className="w-12 shrink-0 font-semibold">{x.c}</span>
               <span className="min-w-0 flex-1 truncate">{x.name}</span>

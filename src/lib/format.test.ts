@@ -22,6 +22,7 @@ it("typeAmount agrega miles al tipear y respeta el decimal", () => {
   expect(type("1,000", "en-US")).toBe("1,000");
   expect(type("0012", "es-AR")).toBe("12");
   expect(type("12345,5", "es")).toBe("12.345,5"); // "es" no agrupa 4 dígitos, igual detecta los separadores
+  expect(type("1500", "es")).toBe("1.500"); // y igual agrupa desde 1.000
   // borrar un dígito no convierte los miles en decimales
   expect(typeAmount("12.34", "12.345", "es-AR")).toBe("1.234");
   for (const [k, l] of [["1234,5", "es-AR"], ["1234.56", "en-US"], ["1.000", "es-AR"]] as const) expect(parseAmount(type(k, l))).toBe(parseAmount(k));

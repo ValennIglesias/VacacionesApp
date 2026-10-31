@@ -119,7 +119,7 @@ export function Group() {
                     type="button"
                     disabled={decide.isPending}
                     onClick={() => decide.mutate({ id: r.id, ok: false })}
-                    className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-transform active:scale-90 disabled:opacity-50"
+                    className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line text-muted tap disabled:opacity-50"
                     aria-label={`${t.reject} ${r.name}`}
                   >
                     <X size={16} weight="bold" />
@@ -290,17 +290,17 @@ function MemberRow({ m, isMe, tripId, onRemove, onUnlink }: { m: Member; isMe: b
           </p>
         </div>
         {onUnlink && (
-          <button onClick={onUnlink} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.unlink} ${m.name}`}>
+          <button onClick={onUnlink} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted tap" aria-label={`${t.unlink} ${m.name}`}>
             <LinkBreak size={18} />
           </button>
         )}
         {onRemove && (
-          <button onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.remove} ${m.name}`}>
+          <button onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted tap" aria-label={`${t.remove} ${m.name}`}>
             <Trash size={18} />
           </button>
         )}
         {isMe && !editing && (
-          <button onClick={() => setEditing(true)} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted" aria-label={`${t.myAlias} ${m.name}`}>
+          <button onClick={() => setEditing(true)} className="inline-flex size-10 items-center justify-center rounded-full bg-surface-2 text-muted tap" aria-label={`${t.myAlias} ${m.name}`}>
             <PencilSimple size={18} />
           </button>
         )}

@@ -37,10 +37,10 @@
             <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">Monto
               <input name="amount" type="text" data-money inputmode="decimal" value="100" autocomplete="off" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent" /></label>
             <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">De (moneda del destino)
-              <select name="from" data-default="BRL" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent"></select></label>
+              <button type="button" data-pick="from" aria-haspopup="dialog" class="flex h-12 min-w-0 items-center gap-2 rounded-2xl border border-line bg-bg px-4 text-left text-base text-ink outline-none transition-colors hover:border-accent focus-visible:border-accent"></button><input type="hidden" name="from" data-default="BRL" /></label>
             <button type="button" data-swap aria-label="Invertir monedas" class="inline-flex size-12 rotate-90 items-center justify-center justify-self-center rounded-full bg-accent-soft text-xl text-accent-ink transition-transform hover:scale-105 sm:rotate-0 sm:self-end">⇄</button>
             <label class="flex min-w-0 flex-col gap-1.5 text-sm text-muted">A (tu moneda)
-              <select name="to" data-default="ARS" class="h-12 rounded-2xl border border-line bg-bg px-4 text-base text-ink outline-none focus:border-accent"></select></label>
+              <button type="button" data-pick="to" aria-haspopup="dialog" class="flex h-12 min-w-0 items-center gap-2 rounded-2xl border border-line bg-bg px-4 text-left text-base text-ink outline-none transition-colors hover:border-accent focus-visible:border-accent"></button><input type="hidden" name="to" data-default="ARS" /></label>
           </div>
           <div data-result class="mt-6 rounded-2xl bg-accent px-5 py-4 text-white" aria-live="polite"><p class="text-sm text-white/80">Cargando la cotización…</p></div>
           <div data-ars class="mt-5" hidden></div>

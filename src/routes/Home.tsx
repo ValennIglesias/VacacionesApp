@@ -65,7 +65,7 @@ export function Home() {
         {/* un invitado que cierra sesión pierde el acceso: para él está "Guardar mi acceso" */}
         {!isGuest && <button
           onClick={() => auth.signOut().then(() => location.assign("/app/login"))}
-          className="inline-flex size-11 items-center justify-center rounded-full text-muted active:scale-95"
+          className="inline-flex size-11 items-center justify-center rounded-full text-muted tap"
           aria-label={t.logout}
         >
           <SignOut size={22} />

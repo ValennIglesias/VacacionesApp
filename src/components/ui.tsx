@@ -111,7 +111,7 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
               <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-line" />
               <div className="flex items-center justify-between gap-3 pb-1">
                 <h2 className="text-xl font-semibold">{title}</h2>
-                <button type="button" onClick={onClose} aria-label={t.close} className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted hover:text-ink">
+                <button type="button" onClick={onClose} aria-label={t.close} className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted tap">
                   <X size={20} weight="bold" />
                 </button>
               </div>
@@ -219,7 +219,7 @@ export function Segmented<T extends string>({ value, onChange, options, full }: 
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={`relative h-9 whitespace-nowrap rounded-full text-sm font-medium transition-colors ${full ? "px-2" : "px-4"} ${value === o.value ? "text-ink" : "text-muted"}`}
+          className={`relative h-9 whitespace-nowrap rounded-full text-sm font-medium transition-colors ${full ? "px-2" : "px-4"} ${value === o.value ? "text-ink" : "text-muted hover:text-ink"}`}
         >
           {value === o.value && <motion.span layoutId={`seg-${options.map((x) => x.value).join()}`} className="absolute inset-0 rounded-full bg-surface shadow-sm" transition={spring} />}
           <span className="relative">{o.label}</span>
