@@ -66,8 +66,8 @@ export function Join() {
   });
 
   if (preview.data?.alreadyMember) return <Navigate to={`/t/${preview.data.trip.id}`} replace />;
-  // aprobado: el pedido ya no figura como pendiente
-  if (status === "pending" && mine.isSuccess && !myRequest && preview.data) return <Navigate to={`/t/${preview.data.trip.id}`} replace />;
+  // aprobado: el pedido ya no figura como pendiente (con datos frescos: la caché de Inicio es de antes de pedir)
+  if (status === "pending" && mine.isFetchedAfterMount && !myRequest && preview.data) return <Navigate to={`/t/${preview.data.trip.id}`} replace />;
 
   const errorCode = (join.error as ApiError | null)?.code;
   const pickedName = pick === "new" ? newName.trim() : preview.data?.members.find((m) => m.id === pick)?.name;
