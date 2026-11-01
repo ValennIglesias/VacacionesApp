@@ -1,56 +1,41 @@
 # Plan de acción AdSense — TribuSplit
 
-- **Sitio:** TribuSplit (`tribusplit.com`, todavía no publicado; auditado desde el repo local)
-- **Fecha:** 24 de octubre de 2026
+- **Sitio:** https://tribusplit.com
+- **Fecha:** 1 de noviembre de 2026
 - **Detalle de cada punto:** [audit.md](audit.md)
 
 ## Immediate Fixes
 
-Bloquean la aprobación.
+Antes de pedir la revisión.
 
-- [ ] Comprar el dominio, asociarlo al Worker y publicar con `SITE_URL=https://tribusplit.com`. *(issue 1 — Program Policies: ser dueño del sitio)*
-- [ ] Crear el buzón `contacto@tribusplit.com` (Cloudflare Email Routing) cuando esté el dominio. Ya está cargado en `shared/brand.ts`. *(issue 4 — Publisher Policies: Misrepresentation / transparencia)*
-- [ ] Dar de alta la cuenta de AdSense, agregar el sitio y pegar el meta tag o el snippet de verificación en el `<head>` de la home (ES y EN). *(issue 3 — Connect your site to AdSense)*
-- [ ] Cargar el ID real como `VITE_ADSENSE_CLIENT` en las variables de build: `ads.txt` y el meta tag de verificación se generan solos. *(issue 2 — ads.txt)*
-- [ ] En AdSense → Privacy & messaging: crear el mensaje de consentimiento para EEE, Reino Unido y Suiza. *(issue 6 — EU User Consent Policy)*
-- [x] Separar el anuncio del final de la lista de gastos del botón flotante "+", con más padding inferior. *(issue 7 — Ad placement policies: clics accidentales)*
-- [ ] Alta en Google Search Console y envío de `sitemap.xml`. Esperar a que se indexen las guías antes de pedir la revisión. *(criterio de revisión del sitio)*
+- [ ] En AdSense → **Sitios**: confirmar que `tribusplit.com` está agregado y verificado con el meta tag, que ya está en el `<head>`. El `ads.txt` ya está publicado. *(Monetization — Connect your site to AdSense)*
+- [ ] En AdSense → **Privacidad y mensajes** → GDPR: crear y **publicar** el mensaje de consentimiento para el EEE, el Reino Unido y Suiza. *(issue 2 — EU User Consent Policy)*
+- [ ] Completar todas las tareas de la cuenta en AdSense: datos de pago, dirección y verificación de identidad si la pide. Si falta alguna, la revisión no arranca y el sitio queda en "Preparándose". *(issue 1 — Check the status of your AdSense sites)*
+- [ ] En Search Console → **Inspección de URLs**: pedir la indexación de unas 10 URLs clave. *(issue 1 — contenido que atraiga audiencia)*
+  - `/`, `/guias/`, `/en/`, `/en/guides/`;
+  - las 3 herramientas en español;
+  - las 3 guías más largas.
+  - Hay un límite diario, así que al día siguiente seguir con otras.
+- [ ] Mandar un mail de prueba a `contacto@tribusplit.com` y confirmar que llega. *(Trust — transparencia)*
 
 ## 30-Day Fixes
 
-Prioridad alta.
-
-- [x] Reescribir las guías con casos paso a paso, capturas de la app y ejemplos con números (hoy de 630 a 1.245 palabras de cuerpo). *(issue 5 — Low value content)*
-- [ ] Llevar las guías de menos de 800 palabras a 1.000 o más, con más casos y preguntas frecuentes. *(issue 5)*
-- [x] Variar la estructura entre guías (no todas con `.tip` al final) y escalonar fechas de publicación y actualización reales. *(issue 5 — Spam Policies: Scaled content abuse)*
-- [x] Sumar autoría: nombre, foto y breve bio en "Sobre nosotros" y como autor en las guías, también en el JSON-LD (`author: Person`). *(issue 8 — E-E-A-T / YMYL)*
-- [x] Completar la bio de Valentin (experiencia viajando en grupo, ciudad, foto opcional) en "Sobre nosotros" y en la caja de autor. *(issue 8 — E-E-A-T)*
-- [x] Mostrar en el header en mobile el link a Guías. *(issue 13 — navegación)*
-- [x] Ampliar los términos: edad mínima, ley aplicable, contenido cargado por usuarios, limitación de responsabilidad y la versión en inglés completa. *(issue 11 — transparencia)*
-- [x] Agregar a la política de privacidad la sección de menores ("no dirigido a menores de 13 años") y el detalle del CMP real. *(issue 12 — Child-directed content)*
-- [x] Revisar y fechar los datos financieros (comisiones, tipos de dólar) y mantener el descargo. *(issue 9 — YMYL)*
+- [ ] **Esperar para pedir la revisión** hasta que se cumplan las tres condiciones (estimado: mediados o fines de noviembre de 2026). *(issue 1)*
+  - "Páginas" en Search Console muestra la mayoría de las guías **indexadas**;
+  - "Rendimiento" registra impresiones;
+  - `site:tribusplit.com` devuelve resultados.
+- [ ] Pedir la revisión en AdSense → Sitios → "Solicitar revisión". Tarda unos días y a veces de 2 a 4 semanas. Si te rechazan, el mail dice el motivo: corregir y volver a pedir. *(issue 1)*
+- [ ] Medir PageSpeed en mobile en [pagespeed.web.dev](https://pagespeed.web.dev) para la home, `/guias/como-dividir-gastos-de-un-viaje/` y `/herramientas/calculadora-de-nafta/`. Corregir lo que dé menos de 90. *(issue 5 — experiencia)*
+- [ ] Publicar 1 o 2 guías por semana con ritmo regular, no en tandas. *(issue 3 — Spam Policies: Scaled content abuse)*
+- [ ] Conseguir las primeras visitas reales: compartir las herramientas y guías donde tengan sentido (grupos de viaje, Reddit, foros), sin incentivos para hacer clic en anuncios. *(issue 1; Invalid traffic)*
+- [ ] No hacer clic en tus propios anuncios ni recargar páginas con anuncios para probar. Para probar, usar la vista previa de AdSense. *(Invalid traffic)*
 
 ## 90-Day Improvements
 
-Optimización.
-
-- [ ] Publicar 1 o 2 guías por semana con temas de mayor valor publicitario, en inglés y en español para España: seguros de viaje, tarjetas sin comisión, eSIM, presupuestos por destino. *(Revenue Optimization)*
-  - 25/10: publicadas, según el Planificador de palabras clave, "Seguro de viaje en grupo" (es), "Pagar en Brasil: Pix, tarjeta o efectivo" (es), "Group travel insurance" (en) y "eSIM, local SIM or roaming" (en). También "Alquiler en la Costa Atlántica en grupo" (es), con la experiencia de Valentin ("alquiler costa atlántica", 5.000 búsquedas/mes).
-- [ ] Páginas de presupuesto por destino (por ejemplo, "Florianópolis en grupo: cuánto cuesta una semana"). *(Revenue Optimization)*
-- [ ] Configurar el acceso del crawler de AdSense a la app (cuenta de prueba) una vez aprobada la cuenta. *(issue 14 — Display ads on login-protected pages)*
-- [ ] Imágenes propias en las guías (capturas, gráficos simples). *(issue 15)*
-- [x] Etiquetar los bloques de anuncios ("Publicidad").
-- [ ] Evaluar un segundo bloque de anuncios en las guías largas. *(issue 18 — Ad placement)*
-- [ ] Unificar el separador de los títulos y agregar `hreflang` en privacidad y términos. *(issues 16 y 17)*
-- [ ] Medir Core Web Vitals en producción con PageSpeed y corregir lo que aparezca. *(UX)*
-- [ ] Evaluar links de afiliados (seguro de viaje, eSIM) como complemento de AdSense. *(Revenue Optimization)*
-
-## Después de la aprobación: tráfico de países que pagan más
-
-Acordado el 25/10. No agregar idiomas antes de la aprobación: suma riesgo y no ayuda a aprobar.
-
-- [ ] Repetir el Planificador de palabras clave con Canadá y Australia: las mismas búsquedas en inglés más "split cottage rental", "ski trip cost split" y "road trip gas split".
-- [ ] Adaptar las guías en inglés a Canadá, Australia, el Reino Unido y EE. UU.: medios de pago locales (Interac e-Transfer, PayID, transferencia bancaria, Venmo/Zelle) y ejemplos en CAD y AUD.
-- [ ] Escribir 2 o 3 guías en inglés para esos países: cabañas de verano ("cottage"), viajes de esquí en grupo y road trips. También llegan a lectores nórdicos que buscan en inglés.
-- [ ] No traducir a idiomas nórdicos: mercados chicos, sin quien revise el texto y la app solo está en español e inglés.
-- [ ] Si hay tráfico, evaluar un tercer idioma de la web y la app: alemán (paga bien) o portugués (Brasil, público grande y afín).
+- [ ] Ya aprobado: activar anuncios automáticos en las guías con densidad baja-media, anclado en mobile y viñeta apagada. *(Ad placement)*
+- [ ] Ya aprobado: crear los bloques de la app (`VITE_ADSENSE_SLOT_SUMMARY` / `_TRIP`) solo en Resumen y al final de la lista de gastos. *(issue 9 — Ad placement policies)*
+- [ ] Si la vista previa de anuncios automáticos no carga, relajar `X-Frame-Options` en las páginas públicas. *(issue 7)*
+- [ ] Agregar `hreflang` o separar privacidad y términos por idioma. *(issue 8)*
+- [ ] Páginas de presupuesto por destino y guías de mayor valor publicitario en inglés. *(Revenue Optimization)*
+- [ ] Evaluar links de afiliados (seguro de viaje, eSIM). *(Revenue Optimization)*
+- [ ] Repasar el plan para países que pagan más (Canadá, Australia, Reino Unido, EE. UU.) que quedó acordado el 25/10. *(Revenue Optimization)*

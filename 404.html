@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página no encontrada · %BRAND%</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/site.css" />
+    <script type="module" src="/src/landing.ts"></script>
+  </head>
+  <body>
+    %GUIDE_HEADER%
+    <main class="mx-auto max-w-6xl px-5">
+      <h1 class="mt-10 text-4xl font-semibold leading-tight tracking-tight md:text-5xl">Página no encontrada</h1>
+      <p class="mt-4 max-w-[60ch] text-lg text-muted">La página que buscás no existe o cambió de dirección. Estas son las guías más leídas:</p>
+      <div class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <a href="/guias/como-dividir-gastos-de-un-viaje/" class="flex flex-col gap-3 rounded-3xl bg-surface p-6 lift">
+          <h2 class="text-lg font-semibold leading-snug">Cómo dividir los gastos de un viaje entre amigos sin peleas</h2>
+          <span class="mt-auto text-sm font-medium text-accent-ink">Leer guía →</span>
+        </a>
+        <a href="/guias/gastos-en-distintas-monedas/" class="flex flex-col gap-3 rounded-3xl bg-surface p-6 lift">
+          <h2 class="text-lg font-semibold leading-snug">Cómo manejar gastos en distintas monedas durante un viaje</h2>
+          <span class="mt-auto text-sm font-medium text-accent-ink">Leer guía →</span>
+        </a>
+        <a href="/guias/minimizar-transferencias/" class="flex flex-col gap-3 rounded-3xl bg-surface p-6 lift">
+          <h2 class="text-lg font-semibold leading-snug">Cómo saldar deudas de grupo con la menor cantidad de transferencias</h2>
+          <span class="mt-auto text-sm font-medium text-accent-ink">Leer guía →</span>
+        </a>
+      </div>
+      <p class="mt-8 flex flex-wrap gap-5 font-medium text-accent-ink"><a href="/guias/">Ver todas las guías →</a><a href="/">Ir al inicio →</a></p>
+    </main>
+    %GUIDE_FOOTER%
+  </body>
+</html>

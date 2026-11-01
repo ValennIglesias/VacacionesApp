@@ -40,13 +40,14 @@ const brand = (): Plugin => ({
       .replaceAll("%BRAND%", BRAND)
       .replaceAll("%CONTACT%", CONTACT)
       .replaceAll("%SITE%", SITE)
-      .replace("</head>", `${ADSENSE ? adsHead(ctx.path.startsWith("/app/")) : ""}  <script src="/registerSW.js" defer></script>
+      // la 404 tampoco lleva el script: AdSense no permite anuncios en pantallas sin contenido propio
+      .replace("</head>", `${ADSENSE ? adsHead(ctx.path.startsWith("/app/") || ctx.path.endsWith("404.html")) : ""}  <script src="/registerSW.js" defer></script>
   </head>`);
   },
   // robots.txt y sitemap.xml con las páginas públicas (la app y los legales no suman para buscadores)
   generateBundle() {
     if (this.environment.name !== "client") return;
-    const urls = Object.keys(pages).filter((k) => k !== "app").map((k) => `${SITE}/${k === "landing" ? "" : k + "/"}`);
+    const urls = Object.keys(pages).filter((k) => k !== "app" && !k.endsWith("404.html")).map((k) => `${SITE}/${k === "landing" ? "" : k + "/"}`);
     this.emitFile({ type: "asset", fileName: "robots.txt", source: `User-agent: *
 Allow: /
 Disallow: /app/
@@ -72,9 +73,10 @@ ${urls.map((u) => `  <url><loc>${u}</loc></url>`).join("\n")}
   },
 });
 
-// todas las páginas del sitio: landing, legales, app y guías (cada carpeta con su index.html)
+// todas las páginas del sitio: landing, legales, app y guías (cada carpeta con su index.html). Las 404: Cloudflare sirve la
+// más cercana a la ruta pedida (en/404.html para /en/…)
 const pages = Object.fromEntries(
-  ["index.html", "app/index.html", ...globSync("{en,privacy,terms,guias,nosotros,contacto,herramientas}/**/index.html")].map((f) => [
+  ["index.html", "app/index.html", "404.html", "en/404.html", ...globSync("{en,privacy,terms,guias,nosotros,contacto,herramientas}/**/index.html")].map((f) => [
     f.replace(/\\/g, "/").replace(/\/?index\.html$/, "") || "landing",
     f,
   ]),

@@ -1,184 +1,174 @@
 # AdSense Compliance Audit — TribuSplit
 
-- **Sitio:** TribuSplit (dominio previsto `tribusplit.com`, **todavía no publicado**)
-- **Fuente:** código fuente del repo local `V:\Repos\Vacaciones` (build de producción revisado en `dist/`), no un sitio en vivo
-- **Fecha:** 24 de octubre de 2026
+- **Sitio auditado:** https://tribusplit.com (en vivo)
+- **Fecha:** 1 de noviembre de 2026
+- **Fuentes:**
+  - el sitio publicado (HTML, `ads.txt`, `robots.txt`, `sitemap.xml` y cabeceras);
+  - el repo local, para las fechas de las guías;
+  - RDAP, para la fecha de registro del dominio;
+  - los DNS, para el MX.
+- **Plan de acción:** [action-plan.md](action-plan.md)
 
-> Limitación: como el sitio no está online, no se pudo evaluar lo que AdSense mira en vivo: velocidad real, indexación en Google, tráfico, antigüedad del dominio ni el aviso de consentimiento (CMP). Hay que repetir esos puntos una vez publicado.
+> **Lo que no pude verificar:**
+> - El panel de AdSense: si el sitio está agregado, en qué estado está y si el mensaje de consentimiento (CMP) está publicado.
+> - El informe "Páginas" de Search Console, que todavía se está procesando.
+> - Core Web Vitals: la API de PageSpeed devolvió cuota agotada.
+> - El tráfico real.
 
-## Actualización — 24 de octubre de 2026 (después de los arreglos)
+## Historial de puntajes
 
-| Dimensión | Inicial | Ahora | Qué cambió |
-|---|---|---|---|
-| Content Quality | 62 | 74 | Guías reescritas (630 a 1.245 palabras de cuerpo), 20 capturas reales de la app, ejemplos con números verificados, preguntas frecuentes, estructuras distintas, guías en inglés adaptadas y no solo traducidas |
-| Policy Compliance | 85 | 88 | Privacidad con menores, CMP y preferencias locales |
-| Trust Signals | 50 | 76 | `contacto@tribusplit.com`; autor firmado (Valentin, líder de proyectos UX, Buenos Aires) con bio, experiencia de viajes y LinkedIn; `Person` en JSON-LD; términos completos |
-| UX Quality | 80 | 85 | Anuncio separado del botón flotante, Guías en el header mobile |
-| Monetization Readiness | 35 | 40 | `ads.txt` y meta tag automáticos; faltan dominio, ID y CMP |
-| **Total** | **63** | **74** | |
-
-**Veredicto:** sigue en **FAIL** hasta publicar con dominio, ID de AdSense y el mensaje de consentimiento. Con eso hecho, Monetization pasa a unos 80 y el total a unos **80** (CONDITIONAL PASS / Ready). Para subir más: 2 a 4 guías nuevas y alargar las guías cortas.
-
-### 25 de octubre de 2026
-
-| Dimensión | Puntaje | Qué cambió |
+| Fecha | Total | Estado |
 |---|---|---|
-| Content Quality | 78 | 5 guías nuevas elegidas por búsquedas (seguro de viaje, Pix en Brasil, group travel insurance, eSIM, Costa Atlántica con experiencia propia de 1.560 palabras) |
-| Policy Compliance | 88 | Sin cambios |
-| Trust Signals | 76 | Bio del autor con experiencia y LinkedIn; fuentes citadas en las guías con datos |
-| UX Quality | 86 | Las tablas anchas ya no desbordan la pantalla en mobile |
-| Monetization Readiness | 42 | Temas de mayor valor publicitario; siguen faltando dominio, ID y CMP |
-| **Total** | **75** | |
-
-Con dominio, ID de AdSense y CMP, Monetization pasa a unos 80 y el total a unos **81** (Ready).
-
-Lo que sigue abajo es la auditoría inicial, sin cambios.
+| 24/10 (repo, sin publicar) | 63 → 74 | FAIL: faltaban dominio, ID y CMP |
+| 25/10 | 75 | FAIL, por el mismo motivo |
+| **01/11 (en vivo)** | **80** | **CONDITIONAL PASS**: listo técnicamente, falta madurez de indexación |
 
 ## Executive Summary
 
-**Overall Score:** 63 / 100. Necesita mejoras importantes.
-**Approval Probability:** hoy **0 %**, porque no se puede ni pedir la revisión: falta el dominio, el `ads.txt` es un placeholder y no está el código de verificación. Con los arreglos inmediatos hechos: **moderada, entre 40 y 60 %**, frenada sobre todo por guías cortas y señales de confianza flojas.
+**Overall Score:** 80 / 100, "Ready" (en el límite).
+**Approval Probability:**
+- **Si se pide la revisión hoy:** entre 35 y 50 %. El dominio tiene 3 días (registrado el 29/10/2026) y Google todavía no indexó las páginas.
+- **Con la indexación confirmada** (2 a 4 semanas), el CMP publicado y algo de tráfico orgánico: entre 65 y 75 %.
 
-El contenido no tiene ningún tema prohibido ni restringido. Los riesgos son de **preparación** (dominio, `ads.txt`, verificación, CMP), de **confianza** (email de contacto falso, nadie identificado detrás del sitio) y de **valor del contenido**: 18 guías de 2 a 4 minutos, con la misma plantilla y la misma fecha. AdSense rechaza más que nada por "contenido de poco valor", así que ahí va el esfuerzo.
+No encontré **ninguna infracción confirmada**. La parte técnica está completa: `ads.txt` válido, meta tag y script de AdSense en el `<head>`, `robots.txt` que deja pasar a Mediapartners-Google, sitemap con 45 URLs, 404 real y HTTPS.
+
+Hay contenido suficiente y de buen tamaño:
+- 35 páginas de contenido (guías de 817 a 1.801 palabras y 6 herramientas de 531 a 698);
+- autor identificado y contacto con un dominio propio que recibe correo.
+
+El riesgo que queda no es de políticas sino de **madurez**. Un dominio recién nacido, sin páginas indexadas ni tráfico, es el perfil típico de "el sitio no está listo" o de rechazo por contenido de poco valor. El revisor no tiene señales externas que confirmen que el sitio aporta valor.
 
 | Dimensión | Puntaje | Peso |
 |---|---|---|
-| Content Quality | 62 | 30 % |
-| Policy Compliance | 85 | 20 % |
-| Trust Signals | 50 | 20 % |
-| UX Quality | 80 | 15 % |
-| Monetization Readiness | 35 | 15 % |
-| **Total ponderado** | **63** | |
+| Content Quality | 80 | 30 % |
+| Policy Compliance | 90 | 20 % |
+| Trust Signals | 80 | 20 % |
+| UX Quality | 85 | 15 % |
+| Monetization Readiness | 62 | 15 % |
+| **Total ponderado** | **80** | |
 
-Método: promedio ponderado; contenido y confianza pesan más porque son la causa más común de rechazo.
+**Método:** promedio ponderado. Contenido y confianza pesan más porque son la causa más frecuente de rechazo.
 
 ## Critical Issues
 
-1. **Sin dominio propio publicado** *(confirmado)*. AdSense solo revisa un dominio raíz al que tengas acceso y que esté online; un subdominio `*.workers.dev` no sirve. — *AdSense Program Policies: ser dueño del sitio; requisitos de elegibilidad*
-2. **`ads.txt` con placeholder** *(confirmado)*. `public/ads.txt` tiene `pub-XXXXXXXXXXXXXXXX`. Con un ID inválido, los compradores autorizados no coinciden y se pierde demanda. — *AdSense: Authorized Digital Sellers (ads.txt)*
-3. **Falta el código de verificación del sitio** *(confirmado)*. El script de AdSense se inyecta solo si está configurado un bloque de anuncio (`src/landing.ts`), y no hay meta tag de verificación en `<head>`. AdSense necesita el snippet o el meta tag en la home para verificar el sitio. — *AdSense: Connect your site to AdSense*
-4. **Email de contacto falso** *(confirmado)*. `shared/brand.ts` define `CONTACT = "contacto@example.com"`, que se publica en Contacto, Privacidad, Términos y en los emails. Un revisor que encuentra un contacto que no funciona lo lee como un sitio no confiable. — *Google Publisher Policies — Misrepresentation / transparencia del sitio; Search Quality Rater Guidelines — confianza*
+Ninguno confirmado.
 
 ## High Priority Issues
 
-5. **Guías cortas y con la misma forma** *(riesgo potencial)*. Son 9 por idioma, de solo 330 a 680 palabras de texto, la mayoría con "2 min de lectura". Todas tienen la misma plantilla, la misma fecha (18 y 20 de octubre), autor "Organization", sin imágenes ni ejemplos propios de la app. Las 9 en inglés son traducciones o adaptaciones de las españolas. Es el patrón típico de "Low value content". — *AdSense Program Policies — contenido de poco valor; Spam Policies — Scaled content abuse (riesgo bajo por el volumen, pero la uniformidad suma)*
-6. **Aviso de consentimiento (CMP) no configurado** *(confirmado para el código; falta configurarlo en AdSense)*. La política de privacidad promete pedir consentimiento en el EEE y el Reino Unido, pero no hay CMP. Desde enero de 2024 hace falta un CMP certificado con TCF para mostrar anuncios personalizados en el EEE y el Reino Unido, y desde julio de 2024 en Suiza. Sin CMP, la política promete algo que no pasa y esas visitas quedan con anuncios limitados. — *EU User Consent Policy; Google consent management requirements (EEA, UK, CH)*
-7. **El anuncio dentro de la app queda debajo del botón flotante "+"** *(riesgo potencial)*. `<AdSlot slot="trip">` va al final de la lista de gastos. El contenedor tiene `pb-32` (128 px) y el botón flotante ocupa entre 88 y 152 px desde abajo, así que al llegar al final del scroll el botón tapa unos 24 px del borde derecho del anuncio. Se presta a clics accidentales. — *Ad placement policies — fomentar clics accidentales; Better Ads / Ad Experience Standards*
-8. **No hay ninguna persona identificada detrás del sitio** *(confirmado)*. "Sobre nosotros" dice "proyecto independiente desarrollado en Argentina", sin nombre de responsable, ciudad ni razón social, y las guías no tienen autor. Para temas de dinero (YMYL), Google pondera la experiencia y la confianza (E-E-A-T). — *Search Quality Rater Guidelines — E-E-A-T, YMYL; Publisher Policies — Misrepresentation*
+1. **Dominio de 3 días y sin indexación confirmada** *(riesgo potencial)*.
+   - RDAP da como fecha de registro el 29/10/2026.
+   - En Search Console, el sitemap muestra 45 URLs descubiertas y el informe "Páginas" sigue procesando.
+   - AdSense no exige una antigüedad mínima, pero pide contenido que "atraiga audiencia" y valor suficiente antes de monetizar. Sin páginas en el índice de Google ni visitas, el revisor no tiene esa evidencia.
+   - *Política: AdSense eligibility requirements, contenido de calidad que atraiga audiencia; "What to do when your site isn't ready to show ads".*
+2. **Mensaje de consentimiento (CMP) sin verificar** *(falta evidencia)*.
+   - La política de privacidad dice que se usa la herramienta de consentimiento de Google certificada para el TCF.
+   - No pude confirmar que el mensaje esté **creado y publicado** en AdSense → Privacidad y mensajes. Sin él, no se sirven anuncios personalizados en el EEE, el Reino Unido ni Suiza, y la privacidad estaría prometiendo algo que no ocurre.
+   - *Política: EU User Consent Policy; Publisher Policies — Misrepresentation.*
 
 ## Medium Priority Issues
 
-9. **Contenido financiero (YMYL) con datos que envejecen** *(riesgo potencial)*. "Pagar en el exterior" da un rango de comisiones ("1 a 3 %") y la guía del dólar describe el blue y el tarjeta. Las dos tienen descargo o aclaran que es orientativo. Conviene revisar las fechas y que nadie lo lea como asesoramiento. — *Search Quality Rater Guidelines — YMYL; Publisher Restrictions (no aplica directo)*
-10. **Mención del dólar blue (mercado informal)** *(riesgo bajo)*. Se lo describe de forma neutral, sin explicar cómo conseguirlo. No viola ninguna política, pero un revisor puede marcar contenido que "facilita" actividades informales. Mantenerlo descriptivo, como está. — *Google Publisher Policies — Illegal content (no se viola)*
-11. **Términos de uso muy breves** *(confirmado)*. Tienen 238 palabras y no incluyen ley aplicable, edad mínima ni contenido de usuarios. La versión en inglés omite la cláusula sobre datos de terceros. — *Transparencia y confianza del sitio*
-12. **La privacidad no menciona menores de edad** *(confirmado)*. No dice que el servicio no está dirigido a menores de 13 años, o la edad que corresponda por país. AdSense pide no dirigir anuncios personalizados a menores. — *Google Publisher Policies — Child-directed content / COPPA*
-13. **El link a Guías no se ve en el header en celulares** *(confirmado)*. En `site/partials.ts` y en la landing, el link tiene `hidden … sm:inline`: en mobile las guías solo se encuentran en el footer y en la sección de la home. — *Navegación clara (criterio de revisión del sitio)*
-14. **Anuncios en pantallas detrás de login** *(riesgo potencial)*. El crawler de AdSense no puede loguearse, y el sitio no tiene que pedir login para que Google lo revise. Las páginas públicas sí son visibles, así que la revisión no se bloquea. Los anuncios de la app van a ser poco relevantes o se pueden limitar hasta configurar el acceso del crawler. — *Display ads on login-protected pages; Fix AdSense crawler issues*
+3. **Contenido publicado en tandas** *(riesgo potencial)*.
+   - Las 35 guías aparecieron en 2 semanas, en bloques con la misma fecha: 13 guías en inglés el 18/10, después 5, 5, 2 y 4.
+   - No es una infracción, porque el contenido es distinto, largo y tiene capturas propias. Pero un ritmo de publicación en ráfagas es una de las señales que mira la política de abuso de contenido a escala.
+   - De ahora en adelante conviene publicar con un ritmo regular.
+   - *Política: Spam Policies — Scaled content abuse.*
+4. **Fechas de las guías anteriores al dominio** *(confirmado, bajo impacto)*. Varias dicen "Actualizado el 24 de octubre de 2026", y el dominio existe desde el 29/10. Es coherente si el contenido se escribió antes, pero un revisor atento puede notar la inconsistencia. No hace falta cambiarlas, y no conviene inventar fechas. *Política: Search Quality Rater Guidelines — confianza.*
+5. **Core Web Vitals sin medir en producción** *(falta evidencia)*. La API de PageSpeed no respondió por cuota. Hay que medir a mano la home, una guía y una herramienta en mobile. *Política: Better Ads / Ad Experience; calidad de la experiencia.*
+6. **Herramientas con menos texto que las guías** *(riesgo bajo)*. Tienen entre 531 y 698 palabras. Para una calculadora es razonable, porque la herramienta es el valor. Aun así, no conviene poner más de un bloque de anuncios en esas páginas. *Política: Publisher Policies — Valuable inventory.*
 
 ## Low Priority Issues
 
-15. Las guías no tienen imágenes propias (capturas de la app, gráficos de ejemplo). Sumarían valor y diferenciación. — *Calidad de contenido*
-16. Los títulos no usan el separador de forma consistente: `|` en las guías, `·` en los índices. Es cosmético. — *SEO*
-17. La política de privacidad tiene ES y EN en la misma URL. Funciona, pero no hay `hreflang` por idioma. — *SEO / UX*
-18. Los anuncios no tienen etiqueta ("Publicidad"). No es obligatoria, pero ayuda a que no se confundan con contenido. — *Ad placement policies — anuncios que parecen contenido*
+7. **`X-Frame-Options: DENY` en todo el sitio** *(potencial)*. Los anuncios no se ven afectados, porque son iframes dentro de la página. Pero algunas vistas previas del panel de AdSense, como la de anuncios automáticos, cargan el sitio dentro de un frame y pueden mostrar "rechazó la conexión". Si molesta, se puede relajar solo en las páginas públicas. *Sin política asociada: herramienta del panel.*
+8. **Privacidad y términos bilingües en una sola URL** *(confirmado)*. No tienen `hreflang` propio. Es menor, porque las dos versiones están en la misma página. *Política: buenas prácticas de Search.*
+9. **Anuncios dentro de la app** *(para después de aprobar)*.
+   - Hoy no hay bloques configurados en la app, porque faltan `VITE_ADSENSE_SLOT_*`.
+   - Al activarlos:
+     - no ponerlos en pantallas sin contenido, como login, unirse o crear viaje;
+     - mantenerlos lejos del botón "+".
+   - *Política: Ad placement policies — clics accidentales; ads on screens without publisher content.*
 
 ## Content Quality Assessment
 
-- **Originalidad:** media-alta. Los textos son propios, con ejemplos numéricos y tablas, y no parecen copiados de otros sitios. El tema del dólar argentino, el blue y el MEP es un diferencial real.
-- **Profundidad:** baja-media. Las guías explican el "qué" pero rara vez el "cómo, paso a paso, con un caso real". Ninguna llega a 1.000 palabras.
-- **Señales de contenido generado en masa:** misma estructura, mismo largo, mismo cierre con `.tip`, publicadas todas el mismo día. Aisladas no son una violación; juntas hacen que el sitio parezca hecho en serie.
-- **Duplicado:** EN y ES son equivalentes y están bien declarados con `hreflang`, así que no es contenido duplicado penalizable.
-- **Volumen:** 18 guías más landing, about, contact y legales, unas 30 URLs. Alcanza en cantidad; falta calidad por página.
+- **Volumen:** 35 URLs de contenido, 45 en el sitemap:
+  - 18 guías en español y 14 en inglés;
+  - 6 herramientas;
+  - índices, home, nosotros, contacto, privacidad y términos.
+- **Profundidad:** las guías tienen entre 817 y 1.801 palabras, con un promedio cercano a 1.050. Incluyen ejemplos con números, preguntas frecuentes, tablas y capturas reales de la app.
+- **Originalidad y experiencia:**
+  - hay casos propios, como la Costa Atlántica, que cuenta experiencia personal;
+  - hay temas locales con valor real, como dólar tarjeta/MEP/blue y Pix en Brasil;
+  - las guías en inglés están adaptadas, no solo traducidas.
+- **Riesgos:** la cantidad publicada en poco tiempo (punto 3) y que el sitio todavía es un producto con contenido de apoyo. Las guías se sostienen solas, así que no lo veo como un problema.
+- **Uso de IA:** sin señales de contenido generado sin revisar. Los textos tienen datos concretos, enlaces internos coherentes y fuentes citadas en las guías con datos.
 
 ## Publisher Policy Assessment
 
-No se encontró contenido sexual, violento, de odio, peligroso, de armas, drogas, apuestas ni malware. El servicio no mueve dinero y lo aclara en la landing, los términos y "Sobre nosotros". **Sin violaciones confirmadas.**
+No hay contenido sexual, violento, de odio, peligroso, ilegal, de armas, drogas ni apuestas. Tampoco hay infracciones de copyright: las imágenes son capturas propias. El contenido financiero es informativo y fechado, con descargo, sin promesas ni asesoramiento. **Cumple.**
 
 ## Publisher Restriction Assessment
 
-No hay alcohol, citas, política ni temas de salud. Las salidas y bebidas aparecen solo como categoría de gasto, sin promover alcohol. **Sin restricciones aplicables.**
+No hay alcohol, citas, temas sociales sensibles, salud ni política. Los tipos de dólar en Argentina son información de cambio, no especulación. **Sin restricciones aplicables.**
 
 ## Invalid Traffic Assessment
 
-- No hay incentivos para hacer clic ni textos tipo "apoyanos haciendo clic".
-- Los anuncios no están junto a botones de pago ni a formularios; la regla figura en el comentario de `AdSlot`.
-- **Riesgo:** el solapamiento con el botón flotante (issue 7).
-- **Recomendación:** no hacer clic en los propios anuncios y no comprar tráfico barato al principio.
+- No hay incentivos para hacer clic, ni intercambio de tráfico, ni pop-ups.
+- Los bloques están etiquetados como "Publicidad".
+- El anuncio de la app ya está separado del botón flotante.
+- Recomendación: no hacer clic en tus propios anuncios ni pedirle a nadie que lo haga, y no comprar tráfico al empezar.
+
+**Riesgo bajo.**
 
 ## Spam Policy Assessment
 
-- No hay cloaking, texto oculto, páginas puerta ni dominios expirados.
-- `robots.txt` bloquea `/app/` para los buscadores y lo permite para `Mediapartners-Google`. Eso es correcto: no es cloaking, porque el crawler de anuncios no indexa.
-- **Riesgo leve:** que las guías se perciban como hechas en serie (issue 5).
+- No hay contenido oculto, cloaking, páginas puerta, dominio expirado ni abuso de reputación de terceros.
+- Los pares es/en usan `hreflang` y canonical correctos.
+- Solo hay una señal a vigilar: la publicación en tandas (punto 3).
+
+**Cumple, con un riesgo menor.**
 
 ## Trust & Transparency Assessment
 
-| Elemento | Estado |
-|---|---|
-| Sobre nosotros | ✔ existe (ES y EN), pero anónimo |
-| Contacto | ✖ el email es un placeholder |
-| Privacidad | ✔ completa: datos, terceros (Cloudflare, Resend), cookies de Google, opt-out, retención y derechos. Faltan menores y el CMP real |
-| Términos | ⚠ breves |
-| Autoría | ✖ las guías no tienen autor |
-| Datos del responsable | ✖ ninguno |
+- **Nosotros:** autor con nombre, ciudad, bio, experiencia y LinkedIn; `Person` en JSON-LD; caja de autor en cada guía.
+- **Contacto:** `contacto@tribusplit.com`, con MX activo en Cloudflare Email Routing.
+- **Privacidad:** cubre cookies de AdSense, publicidad personalizada, CMP en EEE/UK/Suiza, menores de 13 años y ausencia de analítica.
+- **Términos:** completos.
+- **Pendiente:** confirmar que el correo de contacto llegue a una casilla que leés, con un mail de prueba.
 
 ## User Experience Assessment
 
-- **Fortalezas:**
-  - mobile-first, con modo oscuro;
-  - páginas estáticas livianas;
-  - navegación con breadcrumbs, guías relacionadas y footer completo;
-  - `404.html` propio;
-  - headers de seguridad.
-- **Debilidades:**
-  - el link a Guías no aparece en el header en mobile;
-  - el anuncio de la app queda bajo el botón flotante;
-  - no se midieron las Core Web Vitals reales (falta el sitio online).
+- **Navegación:** clara, con header y footer que enlazan guías, herramientas, legales e idioma. El 404 es real.
+- **Mobile:** diseño responsive y probado en 320 a 390 px. Las tablas no desbordan.
+- **Velocidad:** el HTML responde en 0,08 a 0,3 s desde Cloudflare. Faltan las métricas de Lighthouse y CrUX (punto 5).
+- **Interacción:** hay animaciones de hover y foco visible.
 
 ## Monetization Assessment
 
-- **Ubicaciones actuales:**
-  - landing, entre las guías y las preguntas frecuentes;
-  - cada guía, al final del artículo y antes de "Seguí leyendo";
-  - app, al final de la lista de gastos y en el resumen.
-- **Público:** mayormente de Argentina y Latinoamérica, donde el pago por visita es bajo. Las guías en inglés y los temas de pagos y tarjetas apuntan a valores más altos.
-- Faltan el dominio, el `ads.txt` real, la verificación y el CMP.
+- **Listo:**
+  - `ads.txt`: `google.com, pub-2261714480132826, DIRECT, f08c47fec0942fa0`;
+  - meta `google-adsense-account`;
+  - el script `adsbygoogle` en las páginas públicas, no en la app;
+  - `robots.txt` deja a Mediapartners-Google ver `/app/`.
+- **Falta:** indexación, tráfico y CMP publicado. Los temas (viajes, seguros, tarjetas, eSIM) tienen buena demanda de anunciantes.
 
 ## Revenue Optimization Opportunities
 
-1. Más guías en inglés de temas donde los anunciantes pagan más: seguros de viaje, tarjetas sin comisión, eSIM, presupuesto por destino (por ejemplo, "cuánto cuesta 1 semana en Florianópolis en grupo").
-2. Páginas por destino con presupuesto de ejemplo y moneda local. Atraen búsquedas concretas.
-3. Contenido en español pensado también para España (euros, Bizum, viajes por Europa).
-4. Más adelante, links de afiliados (seguro de viaje, eSIM, cuentas multimoneda) como complemento, porque pagan igual sin importar el país.
+- Guías de mayor valor publicitario en inglés: seguros, tarjetas sin comisión, eSIM, presupuestos por destino.
+- Páginas de presupuesto por destino (por ejemplo, Florianópolis, Río o Bariloche en grupo).
+- Después de aprobar, links de afiliados (seguro de viaje, eSIM) como complemento.
+- Atraer tráfico de países que pagan más (EE. UU., Canadá, Australia, Reino Unido) con guías adaptadas.
 
 ## Ad Placement Recommendations
 
-- **Para la revisión:** dejar el script o meta tag en la home, y los bloques manuales en landing y guías. No usar Auto ads en `/app/`; si se activan, que sea solo para landing y guías.
-- **App:** separar el anuncio del final de la lista del botón flotante (más padding inferior o margen), y no ponerlo nunca en pantallas de carga, pago, unión ni formularios.
-- **Guías largas:** más adelante, un segundo bloque a mitad del artículo cuando superen las 1.200 palabras.
-- **Etiqueta:** opcional, "Publicidad" o "Anuncio".
+- **Guías:**
+  - anuncios automáticos con la densidad baja-media, o un bloque dentro del artículo después del segundo `h2` más uno antes de las preguntas frecuentes;
+  - anclado en mobile sí;
+  - viñeta (vignette) mejor apagada al principio.
+- **Herramientas:** un solo bloque debajo del resultado, nunca entre el input y el botón.
+- **App:** solo en Resumen y al final de la lista de gastos, lejos del "+". Nada en login, unirse ni crear viaje.
+- **Home:** como mucho un bloque, debajo de los primeros contenidos, no en el hero.
 
 ## Approval Readiness Verdict
 
-**FAIL** (hoy): no se puede presentar sin dominio, `ads.txt` real, verificación ni un contacto que funcione.
+**CONDITIONAL PASS.**
 
-Después de los arreglos inmediatos y de alargar las guías: **CONDITIONAL PASS** esperable.
-
-Información adicional necesaria para completar la auditoría:
-
-- el dominio publicado;
-- Search Console con el sitemap indexado;
-- PageSpeed en producción;
-- el mensaje de consentimiento configurado en AdSense.
-
----
-
-Fuentes consultadas:
-
-- [Google consent management requirements (EEA, UK, CH)](https://support.google.com/adsense/answer/13554116?hl=en)
-- [Comply with the EU user consent policy](https://support.google.com/adsense/answer/7670013?hl=en)
-- [New consent requirements for traffic in Switzerland](https://support.google.com/adsense/answer/14893312?hl=en)
-- [Display ads on login-protected pages](https://support.google.com/adsense/answer/161351?hl=en-GB)
-- [Ad placement policies](https://support.google.com/adsense/answer/1346295?hl=en)
-- [Google Publisher Policies](https://support.google.com/adsense/answer/10502938?hl=en)
-- [Connect your site to AdSense](https://support.google.com/adsense/answer/7584263?hl=en)
+Ni las políticas ni la parte técnica bloquean nada. La condición es esperar a que Google indexe las páginas y confirmar que el CMP está publicado antes de pedir la revisión.
