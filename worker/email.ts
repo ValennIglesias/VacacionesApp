@@ -1,4 +1,4 @@
-import { BRAND } from "../shared/brand";
+import { BRAND, CONTACT } from "../shared/brand";
 
 /** Envía un email con Resend. Sin RESEND_API_KEY (desarrollo) lo imprime en la consola del Worker. */
 export async function sendEmail(env: Env, to: string, subject: string, html: string) {
@@ -22,6 +22,19 @@ export function resetPasswordEmail(name: string, url: string, lang: "es" | "en")
     lang === "es"
       ? { subject: `Restablecé tu contraseña de ${BRAND}`, hi: `Hola ${name},`, body: "Recibimos un pedido para cambiar tu contraseña. El link vence en 1 hora.", cta: "Elegir nueva contraseña", ignore: "Si no fuiste vos, ignorá este email: tu contraseña no cambia." }
       : { subject: `Reset your ${BRAND} password`, hi: `Hi ${name},`, body: "We got a request to change your password. The link expires in 1 hour.", cta: "Choose a new password", ignore: "If this wasn't you, ignore this email: your password stays the same." };
+  return linkEmail(t, url);
+}
+
+/** Email para confirmar la dirección al registrarse (o al entrar con una cuenta sin confirmar). */
+export function verifyEmail(name: string, url: string, lang: "es" | "en") {
+  const t =
+    lang === "es"
+      ? { subject: `Confirmá tu email en ${BRAND}`, hi: `Hola ${name},`, body: "Tocá el botón para confirmar tu email y entrar a tu cuenta.", cta: "Confirmar email", ignore: "Si no creaste una cuenta, ignorá este email: no vamos a usar esta dirección." }
+      : { subject: `Confirm your email on ${BRAND}`, hi: `Hi ${name},`, body: "Tap the button to confirm your email and sign in.", cta: "Confirm email", ignore: "If you didn't create an account, ignore this email: we won't use this address." };
+  return linkEmail(t, url);
+}
+
+function linkEmail(t: { subject: string; hi: string; body: string; cta: string; ignore: string }, url: string) {
   const html = `<div style="font-family:system-ui,sans-serif;max-width:480px;margin:auto;padding:24px;color:#14161b">
   <p style="font-size:20px;font-weight:600;margin:0 0 16px">${BRAND}</p>
   <p>${esc(t.hi)}</p><p>${t.body}</p>
@@ -49,6 +62,7 @@ export function retentionEmail(kind: "remind" | "warn" | "warnClosed", tripName:
   <p>${es.body}</p>
   <p style="margin:28px 0"><a href="${esc(url)}" style="background:#2f5bff;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600">${es.cta}</a></p>
   <hr style="border:none;border-top:1px solid #e1e4ea;margin:24px 0" />
-  <p style="color:#5b6270;font-size:14px">${en.body}</p></div>`;
+  <p style="color:#5b6270;font-size:14px">${en.body}</p>
+  <p style="color:#8a909c;font-size:12px;margin-top:24px">Te llega porque estás en este viaje en ${BRAND}. Es un aviso del servicio, no publicidad. Si no querés recibir más, borrá tu cuenta desde la app o escribinos a ${CONTACT}.<br />You're getting this because you're on this trip in ${BRAND}. It's a service notice, not marketing. To stop them, delete your account in the app or write to ${CONTACT}.</p></div>`;
   return { subject: es.subject, html };
 }

@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { anonymous } from "better-auth/plugins/anonymous";
 import { isSafeAvatar } from "../shared/avatars";
-import { resetPasswordEmail, sendEmail } from "./email";
+import { resetPasswordEmail, sendEmail, verifyEmail } from "./email";
+
+const langOf = (request?: Request) => (request?.headers.get("accept-language")?.startsWith("es") ? "es" : "en");
 
 // PBKDF2 nativo (WebCrypto): el scrypt en JS por defecto supera el límite de CPU del plan free de Workers.
 const ITER = 100_000;
@@ -39,9 +41,19 @@ export const getAuth = (env: Env) =>
       minPasswordLength: 8,
       password: { hash, verify },
       revokeSessionsOnPasswordReset: true,
+      // sin confirmar el email no se entra: nadie usa ni recibe avisos en una dirección ajena
+      requireEmailVerification: true,
       sendResetPassword: async ({ user, url }, request) => {
-        const lang = request?.headers.get("accept-language")?.startsWith("es") ? "es" : "en";
-        const { subject, html } = resetPasswordEmail(user.name, url, lang);
+        const { subject, html } = resetPasswordEmail(user.name, url, langOf(request));
+        await sendEmail(env, user.email, subject, html);
+      },
+    },
+    emailVerification: {
+      sendOnSignUp: true,
+      sendOnSignIn: true, // cuentas viejas sin confirmar: al intentar entrar les llega el link
+      autoSignInAfterVerification: true, // con sesión de invitado en el mismo navegador, sus viajes pasan a la cuenta (onLinkAccount)
+      sendVerificationEmail: async ({ user, url }, request) => {
+        const { subject, html } = verifyEmail(user.name, url, langOf(request));
         await sendEmail(env, user.email, subject, html);
       },
     },

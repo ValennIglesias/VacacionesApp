@@ -399,6 +399,10 @@ app.post("/api/join/:code", async (c) => {
 
   if (body.memberId) {
     // "Soy Camila": vincula ese nombre; si es invitado, la cuenta toma el nombre elegido
+    const wasRejected = await d.query.joinRequests.findFirst({
+      where: and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.userId, userId), eq(s.joinRequests.status, "rejected")),
+    });
+    if (wasRejected) throw new HttpError(403, "request_rejected");
     const m = members.find((x) => x.id === body.memberId);
     const res = await d
       .update(s.members)
@@ -424,12 +428,13 @@ app.post("/api/join/:code", async (c) => {
 app.get("/api/join-requests", async (c) => {
   const d = db(c);
   const rows = await d
-    .select({ id: s.joinRequests.id, status: s.joinRequests.status, name: s.joinRequests.name, tripName: s.trips.name, countryCode: s.trips.countryCode, code: s.trips.inviteCode })
+    .select({ id: s.joinRequests.id, tripId: s.joinRequests.tripId, status: s.joinRequests.status, name: s.joinRequests.name, tripName: s.trips.name, countryCode: s.trips.countryCode, code: s.trips.inviteCode })
     .from(s.joinRequests)
     .innerJoin(s.trips, eq(s.trips.id, s.joinRequests.tripId))
     .where(and(eq(s.joinRequests.userId, c.get("userId")), ne(s.joinRequests.status, "approved")))
     .orderBy(desc(s.joinRequests.createdAt));
-  return c.json(rows);
+  // el código vigente solo para pendientes: a un rechazado no le damos el código nuevo si el dueño lo cambió
+  return c.json(rows.map((r) => (r.status === "pending" ? r : { ...r, code: null })));
 });
 
 // quien creó el viaje aprueba o rechaza
@@ -465,7 +470,12 @@ app.post("/api/trips/:id/code", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
   if (trip.createdBy !== c.get("userId")) throw new HttpError(403, "only_owner");
   const inviteCode = newCode();
-  await db(c).update(s.trips).set({ inviteCode }).where(eq(s.trips.id, trip.id));
+  const d = db(c);
+  // los pedidos pendientes llegaron con el código viejo: quedan rechazados para que no reciban el nuevo
+  await d.batch([
+    d.update(s.trips).set({ inviteCode }).where(eq(s.trips.id, trip.id)),
+    d.update(s.joinRequests).set({ status: "rejected" }).where(and(eq(s.joinRequests.tripId, trip.id), eq(s.joinRequests.status, "pending"))),
+  ]);
   return c.json({ inviteCode });
 });
 
@@ -637,8 +647,11 @@ app.delete("/api/account", async (c) => {
     else stmts.push(...deleteTripStatements(db(c), trip.id));
   }
   stmts.push(
-    d.update(s.members).set({ userId: null, alias: null }).where(eq(s.members.userId, userId)),
+    // el nombre también es dato personal: los gastos quedan a nombre de "Anónimo"
+    d.update(s.members).set({ userId: null, alias: null, name: "Anónimo" }).where(eq(s.members.userId, userId)),
     d.delete(s.joinRequests).where(eq(s.joinRequests.userId, userId)),
+    // tokens de restablecer contraseña pendientes (value = id del usuario)
+    d.delete(s.verification).where(eq(s.verification.value, userId)),
     d.delete(s.session).where(eq(s.session.userId, userId)),
     d.delete(s.account).where(eq(s.account.userId, userId)),
     d

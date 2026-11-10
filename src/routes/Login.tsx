@@ -35,12 +35,15 @@ export function Login() {
       mode === "forgot"
         ? await auth.requestPasswordReset({ email: form.email, redirectTo: "/app/reset" })
         : mode === "in"
-          ? await auth.signIn.email({ email: form.email, password: form.password })
-          : await auth.signUp.email({ email: form.email, password: form.password, name: form.name || (isGuest ? session.data!.user.name : form.email.split("@")[0]) });
+          ? await auth.signIn.email({ email: form.email, password: form.password, callbackURL: `/app${next}` })
+          : await auth.signUp.email({ email: form.email, password: form.password, name: form.name || (isGuest ? session.data!.user.name : form.email.split("@")[0]), callbackURL: `/app${next}` });
     setLoading(false);
-    if (res.error) setError(res.error.status === 429 ? t.tooManyAttempts : t.authError);
+    // cuenta sin confirmar: el servidor ya mandó el link
+    if (res.error?.status === 403) setNotice(t.verifySent);
+    else if (res.error) setError(res.error.status === 429 ? t.tooManyAttempts : t.authError);
     // mismo mensaje exista o no la cuenta, para no revelar qué emails están registrados
     else if (mode === "forgot") setNotice(t.resetSent);
+    else if (mode === "up") setNotice(t.verifySent);
   };
 
   const google = () => auth.signIn.social({ provider: "google", callbackURL: `/app${next}` });

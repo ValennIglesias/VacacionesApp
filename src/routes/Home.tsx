@@ -27,7 +27,7 @@ export function Home() {
   };
   const requests = useQuery({
     queryKey: ["join-requests"],
-    queryFn: () => api<{ id: string; status: "pending" | "rejected"; tripName: string; countryCode: string; code: string }[]>("/join-requests"),
+    queryFn: () => api<{ id: string; status: "pending" | "rejected"; tripName: string; countryCode: string; code: string | null }[]>("/join-requests"),
   });
   const [confirmDelete, setConfirmDelete] = useState(false);
   const nav = useNavigate();
@@ -111,7 +111,7 @@ export function Home() {
         <section className="mt-8 flex flex-col gap-2">
           <h2 className="px-1 text-sm font-medium text-muted">{t.myRequests}</h2>
           {requests.data.map((r) => (
-            <Link key={r.id} to={`/join/${r.code}`} className="lift flex items-center gap-4 rounded-3xl bg-surface p-4">
+            <Link key={r.id} to={r.code ? `/join/${r.code}` : "/join"} className="lift flex items-center gap-4 rounded-3xl bg-surface p-4">
               <Flag cc={r.countryCode} size={36} />
               <span className="min-w-0 flex-1 truncate font-medium">{r.tripName}</span>
               <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${r.status === "pending" ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-neg"}`}>

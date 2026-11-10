@@ -14,7 +14,7 @@ type JoinPreview = {
   alreadyMember: boolean;
   request: { status: "pending" | "approved" | "rejected"; name: string } | null;
 };
-type MyRequest = { id: string; status: "pending" | "rejected"; code: string };
+type MyRequest = { id: string; tripId: string; status: "pending" | "rejected"; code: string | null };
 
 /**
  * Unirse con código, con o sin cuenta. Elegir un nombre de la lista lo vincula directo
@@ -44,7 +44,8 @@ export function Join() {
     enabled: status === "pending",
     refetchInterval: 6000,
   });
-  const myRequest = mine.data?.find((r) => r.code === code);
+  // por viaje y no por código: a los rechazados ya no les llega el código
+  const myRequest = mine.data?.find((r) => r.tripId === preview.data?.trip.id);
   const rejected = status === "rejected" || myRequest?.status === "rejected";
 
   const join = useMutation({
