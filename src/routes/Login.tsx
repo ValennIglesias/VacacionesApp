@@ -19,7 +19,8 @@ export function Login() {
   const [notice, setNotice] = useState(params.get("reset") === "ok" ? t.passwordChanged : "");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   // vuelta de Google con error (cancelado, cuenta sin vincular, etc.)
-  const [error, setError] = useState(params.get("error") ? t.authError : "");
+  const oauthError = params.get("error");
+  const [error, setError] = useState(oauthError === "account_not_linked" ? t.googleNotLinked : oauthError ? t.authError : "");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
