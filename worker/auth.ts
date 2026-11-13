@@ -36,6 +36,8 @@ export const getAuth = (env: Env) =>
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     trustedOrigins: [env.BETTER_AUTH_URL],
+    // errores de OAuth sin errorCallbackURL propio (ej. state vencido): al login de la app, no a la página genérica
+    onAPIError: { errorURL: `${env.BETTER_AUTH_URL}/app/login` },
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,

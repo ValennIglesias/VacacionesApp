@@ -18,7 +18,8 @@ export function Login() {
   const [mode, setMode] = useState<"in" | "up" | "forgot">(isGuest ? "up" : "in");
   const [notice, setNotice] = useState(params.get("reset") === "ok" ? t.passwordChanged : "");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
+  // vuelta de Google con error (cancelado, cuenta sin vincular, etc.)
+  const [error, setError] = useState(params.get("error") ? t.authError : "");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
@@ -46,7 +47,8 @@ export function Login() {
     else if (mode === "up") setNotice(t.verifySent);
   };
 
-  const google = () => auth.signIn.social({ provider: "google", callbackURL: `/app${next}` });
+  const google = () =>
+    auth.signIn.social({ provider: "google", callbackURL: `/app${next}`, errorCallbackURL: `/app/login?next=${encodeURIComponent(next)}` });
   // sin cuenta: entra como invitado (límite de viajes propios) y va directo a armar el viaje
   const guest = async () => {
     setError("");
