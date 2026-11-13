@@ -5,12 +5,12 @@ import { motion } from "motion/react";
 import { ArrowRight, CalendarCheck, FlagCheckered, CaretRight, CheckCircle, Warning } from "@phosphor-icons/react";
 import { useTripCtx } from "./TripLayout";
 import { pendingBalances } from "./Expenses";
-import { api, arsCrossRate, crossRate, useArsRates, useRates, type ArsType } from "../lib/api";
+import { api, crossRate, useRates, type ArsType } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { money } from "../lib/format";
 import { convertCents, minTransfers } from "../../shared/settle";
 import { Avatar, Button, Sheet, spring } from "../components/ui";
-import { CurrencySelect } from "../components/bits";
+import { ArsRatePills, CurrencySelect } from "../components/bits";
 
 export function Balances() {
   const t = useT();
@@ -136,8 +136,6 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
   const [currency, setCurrency] = useState(trip.settleCurrency);
   const [manualRate, setManualRate] = useState("");
   const [arsType, setArsType] = useState<ArsType | null>(null);
-  const involvesArs = currency !== trip.currency && (currency === "ARS" || trip.currency === "ARS");
-  const ars = useArsRates(involvesArs);
   const autoRate = crossRate(rates.data, trip.currency, currency);
   const rate = currency === trip.currency ? 1 : Number(manualRate.replace(",", ".")) || autoRate;
   const name = (id: string) => members.find((m) => m.id === id)!;
@@ -183,34 +181,13 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
           {t.payIn}
         </label>
         <CurrencySelect id="pay-cur" value={currency} onChange={(c) => (setCurrency(c), setManualRate(""), setArsType(null))} />
-        {involvesArs && ars.data && (
-          <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5" role="radiogroup" aria-label={t.dollarType}>
-            {([null, "oficial", "bolsa", "blue", "tarjeta"] as const).map((k) => {
-              const venta = k && ars.data[k]?.venta;
-              if (k && !venta) return null;
-              const on = arsType === k;
-              return (
-                <motion.button
-                  key={k ?? "market"}
-                  type="button"
-                  role="radio"
-                  aria-checked={on}
-                  whileTap={{ scale: 0.94 }}
-                  onClick={() => {
-                    setArsType(k);
-                    const r = venta ? arsCrossRate(rates.data, venta, trip.currency, currency) : undefined;
-                    setManualRate(r ? r.toPrecision(5) : "");
-                  }}
-                  className={`relative flex shrink-0 flex-col items-start rounded-2xl bg-surface-2 px-3 py-2 text-left transition-colors duration-200 ${on ? "text-white" : ""}`}
-                >
-                  {on && <motion.span layoutId="ars-pill" className="absolute inset-0 rounded-2xl bg-accent" transition={spring} />}
-                  <span className="relative text-xs font-semibold">{k ? t.dollarTypes[k] : t.dollarTypes.market}</span>
-                  <span className={`relative text-[11px] tabular ${on ? "text-white/80" : "text-muted"}`}>{venta ? `US$1 = ${money(venta * 100, "ARS", locale)}` : t.marketRateShort}</span>
-                </motion.button>
-              );
-            })}
-          </div>
-        )}
+        <ArsRatePills
+          from={trip.currency}
+          to={currency}
+          value={arsType}
+          onPick={(k, r) => (setArsType(k), setManualRate(r ? r.toPrecision(5) : ""))}
+          className="-mx-5 px-5"
+        />
         {currency !== trip.currency && (
           <div className="flex items-center gap-2 text-sm text-muted">
             <span>1 {trip.currency} =</span>

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, LockSimple, Trash } from "@phosphor-icons/react";
-import { api, crossRate, useRates, type Expense, type TripData } from "../lib/api";
+import { api, crossRate, useRates, type ArsType, type Expense, type TripData } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { formatDay, money, parseAmount, today, typeAmount } from "../lib/format";
 import { CATEGORIES, type Category } from "../../shared/data";
 import { Avatar, Button, CATEGORY_META, CategoryIcon, Field, focusNoScroll, memberColor, Sheet, spring } from "./ui";
-import { CurrencyPicker } from "./bits";
+import { ArsRatePills, CurrencyPicker } from "./bits";
 import { DateField } from "./DatePicker";
 
 type Props = { data: TripData; open: boolean; expense?: Expense; onClose: () => void };
@@ -89,6 +89,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
   const [currency, setCurrency] = useState(expense?.currency ?? trip.currency);
   const [otherCur, setOtherCur] = useState(![trip.currency, trip.settleCurrency].includes(currency));
   const [manualRate, setManualRate] = useState(expense && expense.currency !== trip.currency ? String(expense.rate) : "");
+  const [arsType, setArsType] = useState<ArsType | null>(null);
   const [category, setCategory] = useState<Category>(expense?.category ?? "food");
   const [description, setDescription] = useState(expense?.description ?? "");
   const [paidBy, setPaidBy] = useState(expense?.paidBy ?? meId);
@@ -159,6 +160,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
                 setCurrency(o.key);
                 setOtherCur(false);
                 setManualRate("");
+                setArsType(null);
               }}
               className={`relative h-8 rounded-full bg-surface px-3 text-sm font-medium transition-colors duration-200 ${o.on ? "text-white" : "text-muted"}`}
             >
@@ -180,17 +182,26 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
             setCurrency(c);
             setOtherCur(!curChips.includes(c));
             setManualRate("");
+            setArsType(null);
           }}
         />
         {currency !== trip.currency && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="flex w-full flex-col gap-1 text-sm">
+            <ArsRatePills
+              from={currency}
+              to={trip.currency}
+              value={arsType}
+              onPick={(k, r) => (setArsType(k), setManualRate(r ? r.toPrecision(5) : ""))}
+              className="-mx-4 mb-1 px-4"
+              pill="bg-surface"
+            />
             <div className="flex items-center justify-center gap-2 text-muted">
               <span>1 {currency} =</span>
               <input
                 inputMode="decimal"
                 aria-label={t.rate}
                 value={manualRate || (autoRate ? autoRate.toPrecision(5) : "")}
-                onChange={(e) => setManualRate(e.target.value.replace(/[^\d.,]/g, ""))}
+                onChange={(e) => (setManualRate(e.target.value.replace(/[^\d.,]/g, "")), setArsType(null))}
                 className="h-8 w-24 rounded-xl border border-line bg-surface text-center tabular text-ink outline-none focus:border-accent"
               />
               <span>{trip.currency}</span>

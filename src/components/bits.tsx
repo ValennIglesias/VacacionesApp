@@ -2,9 +2,10 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { CaretDown, Check, Copy, ShareNetwork, MagnifyingGlass, X } from "@phosphor-icons/react";
 import { COUNTRY_CURRENCY, CURRENCIES } from "../../shared/data";
-import { countryName, currencyName } from "../lib/format";
+import { countryName, currencyName, money } from "../lib/format";
+import { arsCrossRate, useArsRates, useRates, type ArsType } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
-import { Button, Flag, focusNoScroll, Sheet } from "./ui";
+import { Button, Flag, focusNoScroll, Sheet, spring } from "./ui";
 
 export function useCopy() {
   const [copied, setCopied] = useState(false);
@@ -262,5 +263,38 @@ export function ConfirmSheet({ open, onClose, title, body, confirmLabel, onConfi
         </Button>
       </div>
     </Sheet>
+  );
+}
+
+/** Tipos de dólar argentino para cotizar from->to cuando uno de los dos es ARS. onPick recibe la cotización (undefined = mercado). */
+export function ArsRatePills({ from, to, value, onPick, className = "", pill = "bg-surface-2" }: { from: string; to: string; value: ArsType | null; onPick: (k: ArsType | null, rate?: number) => void; className?: string; pill?: string }) {
+  const t = useT();
+  const locale = useLocale();
+  const rates = useRates();
+  const ars = useArsRates(from !== to && (from === "ARS" || to === "ARS"));
+  if (from === to || (from !== "ARS" && to !== "ARS") || !ars.data) return null;
+  return (
+    <div className={`no-scrollbar flex gap-2 overflow-x-auto ${className}`} role="radiogroup" aria-label={t.dollarType}>
+      {([null, "oficial", "bolsa", "blue", "tarjeta"] as const).map((k) => {
+        const venta = k && ars.data[k]?.venta;
+        if (k && !venta) return null;
+        const on = value === k;
+        return (
+          <motion.button
+            key={k ?? "market"}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            whileTap={{ scale: 0.94 }}
+            onClick={() => onPick(k, venta ? arsCrossRate(rates.data, venta, from, to) : undefined)}
+            className={`relative flex shrink-0 flex-col items-start rounded-2xl ${pill} px-3 py-2 text-left transition-colors duration-200 ${on ? "text-white" : ""}`}
+          >
+            {on && <motion.span layoutId="ars-pill" className="absolute inset-0 rounded-2xl bg-accent" transition={spring} />}
+            <span className="relative text-xs font-semibold">{k ? t.dollarTypes[k] : t.dollarTypes.market}</span>
+            <span className={`relative text-[11px] tabular ${on ? "text-white/80" : "text-muted"}`}>{venta ? `US$1 = ${money(venta * 100, "ARS", locale)}` : t.marketRateShort}</span>
+          </motion.button>
+        );
+      })}
+    </div>
   );
 }
