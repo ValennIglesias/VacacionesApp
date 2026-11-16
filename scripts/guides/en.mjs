@@ -350,7 +350,7 @@ export const GUIDES = [
 
   {
     slug: "paying-abroad-cards-cash-fees",
-    pair: null,
+    pair: "tarjeta-de-credito-o-debito-en-el-exterior",
     published: "2026-10-20",
     title: "Paying abroad: cards, cash and how to avoid hidden fees",
     desc: "How to pay when you travel abroad without losing money to foreign transaction fees, ATM charges and dynamic currency conversion, plus how it affects splitting costs with your group.",

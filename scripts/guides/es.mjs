@@ -171,7 +171,7 @@ export const GUIDES = [
 <li><strong>Sumar monedas distintas sin convertir.</strong> 100 reales más 50 dólares no son 150 de nada.</li>
 <li><strong>Convertir todo con la cotización del último día</strong>, aunque los gastos se hicieron en semanas distintas.</li>
 <li><strong>Elegir la cotización al final</strong>, cuando cada uno ya sabe si le conviene una u otra. Acuérdenla antes.</li>
-<li><strong>Olvidar las comisiones</strong> de la tarjeta o del cajero: si son significativas, pueden justificar usar la cotización de tarjeta. Más detalle en la guía de <a href="/en/guides/paying-abroad-cards-cash-fees/">pagos en el exterior</a> (en inglés).</li>
+<li><strong>Olvidar las comisiones</strong> de la tarjeta o del cajero: si son significativas, pueden justificar usar la cotización de tarjeta. Más detalle en la guía de <a href="/guias/tarjeta-de-credito-o-debito-en-el-exterior/">tarjeta de crédito o débito en el exterior</a>.</li>
 </ul>
 
 <p>Para mirar precios en la calle sin hacer cuentas de cabeza, el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a> arma una tabla rápida con montos redondos. Y si viajás solo, en <a href="/guias/controlar-gastos-de-viaje/">cómo controlar tus gastos de viaje</a> explicamos cómo llevar el total en tu moneda.</p>
@@ -367,7 +367,7 @@ export const GUIDES = [
     title: "Dólar oficial, MEP, blue o tarjeta: cuál usar para repartir gastos de viaje",
     desc: "Qué es cada tipo de dólar en Argentina y cuál conviene usar para pasar a pesos las deudas de un viaje en grupo, según cómo pagó cada uno. Con ejemplos y criterios para acordarlo.",
     lead: "En Argentina conviven varias cotizaciones del dólar. Cuando un grupo vuelve de viaje y tiene que pasar las deudas a pesos, elegir una u otra puede cambiar bastante los montos.",
-    related: ["gastos-en-distintas-monedas", "pagar-en-brasil-pix-tarjeta-efectivo", "como-dividir-gastos-de-un-viaje"],
+    related: ["tarjeta-de-credito-o-debito-en-el-exterior", "pagar-en-brasil-pix-tarjeta-efectivo", "gastos-en-distintas-monedas"],
     body: `
 <h2>Por qué importa</h2>
 <p>Supongamos que un grupo gastó en reales en Brasil y al volver se transfiere pesos. Para pasar cada deuda a pesos hay que elegir una cotización. Si se usa una que está bastante por encima de otra, quien debe paga más pesos y quien cobra recibe más. Con deudas de cientos de dólares, la diferencia entre una cotización y otra puede ser de decenas de miles de pesos.</p>
@@ -757,7 +757,7 @@ export const GUIDES = [
 
 <h2>Tarjeta argentina</h2>
 <p>La tarjeta de crédito o débito sigue funcionando en casi todo comercio establecido: hoteles, restaurantes, supermercados, estaciones de servicio. Si pagás en reales con una tarjeta argentina en pesos, el consumo se convierte con el <strong>dólar tarjeta</strong>, es decir, el oficial más los impuestos y percepciones vigentes. Si tenés dólares en el banco, muchas tarjetas permiten pagar el resumen en dólares y evitar esa conversión.</p>
-<p>Cuando la terminal ofrezca cobrarte "en pesos argentinos" en lugar de reales, elegí reales: esa conversión en el momento suele tener una cotización peor. Lo explicamos en la guía de <a href="/en/guides/paying-abroad-cards-cash-fees/">pagos en el exterior</a> (en inglés).</p>
+<p>Cuando la terminal ofrezca cobrarte "en pesos argentinos" en lugar de reales, elegí reales: esa conversión en el momento suele tener una cotización peor. Lo explicamos en la guía de <a href="/guias/tarjeta-de-credito-o-debito-en-el-exterior/">tarjeta de crédito o débito en el exterior</a>.</p>
 
 <h2>Efectivo en reales</h2>
 <p>El efectivo pierde terreno en Brasil, pero sigue siendo útil para propinas, vendedores ambulantes y lugares donde falla la señal. Se puede llevar desde Argentina (comprando reales o llevando dólares para cambiar allá) o sacar de un cajero con tarjeta, con las comisiones del banco y del cajero.</p>
@@ -1186,6 +1186,92 @@ export const GUIDES = [
 <p>Mirá en qué categoría se fue la diferencia. Si fue en salidas o comidas, es fácil compensar; si fue un imprevisto, para eso está el colchón.</p>
 
 <p><strong>En resumen:</strong> separá fijos de diarios, calculá cuánto podés gastar por día, dejá un colchón y seguí el promedio durante el viaje. Viajar solo con un número claro en la cabeza es viajar más tranquilo.</p>
+`,
+  },
+
+  {
+    slug: "tarjeta-de-credito-o-debito-en-el-exterior",
+    pair: "paying-abroad-cards-cash-fees",
+    published: "2026-11-16",
+    title: "Tarjeta de crédito o débito en el exterior: cuál conviene si sos argentino",
+    desc: "Cómo se cobra cada tarjeta argentina cuando pagás afuera, cuándo se suma la percepción del 30%, cómo evitarla pagando con dólares propios y qué elegir en el posnet, el cajero y el hotel.",
+    lead: "Con la misma compra de 100 dólares en el exterior, una tarjeta argentina puede costarte el dólar oficial o el oficial más un 30%. La diferencia no está en la tarjeta que uses sino en cómo la pagues.",
+    related: ["dolar-tarjeta-mep-blue-viajar", "pagar-en-brasil-pix-tarjeta-efectivo", "gastos-en-distintas-monedas"],
+    body: `
+<h2>Lo que decide cuánto pagás</h2>
+<p>Cuando pagás con una tarjeta argentina en el exterior, el consumo se registra en dólares, aunque hayas pagado en reales, euros o pesos chilenos. La red de la tarjeta (Visa, Mastercard o la que sea) convierte la moneda del comercio a dólares. Después, lo que define el costo final es <strong>con qué plata cancelás esos dólares</strong>:</p>
+<ul>
+<li><strong>Con pesos:</strong> el banco te los cobra al <strong>dólar tarjeta</strong>, que es el oficial más una percepción a cuenta de Ganancias. A noviembre de 2026 esa percepción es del 30%.</li>
+<li><strong>Con dólares propios:</strong> no se suma la percepción. Pagás exactamente los dólares que gastaste.</li>
+</ul>
+<p>Esto vale tanto para la tarjeta de crédito como para la de débito. Lo que cambia entre una y otra es el momento en que se cobra y de qué cuenta sale la plata.</p>
+
+<h2>Tarjeta de crédito</h2>
+<p>Los consumos del exterior aparecen en el resumen en una columna aparte, en dólares. Al pagar el resumen tenés dos caminos:</p>
+<ol>
+<li><strong>Pagar en pesos.</strong> El banco convierte el saldo en dólares al dólar tarjeta. Según el banco, usa la cotización del cierre o la del día de pago, así que el número final puede moverse entre que comprás y que pagás.</li>
+<li><strong>Pagar en dólares.</strong> Si tenés una caja de ahorro en dólares, podés debitar el saldo en dólares de ahí. Si no tenés dólares, podés comprarlos al oficial en el homebanking antes del vencimiento y usarlos para pagar. En ese caso, el costo de cada dólar es el oficial, sin la percepción.</li>
+</ol>
+<p>La segunda opción es la que más ahorra. En la práctica, la mayoría de los consumos con tarjeta en el exterior ya se cancelan así.</p>
+<p>A favor de la crédito: no necesitás tener la plata en el momento, sirve para dejar garantías (hoteles, alquiler de autos) y, si te la roban, el dinero no sale de tu cuenta.</p>
+
+<h2>Tarjeta de débito</h2>
+<p>Con débito el consumo se cobra en el momento, de la cuenta que esté asociada a la tarjeta para operar en el exterior:</p>
+<ul>
+<li><strong>Si sale de una caja de ahorro en dólares:</strong> se debitan dólares y no hay percepción. Es la forma más simple de pagar al oficial sin pensar en el resumen.</li>
+<li><strong>Si sale de una cuenta en pesos:</strong> se convierte al dólar tarjeta, igual que la crédito pagada en pesos.</li>
+</ul>
+<p>Cada banco elige la cuenta de forma distinta. En algunos se configura desde el homebanking cuál es la cuenta principal para el exterior; en otros hay que pedirlo. <strong>Revisalo antes de viajar</strong> y hacé una compra chica al llegar para confirmar de dónde se debitó.</p>
+<p>En contra de la débito: para una garantía de hotel o de alquiler de auto te bloquean plata real de tu cuenta, a veces por días. Y si alguien copia la tarjeta, lo que se lleva es tu dinero, no un saldo que podés desconocer antes de pagar.</p>
+
+<h2>Comparación rápida</h2>
+<table>
+<thead><tr><th>Cómo pagás</th><th>A qué cotización</th><th>Cuándo conviene</th></tr></thead>
+<tbody>
+<tr><td>Crédito, resumen en pesos</td><td>Dólar tarjeta (oficial + percepción)</td><td>Si no tenés ni podés comprar dólares antes del vencimiento</td></tr>
+<tr><td>Crédito, resumen en dólares</td><td>Lo que te costaron tus dólares</td><td>Casi siempre: es la más barata y la más segura</td></tr>
+<tr><td>Débito desde caja en dólares</td><td>Lo que te costaron tus dólares</td><td>Gastos del día a día si ya viajás con dólares en el banco</td></tr>
+<tr><td>Débito desde cuenta en pesos</td><td>Dólar tarjeta</td><td>Casi nunca: tiene el costo de la crédito en pesos y menos protección</td></tr>
+<tr><td>Extracción en cajero</td><td>Según la cuenta, más comisiones</td><td>Solo para el efectivo que realmente necesites</td></tr>
+</tbody>
+</table>
+
+<h2>En el posnet: siempre en la moneda local</h2>
+<p>Muchas terminales del exterior preguntan si querés pagar en la moneda del país o "en tu moneda" (pesos argentinos o dólares). Elegí siempre <strong>la moneda local</strong>. Si aceptás la otra, el comercio hace la conversión con una cotización propia, que suele ser bastante peor que la de la red de la tarjeta. Se llama conversión dinámica de moneda y es una de las formas más comunes de perder plata sin darse cuenta.</p>
+<p>Lo mismo pasa en los cajeros automáticos: si la pantalla ofrece "garantizar" el tipo de cambio o convertir en el momento, rechazalo.</p>
+
+<h2>Sacar efectivo en el exterior</h2>
+<p>Una extracción con tarjeta argentina suele pagar dos comisiones: la del banco dueño del cajero y la de tu banco. Por eso conviene sacar <strong>pocas veces y montos más grandes</strong>, en lugar de muchas extracciones chicas. Antes de viajar, fijate en el tarifario de tu banco cuánto cobra por extracción en el exterior y cuál es tu límite diario.</p>
+
+<h2>Antes de viajar</h2>
+<ul>
+<li>Confirmá que tus tarjetas estén habilitadas para usar en el exterior, si tu banco lo pide.</li>
+<li>Abrí una caja de ahorro en dólares si no tenés: es la base para pagar sin percepción.</li>
+<li>En la débito, revisá qué cuenta se usa para operar en el exterior.</li>
+<li>Activá las notificaciones de consumos en la app del banco para ver cada pago al instante.</li>
+<li>Llevá dos tarjetas de bancos distintos y guardalas en lugares separados.</li>
+<li>Si vas a Europa, averiguá el PIN de tu tarjeta de crédito: en algunos lugares lo piden.</li>
+</ul>
+
+<h2>Si viajás en grupo</h2>
+<p>Cómo pagó cada uno cambia lo que le costó en pesos. Quien adelantó el alojamiento con la crédito y va a pagar el resumen en pesos tiene un costo más alto que quien pagó con dólares de su caja de ahorro. Por eso, al volver, conviene acordar con qué cotización pasan las deudas a pesos. La guía <a href="/guias/dolar-tarjeta-mep-blue-viajar/">qué dólar usar para repartir gastos</a> explica cómo elegirla.</p>
+<p>Durante el viaje, lo más simple es anotar cada gasto en la moneda del ticket, sin importar con qué tarjeta se pagó, y dejar la conversión para el final.</p>
+[[fig add-expense | Cada gasto se anota en la moneda del destino, como figura en el ticket]]
+[[fig settle-fx | Al repartir en pesos se elige la cotización: tarjeta, MEP, blue u oficial]]
+
+<p>Para ver cuánto es en pesos un precio del viaje con cada tipo de dólar, usá el <a href="/herramientas/conversor-de-moneda/">conversor de moneda</a>. Si vas a Brasil, la guía <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">cómo pagar en Brasil siendo argentino</a> compara la tarjeta con Pix y el efectivo.</p>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Puedo pagar en dólares el resumen si compré con la tarjeta en pesos?</h3>
+<p>Sí. Lo que importa es la columna de consumos en dólares del resumen. Si al vencimiento tenés esos dólares en tu caja de ahorro, podés debitarlos de ahí, aunque la tarjeta sea la de siempre.</p>
+<h3>¿Qué pasa si pago una parte en pesos y otra en dólares?</h3>
+<p>La percepción se aplica solo a la parte que cancelás en pesos. Pagar al menos una parte en dólares ya reduce el costo.</p>
+<h3>¿Se puede recuperar la percepción?</h3>
+<p>Es un pago a cuenta de Ganancias, así que según tu situación se puede computar en la declaración jurada o pedir su devolución. No es asesoramiento impositivo: consultalo con un contador.</p>
+<h3>¿Visa o Mastercard?</h3>
+<p>Las dos se aceptan casi en todo el mundo y la diferencia de cotización entre redes suele ser chica. Pesa más llevar una de cada una, por si un comercio o un cajero no acepta alguna.</p>
+
+<p class="meta">Fuentes: <a href="https://www.iprofesional.com/finanzas/468686-dolar-tarjeta-caro-recargo-extra-golpea-consumos-noviembre-2026" rel="noopener">iProfesional: el dólar tarjeta en noviembre de 2026</a>; <a href="https://www.bbva.com.ar/economia-para-tu-dia-a-dia/ef/tarjetas-de-debito/compras-en-el-exterior-con-tarjeta-debito.html" rel="noopener">BBVA: compras en el exterior con tarjeta de débito</a>. Esta guía es informativa y no es asesoramiento financiero ni impositivo. La percepción y las condiciones de cada banco cambian; verificalas antes de viajar.</p>
 `,
   },
 ];
