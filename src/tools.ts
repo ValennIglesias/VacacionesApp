@@ -5,8 +5,8 @@ import { currencyName, parseAmount, typeAmount } from "./lib/format";
 
 const es = document.documentElement.lang !== "en";
 const t = es
-  ? { person: "Persona", name: "Nombre", paid: "Cuánto puso", remove: "Quitar", total: "Total", each: "Cada uno", settled: "Están a mano: nadie le debe a nadie.", pays: "le paga a", copied: "¡Copiado!", title: "Gastos compartidos", fuel: "Combustible", litres: "litros", gallons: "galones", trip: "Costo total", perPerson: "Por persona", by: "Calculado con" }
-  : { person: "Person", name: "Name", paid: "Amount paid", remove: "Remove", total: "Total", each: "Each person", settled: "You're even: nobody owes anybody.", pays: "pays", copied: "Copied!", title: "Shared expenses", fuel: "Fuel", litres: "litres", gallons: "gallons", trip: "Total cost", perPerson: "Per person", by: "Worked out with" };
+  ? { person: "Persona", name: "Nombre", paid: "Cuánto pagó", parts: "Partes", perPart: "Por parte", remove: "Quitar", total: "Total", each: "Cada uno", settled: "Están a mano: nadie le debe a nadie.", pays: "le paga a", copied: "¡Copiado!", title: "Gastos compartidos", fuel: "Combustible", litres: "litros", gallons: "galones", trip: "Costo total", perPerson: "Por persona", by: "Calculado con" }
+  : { person: "Person", name: "Name", paid: "Amount paid", parts: "Shares", perPart: "Per share", remove: "Remove", total: "Total", each: "Each person", settled: "You're even: nobody owes anybody.", pays: "pays", copied: "Copied!", title: "Shared expenses", fuel: "Fuel", litres: "litres", gallons: "gallons", trip: "Total cost", perPerson: "Per person", by: "Worked out with" };
 const fmt = new Intl.NumberFormat(es ? "es-AR" : "en-US", { maximumFractionDigits: 2, useGrouping: "always" });
 const num = (el: Element | null) => Math.max(0, Number((el as HTMLInputElement | null)?.value) || 0);
 const amountOf = (el: Element | null) => (parseAmount((el as HTMLInputElement | null)?.value ?? "") ?? 0) / 100;
@@ -38,7 +38,7 @@ function copyButton(btn: HTMLButtonElement | null, text: () => string) {
   });
 }
 
-// --- dividir gastos: cada uno anota cuánto puso y se reparte en partes iguales
+// --- dividir gastos: cada uno anota cuánto puso y se reparte según sus partes (1 = normal, 2 = pareja, 0 = no participa)
 const split = document.getElementById("split-tool");
 if (split) {
   const rows = split.querySelector<HTMLElement>("[data-rows]")!;
@@ -46,25 +46,40 @@ if (split) {
   const field = "h-12 min-w-0 rounded-2xl border border-line bg-bg px-4 text-ink outline-none transition-colors placeholder:text-muted/70 focus:border-accent";
   const addRow = () => {
     const n = rows.children.length + 1;
+    // en celular el nombre ocupa su propia línea y abajo van monto, partes y quitar
     rows.insertAdjacentHTML(
       "beforeend",
-      `<div class="flex items-center gap-2"><input aria-label="${t.name} ${n}" placeholder="${t.person} ${n}" class="${field} flex-1" maxlength="30" /><input aria-label="${t.paid} ${n}" type="text" inputmode="decimal" autocomplete="off" data-money placeholder="0" class="${field} w-32 text-right" /><button type="button" data-remove aria-label="${t.remove}" class="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-muted hover:text-neg">✕</button></div>`,
+      `<div class="grid grid-cols-[minmax(0,1fr)_4.5rem_2.5rem] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_8rem_4.5rem_2.5rem]"><input aria-label="${t.name} ${n}" placeholder="${t.person} ${n}" class="${field} col-span-3 sm:col-span-1" maxlength="30" /><input aria-label="${t.paid} ${n}" type="text" inputmode="decimal" autocomplete="off" data-money placeholder="${t.paid}" class="${field} text-right" /><input aria-label="${t.parts} ${n}" type="text" inputmode="decimal" autocomplete="off" data-parts value="1" class="${field} px-2 text-center" /><button type="button" data-remove aria-label="${t.remove}" class="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-muted hover:text-neg">✕</button></div>`,
     );
   };
+  const partsOf = (el: HTMLInputElement) => {
+    const v = Number(el.value.replace(",", "."));
+    return !el.value.trim() || !Number.isFinite(v) ? 1 : Math.max(0, v);
+  };
   const people = () =>
-    [...rows.children].map((r, i) => ({ name: (r.querySelector("input") as HTMLInputElement).value.trim() || `${t.person} ${i + 1}`, cents: Math.round(amountOf(r.querySelector("[data-money]")) * 100) }));
+    [...rows.children].map((r, i) => ({
+      name: (r.querySelector("input") as HTMLInputElement).value.trim() || `${t.person} ${i + 1}`,
+      cents: Math.round(amountOf(r.querySelector("[data-money]")) * 100),
+      parts: partsOf(r.querySelector("[data-parts]")!),
+    }));
   const calc = () => {
     const p = people();
-    const r = splitPaid(p.map((x) => x.cents));
-    return { p, r, share: fmt.format(r.total / p.length / 100) };
+    const r = splitPaid(
+      p.map((x) => x.cents),
+      p.map((x) => x.parts),
+    );
+    // con partes distintas "cada uno" no existe: se muestra cuánto vale una parte
+    const sum = p.reduce((a, x) => a + x.parts, 0) || p.length;
+    const equal = p.every((x) => x.parts === p[0].parts);
+    return { p, r, shareLabel: equal ? t.each : t.perPart, share: fmt.format(r.total / (equal ? p.length : sum) / 100) };
   };
   const render = () => {
-    const { p, r, share } = calc();
+    const { p, r, shareLabel, share } = calc();
     if (!r.total) return void (out.innerHTML = "");
     const list = r.transfers.length
       ? `<ul class="mt-4 flex flex-col gap-2">${r.transfers.map((x) => `<li class="flex items-center justify-between gap-3 rounded-2xl bg-bg px-4 py-3"><span><strong>${esc(p[+x.from].name)}</strong> ${t.pays} <strong>${esc(p[+x.to].name)}</strong></span><span class="font-semibold tabular-nums">${fmt.format(x.cents / 100)}</span></li>`).join("")}</ul>`
       : `<p class="mt-4 rounded-2xl bg-bg px-4 py-3">${t.settled}</p>`;
-    out.innerHTML = `<div class="flex flex-wrap gap-x-8 gap-y-1"><p>${t.total}: <strong class="tabular-nums">${fmt.format(r.total / 100)}</strong></p><p>${t.each}: <strong class="tabular-nums">${share}</strong></p></div>${list}`;
+    out.innerHTML = `<div class="flex flex-wrap gap-x-8 gap-y-1"><p>${t.total}: <strong class="tabular-nums">${fmt.format(r.total / 100)}</strong></p><p>${shareLabel}: <strong class="tabular-nums">${share}</strong></p></div>${list}`;
   };
   for (let i = 0; i < 3; i++) addRow();
   split.querySelector("[data-add]")?.addEventListener("click", () => {
@@ -77,9 +92,9 @@ if (split) {
   });
   rows.addEventListener("input", render);
   copyButton(split.querySelector("[data-copy]"), () => {
-    const { p, r, share } = calc();
+    const { p, r, shareLabel, share } = calc();
     const lines = r.transfers.map((x) => `• ${p[+x.from].name} → ${p[+x.to].name}: ${fmt.format(x.cents / 100)}`);
-    return [`${t.title} (${t.total.toLowerCase()} ${fmt.format(r.total / 100)}, ${t.each.toLowerCase()} ${share})`, ...(lines.length ? lines : [t.settled]), "", `${t.by} ${link}`].join("\n");
+    return [`${t.title} (${t.total.toLowerCase()} ${fmt.format(r.total / 100)}, ${shareLabel.toLowerCase()} ${share})`, ...(lines.length ? lines : [t.settled]), "", `${t.by} ${link}`].join("\n");
   });
 }
 

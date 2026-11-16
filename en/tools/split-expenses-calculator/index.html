@@ -33,8 +33,9 @@
 
       <section id="split-tool" class="mx-auto mt-8 max-w-3xl px-5" aria-label="Calculator">
         <div class="rounded-3xl bg-surface p-5 sm:p-7">
-          <div class="flex justify-between gap-2 pr-12 text-sm text-muted"><span>Name</span><span>Amount paid</span></div>
-          <div data-rows class="mt-2 flex flex-col gap-2"></div>
+          <div class="hidden grid-cols-[minmax(0,1fr)_8rem_4.5rem_2.5rem] gap-2 text-sm text-muted sm:grid"><span>Name</span><span class="text-right">Amount paid</span><span class="text-center">Shares</span></div>
+          <div data-rows class="mt-2 flex flex-col gap-4 sm:gap-2"></div>
+          <p class="mt-3 text-xs text-muted">Shares: 1 is the default, 2 counts double (a couple, say), 0.5 is half and 0 means they're left out.</p>
           <button type="button" data-add class="mt-3 inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-soft"><i class="ph-duotone ph-user-plus text-lg"></i> Add person</button>
           <div data-result class="mt-6" aria-live="polite"></div>
           <button type="button" data-copy class="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 font-medium text-white lift hover:brightness-110">Copy result to share</button>
@@ -46,7 +47,8 @@
         <h2>How to use it</h2>
         <ol>
           <li>Type each person's name and how much they paid in total. If someone paid nothing, leave the amount empty.</li>
-          <li>The calculator adds everything up, splits it equally and works out each person's balance: what they paid minus their share.</li>
+          <li>If not everyone should pay the same, change their shares. Everyone starts with 1 share.</li>
+          <li>The calculator adds everything up, splits it by shares and works out each person's balance: what they paid minus what they owe.</li>
           <li>From those balances it builds the list of transfers: who pays whom, and how much.</li>
           <li>Tap "Copy result" and paste it in your group chat. A link to this page goes at the end, so anyone can double-check the math.</li>
         </ol>
@@ -64,13 +66,32 @@
         </table>
         <p>The total is $900, so each share is $225. Three transfers settle everything: Lucy pays Anna $225, Jake pays Anna $150 and Jake pays Tom $15.</p>
 
+        <h2>When people shouldn't pay the same: shares</h2>
+        <p>An equal split isn't always fair. The "Shares" column lets you adjust what each person owes without doing the math by hand:</p>
+        <ul>
+          <li><strong>A couple or a family on one row:</strong> enter 2 (or 3, or 4). They pay like two people and get a single transfer.</li>
+          <li><strong>A birthday dinner or a gift:</strong> give the birthday person 0. If they paid for anything, they get it all back.</li>
+          <li><strong>Someone who was there half the time:</strong> enter 0.5, for example a friend who arrived on Saturday instead of Friday.</li>
+          <li><strong>A kid, or someone who skipped the drinks:</strong> a smaller share such as 0.5, if the group agrees.</li>
+        </ul>
+        <p>An example: Anna and Mark are a couple and paid the $600 rental. Jake paid $300 for groceries and Sophie hasn't paid anything.</p>
+        <table>
+          <thead><tr><th>Row</th><th>Shares</th><th>Paid</th><th>Owes</th><th>Balance</th></tr></thead>
+          <tbody>
+            <tr><td>Anna and Mark</td><td>2</td><td>$600</td><td>$450</td><td>is owed $150</td></tr>
+            <tr><td>Jake</td><td>1</td><td>$300</td><td>$225</td><td>is owed $75</td></tr>
+            <tr><td>Sophie</td><td>1</td><td>$0</td><td>$225</td><td>owes $225</td></tr>
+          </tbody>
+        </table>
+        <p>That's 4 shares in total, so each share is worth $225. Sophie pays Anna and Mark $150 and Jake $75, and two transfers settle everything.</p>
+
         <h2>Why "the fewest transfers"</h2>
         <p>If everyone paid back each person's share of each expense, four people could end up making up to twelve transfers, many of them going back and forth. The calculator only looks at each person's final balance and pairs whoever owes the most with whoever is owed the most, over and over. That way you never need more transfers than the number of people minus one. The guide on <a href="/en/guides/settle-group-debts-fewer-transfers/">settling group debts with fewer transfers</a> goes into detail.</p>
 
         <h2>When the app is a better fit</h2>
-        <p>The calculator works when everything is split among everyone and you already know what each person paid. For a trip of several days it often falls short:</p>
+        <p>The calculator works when every expense is split the same way and you already know what each person paid. For a trip of several days it often falls short:</p>
         <ul>
-          <li><strong>Not everyone shares every expense:</strong> the dinner only three went to, or the tour two of you took.</li>
+          <li><strong>Each expense has different people in it:</strong> the dinner only three went to, or the tour two of you took.</li>
           <li><strong>There are lots of expenses a day</strong> and by the end nobody remembers who paid for what.</li>
           <li><strong>You pay in several currencies</strong> on a trip abroad.</li>
           <li><strong>You want to settle up halfway</strong> and keep adding expenses afterwards.</li>
@@ -82,10 +103,12 @@
         <p>No. The math runs in your browser and nothing is sent to any server. Close the page and it's gone.</p>
         <h3>Does it work with any currency?</h3>
         <p>Yes, as long as every amount is in the same currency. If some expenses were in another currency, convert them to one first; <a href="/en/guides/travel-expenses-multiple-currencies/">this guide</a> explains how to do it fairly.</p>
-        <h3>What if someone didn't share an expense?</h3>
-        <p>The calculator splits everything equally. If an expense was only for some of you, the simplest way is to log it in the app, where you choose who takes part in each expense.</p>
+        <h3>What if someone didn't take part?</h3>
+        <p>Give them 0 shares: they pay nothing and, if they covered something, they get it all back. If they joined some expenses but not others, it's easier to log each expense separately in the app, where you choose who takes part in each one.</p>
+        <h3>Can shares have decimals?</h3>
+        <p>Yes: 0.5 is half a share and 1.5 is one and a half. It's handy for someone who stayed fewer days, or for splitting rent by the nights each person stayed.</p>
         <h3>What happens to cents that don't divide evenly?</h3>
-        <p>They go one by one to the first people on the list, so the total adds up exactly and nothing is lost or left over.</p>
+        <p>They go one by one to the first people on the list who take part, so the total adds up exactly and nothing is lost or left over.</p>
       </article>
       <div id="ad-landing" class="prose mt-10" hidden></div>
       %GUIDE_CTA%

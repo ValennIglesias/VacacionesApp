@@ -26,6 +26,22 @@ describe("splitPaid", () => {
   it("todos pusieron lo mismo: sin transferencias", () => {
     expect(splitPaid([500, 500]).transfers).toEqual([]);
   });
+
+  it("partes: una pareja cuenta doble y quien no participa no paga", () => {
+    const r = splitPaid([40000, 0, 0], [2, 2, 0]);
+    expect(r.shares).toEqual([20000, 20000, 0]);
+    expect(r.transfers).toEqual([{ from: "1", to: "0", cents: 20000 }]);
+  });
+
+  it("partes con decimales: los centavos cierran y van a quien participa", () => {
+    const r = splitPaid([1001, 0, 0], [0, 1.5, 1.5]);
+    expect(r.shares.reduce((a, b) => a + b, 0)).toBe(1001);
+    expect(r.shares[0]).toBe(0);
+  });
+
+  it("todas las partes en cero: reparte en partes iguales", () => {
+    expect(splitPaid([300, 0, 0], [0, 0, 0]).shares).toEqual([100, 100, 100]);
+  });
 });
 
 describe("fuelCost", () => {
