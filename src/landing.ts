@@ -8,6 +8,11 @@ document.getElementById("theme-toggle")?.addEventListener("click", () => {
   } catch {}
 });
 
+// la app arranca en el idioma de la página desde la que se entró, salvo que el usuario ya haya elegido uno
+try {
+  if (!localStorage.getItem("lang")) localStorage.setItem("lang", document.documentElement.lang === "en" ? "en" : "es");
+} catch {}
+
 const client = import.meta.env.VITE_ADSENSE_CLIENT as string | undefined;
 const slot = import.meta.env.VITE_ADSENSE_SLOT_LANDING as string | undefined;
 const host = document.getElementById("ad-landing");

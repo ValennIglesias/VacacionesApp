@@ -19,9 +19,9 @@ export function TripTiming({ start, end, extra }: { start: string | null; end: s
   const progress = x.phase === "ongoing" && x.total ? Math.min(1, x.day / x.total) : null;
   return (
     <div className="mt-3 flex flex-col gap-1.5">
-      <div className="flex items-baseline justify-between gap-2 text-sm text-white/85">
+      <div className="flex items-baseline justify-between gap-2 text-sm text-white">
         <span className="font-medium">{timingLabel(t, x)}</span>
-        {extra && <span className="tabular text-white/70">{extra}</span>}
+        {extra && <span className="tabular text-white">{extra}</span>}
       </div>
       {progress !== null && (
         <div className="h-1.5 overflow-hidden rounded-full bg-white/20" role="progressbar" aria-valuemin={0} aria-valuemax={x.total!} aria-valuenow={x.day}>

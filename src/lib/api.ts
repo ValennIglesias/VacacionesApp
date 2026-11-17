@@ -69,10 +69,12 @@ export async function api<T = unknown>(path: string, init?: { method?: string; b
   return data as T;
 }
 
+export const fetchTrip = (id: string) => api<TripData>(`/trips/${id}`);
+
 export const useTrip = (id: string) =>
   useQuery({
     queryKey: ["trip", id],
-    queryFn: () => api<TripData>(`/trips/${id}`),
+    queryFn: () => fetchTrip(id),
     // shortcut: polling cada 10s en vez de tiempo real; pasar a Durable Objects/WebSocket si hace falta
     refetchInterval: 10_000,
   });

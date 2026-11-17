@@ -1,11 +1,12 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Navigate, Outlet, RouterProvider, useLocation } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { MotionConfig } from "motion/react";
 import "./styles.css";
 import { I18nProvider } from "./lib/i18n";
-import { auth } from "./lib/api";
+import { auth, fetchTrip } from "./lib/api";
+import { PageLoader } from "./components/ui";
 import { Login } from "./routes/Login";
 import { ResetPassword } from "./routes/ResetPassword";
 import { Home } from "./routes/Home";
@@ -38,7 +39,13 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, ref
 function RequireAuth() {
   const { data, isPending } = auth.useSession();
   const loc = useLocation();
-  if (isPending) return <div className="min-h-[100dvh]" />;
+  const qc = useQueryClient();
+  // link directo a un viaje: pedirlo junto con la sesión en vez de después (ahorra una vuelta al servidor)
+  const tripId = isPending ? loc.pathname.match(/^\/t\/([^/]+)/)?.[1] : undefined;
+  useEffect(() => {
+    if (tripId) qc.prefetchQuery({ queryKey: ["trip", tripId], queryFn: () => fetchTrip(tripId) });
+  }, [tripId, qc]);
+  if (isPending) return <PageLoader />;
   if (!data) return <Navigate to={`/login?next=${encodeURIComponent(loc.pathname)}`} replace />;
   return <Outlet />;
 }

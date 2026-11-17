@@ -4,11 +4,11 @@ import { motion } from "motion/react";
 import { GoogleLogo, Lightning } from "@phosphor-icons/react";
 import { auth, useConfig, useIsGuest } from "../lib/api";
 import { GUEST_TRIP_LIMIT } from "../../shared/data";
-import { useT } from "../lib/i18n";
-import { Button, Field } from "../components/ui";
+import { useI18n } from "../lib/i18n";
+import { Button, Field, PageLoader, Segmented } from "../components/ui";
 
 export function Login() {
-  const t = useT();
+  const { t, lang, setLang } = useI18n();
   const [params] = useSearchParams();
   const next = params.get("next") || "/";
   const session = auth.useSession();
@@ -25,7 +25,7 @@ export function Login() {
   const nav = useNavigate();
 
   // después de todos los hooks: si no, al iniciar sesión se renderizan menos hooks y React rompe (#300)
-  if (session.isPending) return <div className="min-h-[100dvh]" />;
+  if (session.isPending) return <PageLoader />;
   if (session.data && !isGuest) return <Navigate to={next} replace />;
 
   const submit = async (e: React.FormEvent) => {
@@ -67,6 +67,10 @@ export function Login() {
 
   return (
     <main className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-10 pt-[max(3rem,env(safe-area-inset-top))]">
+      {/* antes de entrar no hay otro lugar para cambiar el idioma (en la app está en Grupo) */}
+      <div className="-mt-6 mb-2 self-end">
+        <Segmented value={lang} onChange={setLang} options={[{ value: "es", label: "Español" }, { value: "en", label: "English" }]} />
+      </div>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
         <img src="/favicon.svg" alt="" width="64" height="64" className="size-16 rounded-[22px] shadow-[0_12px_32px_-12px_rgba(47,91,255,0.8)]" />
         <h1 className="mt-6 text-4xl font-semibold tracking-tight">{isGuest ? t.saveAccessTitle : t.appName}</h1>
