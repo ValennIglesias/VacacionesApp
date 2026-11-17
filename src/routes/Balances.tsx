@@ -9,7 +9,7 @@ import { api, crossRate, useRates, type ArsType } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
 import { money } from "../lib/format";
 import { convertCents, minTransfers } from "../../shared/settle";
-import { Avatar, Button, Sheet, spring } from "../components/ui";
+import { Avatar, Button, Sheet } from "../components/ui";
 import { ArsRatePills, CurrencySelect } from "../components/bits";
 
 export function Balances() {

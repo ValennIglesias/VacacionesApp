@@ -77,9 +77,10 @@ app.get("/api/rates", async (c) => {
   const d = db(c);
   const cached = await d.query.rates.findFirst({ where: eq(s.rates.base, "USD") });
   if (cached?.day === day) return c.json(JSON.parse(cached.json));
-  const res = await fetch("https://open.er-api.com/v6/latest/USD");
-  const data = (await res.json()) as { result: string; rates: Record<string, number> };
-  if (data.result !== "success") {
+  const data = (await fetch("https://open.er-api.com/v6/latest/USD")
+    .then((r) => r.json())
+    .catch(() => null)) as { result: string; rates: Record<string, number> } | null;
+  if (data?.result !== "success") {
     if (cached) return c.json(JSON.parse(cached.json)); // mejor una cotización de ayer que nada
     return c.json({ error: "rates_unavailable" }, 502);
   }
@@ -625,7 +626,7 @@ app.post("/api/trips/:id/transfers/:tid/paid", async (c) => {
 
 app.post("/api/trips/:id/transfers/:tid/confirm", async (c) => {
   const { trip } = await requireMember(c, c.req.param("id"));
-  const { t, from, to } = await loadTransfer(c, trip.id);
+  const { t, to } = await loadTransfer(c, trip.id);
   // solo quien recibe confirma la recepción
   if (to.userId !== c.get("userId")) throw new HttpError(403, "only_creditor");
   if (t.status !== "confirmed")
