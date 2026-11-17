@@ -70,7 +70,18 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
   useEffect(() => {
     if (!open) return;
     // con hojas apiladas, Escape cierra solo la de arriba
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && [...document.querySelectorAll("[aria-modal=true]")].at(-1) === ref.current && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      const el = ref.current;
+      if (!el || [...document.querySelectorAll("[aria-modal=true]")].at(-1) !== el) return;
+      if (e.key === "Escape") return onClose();
+      if (e.key !== "Tab") return;
+      // Tab no sale de la hoja: del último vuelve al primero y viceversa
+      const f = [...el.querySelectorAll<HTMLElement>("button:not(:disabled), [href], input:not(:disabled), select, textarea, [tabindex]:not([tabindex='-1'])")];
+      const [first, last] = [f[0], f.at(-1)];
+      if (!first || !last) return e.preventDefault();
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === el)) (e.preventDefault(), last.focus());
+      else if (!e.shiftKey && document.activeElement === last) (e.preventDefault(), first.focus());
+    };
     window.addEventListener("keydown", onKey);
     // restaurar el valor previo: con una hoja abierta encima de otra, cerrar la de arriba no libera el scroll de fondo
     const prev = document.body.style.overflow;
@@ -80,11 +91,19 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
       document.body.style.overflow = prev;
     };
   }, [open, onClose]);
+  // foco: entra a la hoja al abrir (si un campo no lo tomó ya) y vuelve a quien la abrió al cerrar.
+  // efecto aparte: onClose cambia en cada render y no tiene que re-disparar esto
+  useEffect(() => {
+    if (!open) return;
+    const opener = document.activeElement as HTMLElement | null;
+    if (!ref.current?.contains(opener)) ref.current?.focus({ preventScroll: true });
+    return () => opener?.focus({ preventScroll: true });
+  }, [open]);
   // portal: una hoja abierta desde otra hoja quedaría atrapada en el transform de la primera
   return createPortal(
     <AnimatePresence>
       {open && (
-        <div ref={ref} className="fixed inset-0 z-40 flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
+        <div ref={ref} tabIndex={-1} className="fixed inset-0 z-40 flex items-end justify-center outline-none" role="dialog" aria-modal="true" aria-label={title}>
           <motion.div
             className="absolute inset-0 bg-black/40"
             initial={{ opacity: 0 }}
@@ -204,6 +223,16 @@ export function Empty({ icon: I, title, body, children }: { icon: Icon; title: s
       <p className="mt-1 max-w-[32ch] text-sm text-muted">{body}</p>
       {children && <div className="mt-6 flex flex-col gap-3">{children}</div>}
     </motion.div>
+  );
+}
+
+/** Pantalla completa mientras se resuelve la sesión: aparece tras 300 ms, así una carga rápida no parpadea. */
+export function PageLoader() {
+  const t = useT();
+  return (
+    <div className="flex min-h-[100dvh] items-center justify-center text-muted" role="status" aria-label={t.loading}>
+      <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="size-8 animate-spin rounded-full border-[3px] border-current border-t-transparent" />
+    </div>
   );
 }
 

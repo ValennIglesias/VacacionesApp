@@ -4,6 +4,8 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 const es = {
   appName: BRAND,
   tagline: "Los gastos del viaje, claros y repartidos.",
+  loading: "Cargando…",
+  guest: "Invitado",
   // auth
   signInGoogle: "Continuar con Google",
   or: "o",
@@ -309,6 +311,8 @@ export type Dict = typeof es;
 const en: Dict = {
   appName: BRAND,
   tagline: "Trip expenses, clear and split.",
+  loading: "Loading…",
+  guest: "Guest",
   signInGoogle: "Continue with Google",
   or: "or",
   email: "Email",

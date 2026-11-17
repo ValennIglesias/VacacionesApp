@@ -175,7 +175,7 @@ export function NewTrip() {
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-lg font-semibold">{o.title}</span>
-                          <span className={`block text-sm ${on ? "text-white/80" : "text-muted"}`}>{o.body}</span>
+                          <span className={`block text-sm ${on ? "text-white" : "text-muted"}`}>{o.body}</span>
                         </span>
                         <CaretRight size={20} className={on ? "" : "text-muted"} />
                       </button>

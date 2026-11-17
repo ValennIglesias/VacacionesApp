@@ -74,9 +74,9 @@ export function Expenses() {
       )}
       {/* resumen */}
       <section className="relative overflow-hidden rounded-3xl bg-accent p-5 text-white">
-        <div className="pointer-events-none absolute -right-10 -top-16 size-48 rounded-full bg-white/10" />
+        <div className="pointer-events-none absolute -right-10 -top-16 size-48 rounded-full bg-white/[0.06]" />
         <div className="pointer-events-none absolute -bottom-20 right-16 size-40 rounded-full bg-white/5" />
-        <p className="text-sm text-white/75">{t.tripTotal}</p>
+        <p className="text-sm text-white">{t.tripTotal}</p>
         {/* montos largos (millones de pesos) achican la letra para no salirse de la tarjeta */}
         <motion.p
           key={total}
@@ -87,18 +87,18 @@ export function Expenses() {
           {totalText}
         </motion.p>
         {settleK !== 1 && total > 0 && (
-          <p className="mt-0.5 text-sm text-white/75 tabular">
+          <p className="mt-0.5 text-sm text-white tabular">
             ≈ {money(Math.round(total * settleK), trip.settleCurrency, locale)}
           </p>
         )}
         <TripTiming start={trip.startDate} end={trip.endDate} extra={perDay} />
         {!trip.solo && (
-        <div className="mt-4 flex items-center justify-between rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-sm">
-          <span className="text-sm text-white/80">{myBalance === 0 ? t.settledUp : myBalance > 0 ? t.theyOweYou : t.youOwe}</span>
+        <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/15 px-4 py-3">
+          <span className="text-sm text-white">{myBalance === 0 ? t.settledUp : myBalance > 0 ? t.theyOweYou : t.youOwe}</span>
           {myBalance !== 0 && (
             <span className="text-right tabular">
               <span className="block font-semibold">{money(Math.abs(myBalance), trip.currency, locale)}</span>
-              {settleK !== 1 && <span className="block text-xs text-white/75">≈ {money(Math.round(Math.abs(myBalance) * settleK), trip.settleCurrency, locale)}</span>}
+              {settleK !== 1 && <span className="block text-xs text-white">≈ {money(Math.round(Math.abs(myBalance) * settleK), trip.settleCurrency, locale)}</span>}
             </span>
           )}
         </div>

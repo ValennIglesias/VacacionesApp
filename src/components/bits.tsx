@@ -291,7 +291,7 @@ export function ArsRatePills({ from, to, value, onPick, className = "", pill = "
           >
             {on && <motion.span layoutId="ars-pill" className="absolute inset-0 rounded-2xl bg-accent" transition={spring} />}
             <span className="relative text-xs font-semibold">{k ? t.dollarTypes[k] : t.dollarTypes.market}</span>
-            <span className={`relative text-[11px] tabular ${on ? "text-white/80" : "text-muted"}`}>{venta ? `US$1 = ${money(venta * 100, "ARS", locale)}` : t.marketRateShort}</span>
+            <span className={`relative text-[11px] tabular ${on ? "text-white" : "text-muted"}`}>{venta ? `US$1 = ${money(venta * 100, "ARS", locale)}` : t.marketRateShort}</span>
           </motion.button>
         );
       })}

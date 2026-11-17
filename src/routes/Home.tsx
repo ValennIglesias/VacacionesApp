@@ -52,7 +52,7 @@ export function Home() {
     <main className="mx-auto min-h-[100dvh] max-w-lg px-5 pb-16 pt-[max(2rem,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-muted">{session.data?.user.name}</p>
+          <p className="text-sm text-muted">{session.data?.user.name === "Invitado" ? t.guest : session.data?.user.name}</p>
           <h1 className="text-3xl font-semibold tracking-tight">{t.myTrips}</h1>
         </div>
         <div className="flex items-center gap-1">

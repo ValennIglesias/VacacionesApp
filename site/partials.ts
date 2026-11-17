@@ -22,7 +22,7 @@ export const header = (lang: Lang) => `<header class="mx-auto flex h-16 max-w-6x
 
 export const cta = (lang: Lang) => `<aside class="mx-auto mt-14 max-w-3xl rounded-3xl bg-accent p-7 text-white">
       <p class="text-2xl font-semibold tracking-tight">${t[lang].ctaTitle}</p>
-      <p class="mt-2 max-w-[52ch] text-white/80">${t[lang].ctaBody}</p>
+      <p class="mt-2 max-w-[52ch] text-white">${t[lang].ctaBody}</p>
       <a href="/app/new" class="mt-5 inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-medium text-[#2449d8] lift">${t[lang].ctaBtn} <i class="ph-duotone ph-arrow-right"></i></a>
     </aside>`;
 

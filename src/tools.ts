@@ -102,7 +102,7 @@ if (fuel) {
     fuel.querySelectorAll<HTMLElement>("[data-km]").forEach((el) => (el.textContent = mpg ? el.dataset.mi! : el.dataset.km!));
     const r = calc();
     out.innerHTML = r
-      ? `<div class="grid gap-3 sm:grid-cols-3"><p class="rounded-2xl bg-bg px-4 py-3"><span class="block text-sm text-muted">${t.fuel}</span><strong class="text-xl tabular-nums">${fmt.format(r.fuel)} ${mpg ? t.gallons : t.litres}</strong></p><p class="rounded-2xl bg-bg px-4 py-3"><span class="block text-sm text-muted">${t.trip}</span><strong class="text-xl tabular-nums">${fmt.format(r.total)}</strong></p><p class="rounded-2xl bg-accent px-4 py-3 text-white"><span class="block text-sm text-white/80">${t.perPerson} (${r.people})</span><strong class="text-xl tabular-nums">${fmt.format(r.perPerson)}</strong></p></div>`
+      ? `<div class="grid gap-3 sm:grid-cols-3"><p class="rounded-2xl bg-bg px-4 py-3"><span class="block text-sm text-muted">${t.fuel}</span><strong class="text-xl tabular-nums">${fmt.format(r.fuel)} ${mpg ? t.gallons : t.litres}</strong></p><p class="rounded-2xl bg-bg px-4 py-3"><span class="block text-sm text-muted">${t.trip}</span><strong class="text-xl tabular-nums">${fmt.format(r.total)}</strong></p><p class="rounded-2xl bg-accent px-4 py-3 text-white"><span class="block text-sm text-white">${t.perPerson} (${r.people})</span><strong class="text-xl tabular-nums">${fmt.format(r.perPerson)}</strong></p></div>`
       : "";
   };
   fuel.addEventListener("input", render);
@@ -193,7 +193,7 @@ if (fx) {
     const k = crossRate(rates, from, to);
     if (!rates) return;
     if (!k) return void (out.innerHTML = `<p class="text-neg">${L.error}</p>`);
-    out.innerHTML = `<p class="text-sm text-white/80">${L.market}</p><p class="text-3xl font-semibold tabular-nums">${money(amount * k, to)}</p><p class="mt-1 text-sm text-white/80 tabular-nums">1 ${from} = ${unit(k, to)} · 1 ${to} = ${unit(1 / k, from)}</p>`;
+    out.innerHTML = `<p class="text-sm text-white">${L.market}</p><p class="text-3xl font-semibold tabular-nums">${money(amount * k, to)}</p><p class="mt-1 text-sm text-white tabular-nums">1 ${from} = ${unit(k, to)} · 1 ${to} = ${unit(1 / k, from)}</p>`;
     // montos redondos según cuánto vale la moneda de origen (1 a 500 reales, 1.000 a 500.000 pesos)
     const step = 10 ** Math.max(0, Math.floor(Math.log10(rates[from] ?? 1)));
     table.innerHTML = [1, 5, 10, 20, 50, 100, 200, 500]
