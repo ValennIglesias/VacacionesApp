@@ -5,7 +5,7 @@ import { useTripCtx } from "./TripLayout";
 import { dayNumber } from "./Expenses";
 import { crossRate, useRates } from "../lib/api";
 import { useLocale, useT } from "../lib/i18n";
-import { money, moneyShort } from "../lib/format";
+import { compact, money } from "../lib/format";
 import { CATEGORIES } from "../../shared/data";
 import { Avatar, CATEGORY_META, Empty, Segmented } from "../components/ui";
 import { AdSlot } from "../components/AdSlot";
@@ -97,13 +97,15 @@ export function Summary() {
 
       {stats.byDay.length > 1 && (
         <section className="rounded-3xl bg-surface p-4">
-          <h2 className="mb-3 font-semibold">{t.byDay}</h2>
+          <h2 className="mb-3 font-semibold">
+            {t.byDay} <span className="text-sm font-normal text-muted">· {cur}</span>
+          </h2>
           <div className="h-52">
             <ResponsiveContainer>
               <BarChart data={stats.byDay.map((d) => ({ ...d, v: cv(d.v) }))} margin={{ left: -8, right: 4, top: 4, bottom: 0 }}>
                 <CartesianGrid vertical={false} stroke="var(--line)" />
                 <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "var(--muted)", fontSize: 11 }} interval="preserveStartEnd" />
-                <YAxis tickLine={false} axisLine={false} width={56} tick={{ fill: "var(--muted)", fontSize: 11 }} tickFormatter={(v: number) => moneyShort(v, cur, locale)} />
+                <YAxis tickLine={false} axisLine={false} width={56} tick={{ fill: "var(--muted)", fontSize: 11 }} tickFormatter={(v: number) => compact(v, locale)} />
                 <Tooltip cursor={{ fill: "var(--surface-2)" }} content={<Tip render={(p) => `${p.label}: ${money(p.v, cur, locale)}`} />} />
                 <Bar dataKey="v" fill="var(--color-accent)" radius={[4, 4, 0, 0]} maxBarSize={28} />
               </BarChart>

@@ -1,12 +1,12 @@
 import { COUNTRY_CURRENCY } from "../../shared/data";
 
-// en español Intl no agrupa los números de 4 cifras (1234): siempre separador de miles, también desde 1.000
+// en español Intl no agrupa los números de 4 cifras (1234): siempre separador de miles, también desde 1.000.
+// Montos enteros sin ",00": en pesos, millones con centavos en cero son ruido
 export const money = (cents: number, currency: string, locale: string) =>
-  new Intl.NumberFormat(locale, { style: "currency", currency, useGrouping: "always" }).format(cents / 100);
+  new Intl.NumberFormat(locale, { style: "currency", currency, useGrouping: "always", ...(cents % 100 === 0 && { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }).format(cents / 100);
 
-/** Monto compacto para ejes de gráficos. */
-export const moneyShort = (cents: number, currency: string, locale: string) =>
-  new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol", notation: "compact" }).format(cents / 100);
+/** Número compacto para ejes de gráficos (800 K). Sin símbolo: "$" sería ambiguo entre pesos y dólares; la moneda va en el título. */
+export const compact = (cents: number, locale: string) => new Intl.NumberFormat(locale, { notation: "compact" }).format(cents / 100);
 
 export const countryName = (cc: string, locale: string) => new Intl.DisplayNames([locale], { type: "region" }).of(cc) ?? cc;
 

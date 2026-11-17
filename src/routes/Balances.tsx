@@ -23,6 +23,9 @@ export function Balances() {
   const max = Math.max(1, ...[...balances.values()].map(Math.abs));
   const rates = useRates();
   const settleK = crossRate(rates.data, trip.currency, trip.settleCurrency) ?? 1;
+  // quién le paga a quién con lo pendiente: lo central, visible sin tener que abrir "Repartir"
+  const transfers = useMemo(() => minTransfers(balances), [balances]);
+  const who = (id: string) => (id === meId ? t.you : (members.find((m) => m.id === id)?.name ?? "?"));
   if (trip.solo) return <Navigate to={`/t/${trip.id}`} replace />;
 
   return (
@@ -50,7 +53,7 @@ export function Balances() {
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 + i * 0.04 }}
                 />
                 <Avatar name={m.name} color={m.color} image={m.image} />
-                <span className="relative flex-1 font-medium">{m.id === meId ? `${m.name} (${t.you})` : m.name}</span>
+                <span className="relative flex-1 font-medium">{m.id === meId ? t.you : m.name}</span>
                 <span className="relative text-right tabular">
                   <span className={`block font-semibold ${v > 0 ? "text-pos" : v < 0 ? "text-neg" : "text-muted"}`}>
                     {v > 0 ? "+" : v < 0 ? "−" : ""}
@@ -64,6 +67,22 @@ export function Balances() {
         </ul>
       </section>
 
+      {transfers.length > 0 && (
+        <section>
+          <h2 className="text-xl font-semibold">{t.transfersPreview}</h2>
+          <ul className="mt-3 flex flex-col divide-y divide-line rounded-3xl bg-surface px-4">
+            {transfers.map((x) => (
+              <li key={x.from + x.to} className="flex items-center gap-3 py-3">
+                <span className="min-w-0 flex-1 truncate">
+                  {who(x.from)} → {who(x.to)}
+                </span>
+                <span className="font-semibold tabular">{money(x.cents, trip.currency, locale)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {trip.status === "active" && (
         <section className="grid grid-cols-2 gap-3">
           <button
@@ -74,8 +93,9 @@ export function Balances() {
             <CalendarCheck size={28} weight="duotone" className="text-accent-ink" />
             <span className="font-medium">{t.settlePartial}</span>
           </button>
-          <button onClick={() => setKind("final")} className="flex flex-col gap-5 rounded-3xl bg-strong p-4 text-left text-strong-ink lift">
-            <FlagCheckered size={28} weight="duotone" />
+          {/* mismo peso que "Repartir hasta hoy": cerrar el viaje no tiene que ser lo que más llama la atención */}
+          <button onClick={() => setKind("final")} className="flex flex-col gap-5 rounded-3xl bg-surface p-4 text-left lift">
+            <FlagCheckered size={28} weight="duotone" className="text-accent-ink" />
             <span className="font-medium">{t.settleFinal}</span>
           </button>
           {!hasPending && <p className="col-span-2 text-center text-sm text-muted">{t.nothingPending}</p>}
@@ -139,6 +159,7 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
   const autoRate = crossRate(rates.data, trip.currency, currency);
   const rate = currency === trip.currency ? 1 : Number(manualRate.replace(",", ".")) || autoRate;
   const name = (id: string) => members.find((m) => m.id === id)!;
+  const label = (id: string) => (id === data.meId ? t.you : name(id).name);
   // al finalizar: pagos de repartidas anteriores que todavía no se saldaron (no bloquea: se pueden marcar con el viaje cerrado)
   const unsettled = kind === "final" ? data.settlements.flatMap((st) => st.transfers.filter((x) => x.status !== "confirmed").map((x) => ({ ...x, currency: st.currency }))) : [];
   const pendingTotal = data.expenses.filter((e) => !e.settlementId).reduce((a, e) => a + e.amountTripCents, 0);
@@ -165,7 +186,7 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
             {unsettled.map((x) => (
               <li key={x.id} className="flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate">
-                  {name(x.fromMember).name} → {name(x.toMember).name}
+                  {label(x.fromMember)} → {label(x.toMember)}
                 </span>
                 <span className="shrink-0 text-muted">
                   <span className="tabular">{money(x.amountCents, x.currency, locale)}</span> · {x.status === "paid" ? t.unsettledNotConfirmed : t.unsettledNotPaid}
@@ -224,7 +245,7 @@ function SettleForm({ kind, balances, onClose }: { kind: "partial" | "final"; ba
                 <ArrowRight size={16} className="text-muted" />
                 <Avatar name={name(x.to).name} color={name(x.to).color} image={name(x.to).image} size={32} />
                 <span className="flex-1 truncate text-sm">
-                  {name(x.from).name} → {name(x.to).name}
+                  {label(x.from)} → {label(x.to)}
                 </span>
                 <span className="text-right tabular">
                   <span className="block font-semibold">{money(x.amount, currency, locale)}</span>

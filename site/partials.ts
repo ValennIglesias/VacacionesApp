@@ -29,6 +29,6 @@ export const cta = (lang: Lang) => `<aside class="mx-auto mt-14 max-w-3xl rounde
 export const footer = (lang: Lang) => `<footer class="mt-20 border-t border-line">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-muted">
         <p>%BRAND%</p>
-        <nav class="flex flex-wrap gap-5"><a href="${t[lang].guides}">${t[lang].guidesLabel}</a>${t[lang].tools.map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}<a href="/privacy/${lang === "en" ? "#en" : ""}">${t[lang].privacy}</a><a href="/terms/${lang === "en" ? "#en" : ""}">${t[lang].terms}</a><a href="${t[lang].aboutUrl}">${t[lang].about}</a><a href="${t[lang].contactUrl}">${t[lang].contact}</a><a href="${t[lang].other}" hreflang="${lang === "es" ? "en" : "es"}">${t[lang].otherLabel}</a></nav>
+        <nav class="flex flex-wrap gap-x-5 *:py-1.5"><a href="${t[lang].guides}">${t[lang].guidesLabel}</a>${t[lang].tools.map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}<a href="/privacy/${lang === "en" ? "#en" : ""}">${t[lang].privacy}</a><a href="/terms/${lang === "en" ? "#en" : ""}">${t[lang].terms}</a><a href="${t[lang].aboutUrl}">${t[lang].about}</a><a href="${t[lang].contactUrl}">${t[lang].contact}</a><a href="${t[lang].other}" hreflang="${lang === "es" ? "en" : "es"}">${t[lang].otherLabel}</a></nav>
       </div>
     </footer>`;

@@ -120,8 +120,9 @@ export function Expenses() {
         </Link>
       )}
 
+      {/* con mouse no hay gesto para desplazar en horizontal: los chips bajan de línea en vez de quedar cortados */}
       {usedCats.length > 1 && (
-        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5">
+        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 py-1 pointer-fine:flex-wrap">
           <FilterChip on={!filter} onClick={() => setFilter(null)} label={t.all} />
           {usedCats.map((c) => (
             <FilterChip key={c} on={filter === c} onClick={() => setFilter(filter === c ? null : c)} label={t.categories[c]} color={CATEGORY_META[c].color} />
@@ -193,7 +194,7 @@ function FilterChip({ on, onClick, label, color }: { on: boolean; onClick: () =>
     <button
       onClick={onClick}
       aria-pressed={on}
-      className={`lift h-9 shrink-0 rounded-full px-4 text-sm font-medium ${on ? "bg-ink text-bg" : "bg-surface text-muted hover:text-ink"}`}
+      className={`lift relative h-9 shrink-0 rounded-full px-4 text-sm font-medium before:absolute before:inset-x-0 before:-inset-y-1 before:content-[""] ${on ? "bg-ink text-bg" : "bg-surface text-muted hover:text-ink"}`}
     >
       {color && <span className="mr-1.5 inline-block size-2 rounded-full align-middle" style={{ background: color }} />}
       {label}

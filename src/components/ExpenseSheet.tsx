@@ -233,7 +233,7 @@ function ExpenseForm({ data, expense, onDone }: { data: TripData; expense?: Expe
                 whileTap={{ scale: 0.92 }}
                 whileHover={{ y: -2 }}
                 onClick={() => setCategory(c)}
-                className="relative flex flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-[11px] font-medium"
+                className="relative flex flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-xs font-medium"
                 style={{ background: bg, color: on ? color : undefined }}
               >
                 {on && <motion.span layoutId="cat-ring" className="absolute inset-0 rounded-2xl border-2" style={{ borderColor: color }} transition={spring} />}
