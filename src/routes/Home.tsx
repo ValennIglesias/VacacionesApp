@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { Plus, Ticket, SuitcaseRolling, CaretRight, SignOut, FloppyDisk, Sparkle, Trash, User } from "@phosphor-icons/react";
@@ -18,6 +18,19 @@ export function Home() {
   const locale = useLocale();
   const session = auth.useSession();
   const trips = useQuery({ queryKey: ["trips"], queryFn: () => api<Trip[]>("/trips") });
+  // el esqueleto muestra tantas filas como viajes había la última vez: sin filas que aparecen y desaparecen
+  const [skeletons] = useState(() => {
+    try {
+      return Math.min(4, Number(localStorage.getItem("trips-count") ?? 2) || 0);
+    } catch {
+      return 2;
+    }
+  });
+  useEffect(() => {
+    try {
+      if (trips.data) localStorage.setItem("trips-count", String(trips.data.length));
+    } catch {}
+  }, [trips.data]);
   const isGuest = useIsGuest();
   // invitado con el máximo de viajes propios: "Nuevo viaje" lleva a crear la cuenta
   const atGuestLimit = isGuest && (trips.data?.filter((x) => x.createdBy === session.data?.user.id).length ?? 0) >= GUEST_TRIP_LIMIT;
@@ -56,11 +69,7 @@ export function Home() {
           <h1 className="text-3xl font-semibold tracking-tight">{t.myTrips}</h1>
         </div>
         <div className="flex items-center gap-1">
-        {isGuest && (
-          <Link to="/login?save=1" className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-sm font-medium text-white lift">
-            {t.createAccount}
-          </Link>
-        )}
+        {/* el invitado guarda su acceso desde el banner de abajo: un botón azul acá competía con "Nuevo viaje" */}
         <ThemeToggle />
         {/* un invitado que cierra sesión pierde el acceso: para él está "Guardar mi acceso" */}
         {!isGuest && <button
@@ -123,7 +132,7 @@ export function Home() {
       )}
 
       <section className="mt-8 flex flex-col gap-3">
-        {trips.isPending && [0, 1].map((i) => <Skeleton key={i} className="h-20" />)}
+        {trips.isPending && Array.from({ length: skeletons }, (_, i) => <Skeleton key={i} className="h-20" />)}
         {trips.data?.length === 0 && (
           <Empty icon={SuitcaseRolling} title={t.noTripsTitle} body={t.noTripsBody}>
             <Button variant="soft" loading={demo.isPending} onClick={() => demo.mutate()}>
