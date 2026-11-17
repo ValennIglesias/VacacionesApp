@@ -1,5 +1,14 @@
 import { expect, it } from "vitest";
-import { parseAmount, tripTiming, typeAmount } from "./format";
+import { compact, money, parseAmount, tripTiming, typeAmount } from "./format";
+
+it("money oculta los centavos solo si son cero", () => {
+  const m = (...a: Parameters<typeof money>) => money(...a).replace(/\s/g, " "); // Intl usa espacio duro
+  expect(m(103840000, "ARS", "en-US")).toBe("ARS 1,038,400");
+  expect(m(1050050, "ARS", "en-US")).toBe("ARS 10,500.50");
+  expect(m(-6420000, "ARS", "en-US")).toBe("-ARS 64,200");
+  expect(m(150000, "BRL", "es-AR")).toBe("BRL 1.500");
+  expect(compact(80000000, "en-US")).toBe("800K");
+});
 
 it("parseAmount entiende formatos es/en", () => {
   expect(parseAmount("1234")).toBe(123400);
