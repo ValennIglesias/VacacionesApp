@@ -739,7 +739,7 @@ export const GUIDES = [
     title: "Cómo pagar en Brasil siendo argentino: Pix, tarjeta o efectivo",
     desc: "Qué conviene usar para pagar en Brasil: Pix desde billeteras argentinas, tarjeta o reales en efectivo. Cómo funciona cada uno, qué cotización se aplica y cómo repartir los gastos con tu grupo.",
     lead: "En Brasil casi todo se paga con Pix, y desde hace poco también se puede pagar así desde billeteras argentinas. Pero no es la única opción, y la más cómoda no siempre es la más barata.",
-    related: ["dolar-tarjeta-mep-blue-viajar", "gastos-en-distintas-monedas", "seguro-de-viaje-en-grupo"],
+    related: ["dolar-tarjeta-mep-blue-viajar", "pagar-en-chile-siendo-argentino", "gastos-en-distintas-monedas"],
     body: `
 <h2>Qué es Pix y por qué está en todos lados</h2>
 <p>Pix es el sistema de pagos instantáneos del Banco Central de Brasil. Funciona con un código QR o con una "chave" (un alias: puede ser un teléfono, un email o un número de documento) y la plata llega en segundos. Para los brasileños reemplazó en gran parte al efectivo y a la tarjeta de débito: lo aceptan desde un restaurante hasta el puesto de la playa que vende cocos.</p>
@@ -1259,7 +1259,7 @@ export const GUIDES = [
 [[fig add-expense | Cada gasto se anota en la moneda del destino, como figura en el ticket]]
 [[fig settle-fx | Al repartir en pesos se elige la cotización: tarjeta, MEP, blue u oficial]]
 
-<p>Para ver cuánto es en pesos un precio del viaje con cada tipo de dólar, usá el <a href="/herramientas/conversor-de-moneda/">conversor de moneda</a>. Si vas a Brasil, la guía <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">cómo pagar en Brasil siendo argentino</a> compara la tarjeta con Pix y el efectivo.</p>
+<p>Para ver cuánto es en pesos un precio del viaje con cada tipo de dólar, usá el <a href="/herramientas/conversor-de-moneda/">conversor de moneda</a>. Si vas a Brasil, la guía <a href="/guias/pagar-en-brasil-pix-tarjeta-efectivo/">cómo pagar en Brasil siendo argentino</a> compara la tarjeta con Pix y el efectivo, y si vas a Chile, está la guía <a href="/guias/pagar-en-chile-siendo-argentino/">cómo pagar en Chile siendo argentino</a>.</p>
 
 <h2>Preguntas frecuentes</h2>
 <h3>¿Puedo pagar en dólares el resumen si compré con la tarjeta en pesos?</h3>
@@ -1272,6 +1272,102 @@ export const GUIDES = [
 <p>Las dos se aceptan casi en todo el mundo y la diferencia de cotización entre redes suele ser chica. Pesa más llevar una de cada una, por si un comercio o un cajero no acepta alguna.</p>
 
 <p class="meta">Fuentes: <a href="https://www.iprofesional.com/finanzas/468686-dolar-tarjeta-caro-recargo-extra-golpea-consumos-noviembre-2026" rel="noopener">iProfesional: el dólar tarjeta en noviembre de 2026</a>; <a href="https://www.bbva.com.ar/economia-para-tu-dia-a-dia/ef/tarjetas-de-debito/compras-en-el-exterior-con-tarjeta-debito.html" rel="noopener">BBVA: compras en el exterior con tarjeta de débito</a>. Esta guía es informativa y no es asesoramiento financiero ni impositivo. La percepción y las condiciones de cada banco cambian; verificalas antes de viajar.</p>
+`,
+  },
+
+  {
+    slug: "pagar-en-chile-siendo-argentino",
+    pair: null,
+    published: "2026-11-18",
+    title: "Cómo pagar en Chile siendo argentino: tarjeta, efectivo y el IVA del hotel",
+    desc: "Qué conviene usar para pagar en Chile: tarjeta argentina, pesos chilenos o billeteras. Cómo evitar el 30% pagando con dólares, cómo no pagar el IVA del hotel y qué tener en cuenta con la propina y las autopistas.",
+    lead: "En Chile casi todo se paga con tarjeta, y acercándola al posnet. A diferencia de Brasil, no hay un sistema como Pix que las billeteras argentinas usen en cualquier comercio, así que la tarjeta es la protagonista y el efectivo, el respaldo.",
+    related: ["tarjeta-de-credito-o-debito-en-el-exterior", "pagar-en-brasil-pix-tarjeta-efectivo", "dolar-tarjeta-mep-blue-viajar"],
+    body: `
+<h2>Tarjeta: el medio principal</h2>
+<p>Supermercados, restaurantes, farmacias, estaciones de servicio: en Chile la tarjeta se acepta casi en todos lados, y el pago sin contacto es lo normal. Con una tarjeta argentina, el consumo se cobra en pesos chilenos y aparece en dólares en tu resumen.</p>
+<p>El costo final depende de cómo pagues esos dólares, igual que en cualquier país:</p>
+<ul>
+<li><strong>Pagando el resumen en pesos:</strong> se aplica el dólar tarjeta, que es el oficial más la percepción del 30% a cuenta de Ganancias.</li>
+<li><strong>Pagando el resumen con dólares propios</strong>, o con débito desde una caja de ahorro en dólares: no hay percepción.</li>
+</ul>
+<p>La diferencia es grande, así que vale la pena tener los dólares en la cuenta antes del vencimiento. Lo explicamos paso a paso en la guía <a href="/guias/tarjeta-de-credito-o-debito-en-el-exterior/">tarjeta de crédito o débito en el exterior</a>.</p>
+<p>Cuando el posnet pregunte si querés pagar en pesos chilenos o en "tu moneda", elegí siempre <strong>pesos chilenos</strong>. La conversión que hace el comercio en el momento suele ser peor que la de la tarjeta.</p>
+
+<h2>El IVA del hotel: cómo no pagarlo</h2>
+<p>En Chile, los hoteles registrados pueden no cobrar el IVA (19%) a turistas extranjeros que pagan en moneda extranjera. Es uno de los ahorros más grandes del viaje y muchos no lo aprovechan.</p>
+<ul>
+<li>Pagá el alojamiento <strong>en dólares</strong>, en efectivo o con tu tarjeta argentina, que se procesa en moneda extranjera. Si pagás en pesos chilenos, el hotel tiene que cobrarte el IVA.</li>
+<li>Al hacer el check-in, mostrá tu documento y el comprobante de ingreso que te dio la PDI (la policía migratoria) al entrar al país.</li>
+<li>El hotel tiene que emitir una factura de exportación a tu nombre, en moneda extranjera.</li>
+</ul>
+<p>No todos los alojamientos pueden aplicar la exención: tienen que estar registrados como hoteleros ante el SII, el organismo de impuestos chileno. Preguntá al reservar si el precio incluye IVA y si te lo pueden descontar. En alquileres de departamentos entre particulares, normalmente no aplica.</p>
+
+<h2>Efectivo en pesos chilenos</h2>
+<p>El efectivo sirve para ferias, kioscos, propinas y algún taxi. No hace falta llevar mucho. Para conseguir pesos chilenos hay tres caminos:</p>
+<ol>
+<li><strong>Llevar dólares y cambiarlos en Chile.</strong> Las casas de cambio del centro de las ciudades, como las de Santiago, suelen dar mejor cotización que las del aeropuerto. Llevá billetes en buen estado: los rotos o escritos pueden rechazarlos.</li>
+<li><strong>Cambiar en Argentina antes de salir</strong>, por ejemplo en ciudades de frontera como Mendoza. Compará la cotización con la de Chile antes de cambiar todo.</li>
+<li><strong>Sacar del cajero con tarjeta.</strong> Es cómodo, pero suma la comisión del cajero y la de tu banco. Mejor pocas extracciones grandes que muchas chicas.</li>
+</ol>
+
+<h2>Billeteras virtuales</h2>
+<p>Algunas billeteras argentinas permiten pagar en ciertos comercios chilenos, pero no hay un sistema que funcione en todos lados como Pix en Brasil. Si querés usarlas, revisá en la app antes de viajar si tienen pagos internacionales y si hay que habilitarlos, y tené siempre la tarjeta como plan B.</p>
+<p>Desde el teléfono, lo que mejor funciona es <strong>cargar tu tarjeta en Google Wallet o Apple Pay</strong> y pagar acercando el celular. Es la misma tarjeta, con la misma cotización, pero sin sacarla de la billetera.</p>
+
+<h2>Comparación rápida</h2>
+<table>
+<thead><tr><th>Medio</th><th>Dónde sirve</th><th>Cotización</th><th>Lo bueno</th><th>Lo malo</th></tr></thead>
+<tbody>
+<tr><td>Tarjeta, resumen en dólares</td><td>Casi todo</td><td>Lo que te costaron tus dólares</td><td>La más barata y aceptada</td><td>Necesitás dólares en el banco</td></tr>
+<tr><td>Tarjeta, resumen en pesos</td><td>Casi todo</td><td>Dólar tarjeta</td><td>No necesitás dólares</td><td>La percepción la encarece bastante</td></tr>
+<tr><td>Efectivo en pesos chilenos</td><td>Todo, incluso sin señal</td><td>La que conseguiste al cambiar</td><td>Plan B universal</td><td>Riesgo de pérdida; cambio malo en aeropuertos</td></tr>
+<tr><td>Dólares en efectivo en el hotel</td><td>Hoteles registrados</td><td>Sin conversión</td><td>Te ahorrás el IVA del 19%</td><td>Llevar efectivo encima</td></tr>
+<tr><td>Billetera argentina</td><td>Algunos comercios</td><td>La que define la app</td><td>Rápida si funciona</td><td>No está en todos lados</td></tr>
+</tbody>
+</table>
+
+<h2>La propina en restaurantes</h2>
+<p>En restaurantes y bares, al pedir la cuenta te van a preguntar si querés agregar la propina, que suele sugerirse en un 10%. Es voluntaria, pero es la costumbre. Si pagás con tarjeta, se suma al mismo cobro. Si viajás en grupo, conviene anotar el total con propina como un solo gasto.</p>
+
+<h2>Si vas en auto: autopistas con TAG</h2>
+<p>Muchos argentinos cruzan a Chile en auto. Las autopistas urbanas de Santiago no tienen cabinas: cobran con un dispositivo llamado TAG. Si tu auto no lo tiene, hay que comprar un pase diario después de usarlas, dentro del plazo que fija cada autopista, para evitar multas. Averiguá cómo hacerlo antes de entrar a la ciudad. Si alquilás auto en Chile, preguntá si incluye TAG y cómo te cobran los peajes.</p>
+<p>Los peajes de ruta, en cambio, se pagan en cabina, con efectivo o tarjeta. Para calcular la nafta del cruce y repartirla, está la <a href="/herramientas/calculadora-de-nafta/">calculadora de nafta</a>.</p>
+
+<h2>Si viajás en grupo: cómo repartir</h2>
+<p>En Chile los montos tienen muchos ceros: una cena para cuatro puede salir 60.000 pesos chilenos. Para no confundirse, lo mejor es:</p>
+<ol>
+<li><strong>Anotar cada gasto en pesos chilenos</strong>, el monto del ticket, sin importar con qué se pagó.</li>
+<li>Calcular saldos y transferencias en pesos chilenos.</li>
+<li>Al volver, <strong>pasar a pesos argentinos con una sola cotización acordada</strong>. La guía <a href="/guias/dolar-tarjeta-mep-blue-viajar/">qué dólar usar para repartir</a> explica cómo elegirla según cómo pagó cada uno.</li>
+</ol>
+[[fig add-expense | Cada gasto se anota en la moneda del destino, como figura en el ticket]]
+<p>Si alguien pagó el hotel en dólares para ahorrar el IVA, anotalo en dólares: la app convierte todo a la moneda del viaje.</p>
+[[fig settle-fx | Al repartir en pesos argentinos se elige la cotización y queda fija para esa repartida]]
+
+<h2>Antes de viajar</h2>
+<ul>
+<li>Confirmá que tus tarjetas estén habilitadas para el exterior y cargalas en la billetera del teléfono.</li>
+<li>Tené dólares en la caja de ahorro para pagar el resumen sin percepción.</li>
+<li>Llevá algunos dólares en efectivo, en buen estado, para el hotel o para cambiar.</li>
+<li>Preguntá al hotel si te puede descontar el IVA y cómo tenés que pagar.</li>
+<li>Si vas en auto a Santiago, averiguá cómo pagar las autopistas sin TAG.</li>
+<li>Acordá con tu grupo con qué cotización van a saldar las deudas.</li>
+</ul>
+
+<p>Para saber cuánto es en pesos argentinos un precio en pesos chilenos, con dólar tarjeta, MEP u oficial, usá el <a href="/herramientas/conversor-de-moneda/">conversor de moneda para viajar</a>.</p>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Puedo pagar con pesos argentinos en Chile?</h3>
+<p>En general, no. Algunos comercios de zonas de frontera o con mucho turismo argentino aceptan pagos desde billeteras argentinas, pero no es lo habitual. Contá con la tarjeta y con pesos chilenos.</p>
+<h3>¿Conviene llevar dólares o pesos argentinos para cambiar?</h3>
+<p>Dólares: se cambian en cualquier casa de cambio y sirven para pagar el hotel sin IVA. Los pesos argentinos se aceptan en menos lugares y con peor cotización.</p>
+<h3>¿El descuento del IVA del hotel vale si reservo por una página de reservas?</h3>
+<p>Depende de cómo se cobre. Si pagás por adelantado en pesos chilenos, o si la página no lo contempla, puede que no aplique. Antes de reservar, revisá si la tarifa dice "IVA incluido" y consultá al hotel.</p>
+<h3>¿Me cobran la percepción del 30% si pago en Chile con débito?</h3>
+<p>Solo si el débito sale de una cuenta en pesos. Si sale de una caja de ahorro en dólares, no.</p>
+
+<p class="meta">Fuentes: <a href="https://www.sii.cl/preguntas_frecuentes/declaracion_renta/001_140_1165.htm" rel="noopener">SII: exenciones en la actividad de turismo</a>; <a href="https://transtecnia.cl/articulo-tributario/ratifican-aplicacion-de-exencion-a-iva-a-servicios-de-hoteleria-pagados-en-tarjeta-de-credito-en-dolares/" rel="noopener">Transtecnia: exención de IVA en hoteles pagados con tarjeta en dólares</a>; <a href="https://www.losandes.com.ar/turismo/billeteras-virtuales-chile-la-forma-pagar-que-mas-eligen-los-argentinos-este-verano-n5978830" rel="noopener">Los Andes: billeteras virtuales en Chile</a>. Esta guía es informativa y no es asesoramiento financiero ni impositivo; las condiciones de bancos, billeteras y hoteles pueden cambiar.</p>
 `,
   },
 ];
