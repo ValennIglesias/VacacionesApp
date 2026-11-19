@@ -1,18 +1,18 @@
 # AdSense Compliance Audit — TribuSplit
 
 - **Sitio auditado:** https://tribusplit.com (en vivo)
-- **Fecha:** 1 de noviembre de 2026
+- **Fecha:** 16 de noviembre de 2026
 - **Fuentes:**
-  - el sitio publicado (HTML, `ads.txt`, `robots.txt`, `sitemap.xml` y cabeceras);
-  - el repo local, para las fechas de las guías;
-  - RDAP, para la fecha de registro del dominio;
-  - los DNS, para el MX.
+  - el sitio publicado: las 46 URLs del sitemap (todas responden 200), `ads.txt`, `robots.txt`, la 404 y las cabeceras;
+  - el repo local, para las fechas de publicación de las guías;
+  - un buscador web (no es Google), para ver presencia externa;
+  - el export de **Rendimiento** de Search Console (últimos 3 meses, bajado el 16/11).
 - **Plan de acción:** [action-plan.md](action-plan.md)
 
 > **Lo que no pude verificar:**
-> - El panel de AdSense: si el sitio está agregado, en qué estado está y si el mensaje de consentimiento (CMP) está publicado.
-> - El informe "Páginas" de Search Console, que todavía se está procesando.
-> - Core Web Vitals: la API de PageSpeed devolvió cuota agotada.
+> - El informe "Páginas" (indexación) de Search Console: el export es de Rendimiento, así que la indexación la deduzco de las páginas con impresiones.
+> - El panel de AdSense: estado del sitio, si ya pediste la revisión y si el mensaje de consentimiento (CMP) está publicado.
+> - Core Web Vitals: la API de PageSpeed no respondió en la auditoría anterior y no volví a medir.
 > - El tráfico real.
 
 ## Historial de puntajes
@@ -21,31 +21,33 @@
 |---|---|---|
 | 24/10 (repo, sin publicar) | 63 → 74 | FAIL: faltaban dominio, ID y CMP |
 | 25/10 | 75 | FAIL, por el mismo motivo |
-| **01/11 (en vivo)** | **80** | **CONDITIONAL PASS**: listo técnicamente, falta madurez de indexación |
+| 01/11 (en vivo) | 80 | CONDITIONAL PASS: listo técnicamente, falta madurez de indexación |
+| 16/11 (en vivo) | 81 | CONDITIONAL PASS: el sitio mejoró poco; la condición sigue siendo la misma |
+| **16/11 (con Search Console)** | **82** | **CONDITIONAL PASS**: indexación confirmada; las impresiones cayeron a cero desde el 12/11 |
 
 ## Executive Summary
 
-**Overall Score:** 80 / 100, "Ready" (en el límite).
+**Overall Score:** 82 / 100, "Ready".
 **Approval Probability:**
-- **Si se pide la revisión hoy:** entre 35 y 50 %. El dominio tiene 3 días (registrado el 29/10/2026) y Google todavía no indexó las páginas.
-- **Con la indexación confirmada** (2 a 4 semanas), el CMP publicado y algo de tráfico orgánico: entre 65 y 75 %.
+- **Si se pide la revisión hoy:** entre 50 y 60 %. Google ya indexó casi todo, pero la caída de impresiones desde el 12/11 no tiene explicación todavía.
+- **Si las impresiones vuelven (o se explica la caída) y el CMP está publicado:** entre 65 y 75 %.
 
-No encontré **ninguna infracción confirmada**. La parte técnica está completa: `ads.txt` válido, meta tag y script de AdSense en el `<head>`, `robots.txt` que deja pasar a Mediapartners-Google, sitemap con 45 URLs, 404 real y HTTPS.
+**Search Console (28/10 al 14/11):** 5.086 impresiones y 4 clics. 40 de las 45 URLs del sitemap tuvieron impresiones, así que Google las indexó. La calculadora para dividir gastos concentra el 69 % (3.503 impresiones, posición media 7,5, sin clics), con público de toda Latinoamérica. Pero las impresiones diarias pasaron de 300–600 a 44 el 12/11 y a 0–1 desde el 13/11.
 
-Hay contenido suficiente y de buen tamaño:
-- 35 páginas de contenido (guías de 817 a 1.801 palabras y 6 herramientas de 531 a 698);
-- autor identificado y contacto con un dominio propio que recibe correo.
+Desde el 1/11 se resolvieron dos puntos técnicos: `www.tribusplit.com` ahora redirige con 301 a `tribusplit.com`, y la 404 tiene navegación y enlaces a guías, con `noindex` y sin anuncios. Las 46 URLs del sitemap responden 200. Se publicó una guía nueva (tarjeta de crédito o débito en el exterior) y hay otra lista sin publicar (pagar en Chile).
 
-El riesgo que queda no es de políticas sino de **madurez**. Un dominio recién nacido, sin páginas indexadas ni tráfico, es el perfil típico de "el sitio no está listo" o de rechazo por contenido de poco valor. El revisor no tiene señales externas que confirmen que el sitio aporta valor.
+**Lo honesto:** el sitio ya estaba listo hace dos semanas y casi no cambió. La indexación, que era la gran duda, está bien. El tráfico real es casi nulo (4 clics), y la caída de impresiones es lo que hay que entender antes de pedir la revisión. En producción no encontré nada que bloquee a Google: las páginas responden 200, sin `noindex` ni `X-Robots-Tag`, con canonical correcto. Las causas más probables son que terminó el empuje inicial que Google les da a las páginas nuevas, o que los últimos días del export todavía no están completos.
 
-| Dimensión | Puntaje | Peso |
-|---|---|---|
-| Content Quality | 80 | 30 % |
-| Policy Compliance | 90 | 20 % |
-| Trust Signals | 80 | 20 % |
-| UX Quality | 85 | 15 % |
-| Monetization Readiness | 62 | 15 % |
-| **Total ponderado** | **80** | |
+No encontré **ninguna infracción confirmada**.
+
+| Dimensión | Puntaje | Peso | Cambio |
+|---|---|---|---|
+| Content Quality | 80 | 30 % | = (una guía más, ritmo lento) |
+| Policy Compliance | 90 | 20 % | = |
+| Trust Signals | 80 | 20 % | = |
+| UX Quality | 87 | 15 % | +2 (www y 404) |
+| Monetization Readiness | 70 | 15 % | +8 (indexación confirmada; tráfico casi nulo y en caída) |
+| **Total ponderado** | **82** | | +2 |
 
 **Método:** promedio ponderado. Contenido y confianza pesan más porque son la causa más frecuente de rechazo.
 
@@ -55,120 +57,87 @@ Ninguno confirmado.
 
 ## High Priority Issues
 
-1. **Dominio de 3 días y sin indexación confirmada** *(riesgo potencial)*.
-   - RDAP da como fecha de registro el 29/10/2026.
-   - En Search Console, el sitemap muestra 45 URLs descubiertas y el informe "Páginas" sigue procesando.
-   - AdSense no exige una antigüedad mínima, pero pide contenido que "atraiga audiencia" y valor suficiente antes de monetizar. Sin páginas en el índice de Google ni visitas, el revisor no tiene esa evidencia.
-   - *Política: AdSense eligibility requirements, contenido de calidad que atraiga audiencia; "What to do when your site isn't ready to show ads".*
-2. **Mensaje de consentimiento (CMP) sin verificar** *(falta evidencia)*.
+1. **Impresiones en cero desde el 12/11 y tráfico casi nulo** *(confirmado en Search Console; causa sin determinar)*.
+   - Del 31/10 al 11/11: entre 290 y 600 impresiones por día. El 12/11: 44. Del 13/11 al 14/11: 0 y 1.
+   - En total, 4 clics en 18 días. La calculadora tiene 3.503 impresiones en posición 7,5 y ningún clic, algo raro para esa posición.
+   - En producción no hay bloqueos: 200, sin `noindex`, canonical correcto. Los cambios del 10/11 y 13/11 tocaron la app y la privacidad, no las páginas con impresiones.
+   - Causas probables: fin del empuje inicial a páginas nuevas, o datos incompletos de los últimos días. Hay que mirarlo de nuevo en 2 o 3 días.
+   - AdSense pide contenido que "atraiga audiencia". La indexación ya está; una caída a cero justo antes de la revisión no ayuda.
+   - *Política: AdSense eligibility requirements; "What to do when your site isn't ready to show ads".*
+2. **Mensaje de consentimiento (CMP) sin verificar** *(falta evidencia, sigue igual que el 1/11)*.
    - La política de privacidad dice que se usa la herramienta de consentimiento de Google certificada para el TCF.
-   - No pude confirmar que el mensaje esté **creado y publicado** en AdSense → Privacidad y mensajes. Sin él, no se sirven anuncios personalizados en el EEE, el Reino Unido ni Suiza, y la privacidad estaría prometiendo algo que no ocurre.
+   - Si el mensaje no está creado y publicado en AdSense → Privacidad y mensajes, la privacidad promete algo que no ocurre y no se sirven anuncios personalizados en el EEE, el Reino Unido y Suiza.
    - *Política: EU User Consent Policy; Publisher Policies — Misrepresentation.*
 
 ## Medium Priority Issues
 
-3. **Contenido publicado en tandas** *(riesgo potencial)*.
-   - Las 35 guías aparecieron en 2 semanas, en bloques con la misma fecha: 13 guías en inglés el 18/10, después 5, 5, 2 y 4.
-   - No es una infracción, porque el contenido es distinto, largo y tiene capturas propias. Pero un ritmo de publicación en ráfagas es una de las señales que mira la política de abuso de contenido a escala.
-   - De ahora en adelante conviene publicar con un ritmo regular.
+3. **Ritmo de publicación: tandas al principio, casi nada después** *(riesgo potencial)*.
+   - Del 18/10 al 30/10 se publicaron unas 30 guías en tandas. Del 1/11 al 16/11, una sola.
+   - Primero ráfagas y después silencio es el patrón que más se parece a "sitio armado para monetizar". Lo que ayuda es un ritmo regular: 1 o 2 guías por semana.
    - *Política: Spam Policies — Scaled content abuse.*
-4. **Fechas de las guías anteriores al dominio** *(confirmado, bajo impacto)*. Varias dicen "Actualizado el 24 de octubre de 2026", y el dominio existe desde el 29/10. Es coherente si el contenido se escribió antes, pero un revisor atento puede notar la inconsistencia. No hace falta cambiarlas, y no conviene inventar fechas. *Política: Search Quality Rater Guidelines — confianza.*
-5. **Core Web Vitals sin medir en producción** *(falta evidencia)*. La API de PageSpeed no respondió por cuota. Hay que medir a mano la home, una guía y una herramienta en mobile. *Política: Better Ads / Ad Experience; calidad de la experiencia.*
-6. **Herramientas con menos texto que las guías** *(riesgo bajo)*. Tienen entre 531 y 698 palabras. Para una calculadora es razonable, porque la herramienta es el valor. Aun así, no conviene poner más de un bloque de anuncios en esas páginas. *Política: Publisher Policies — Valuable inventory.*
+4. **Guía de Chile lista pero sin publicar** *(confirmado)*. Está en el repo sin commitear y en producción da 404. Publicarla suma al ritmo regular. *Sin política asociada.*
+5. **Core Web Vitals sin medir en producción** *(falta evidencia)*. Medir a mano en mobile la home, una guía y una herramienta. *Política: Ad Experience; calidad de la experiencia.*
+6. **Herramientas con menos texto que las guías** *(riesgo bajo, sin cambios)*. Para una calculadora es razonable. No poner más de un bloque de anuncios ahí. *Política: Publisher Policies — Valuable inventory.*
 
 ## Low Priority Issues
 
-7. **`X-Frame-Options: DENY` en todo el sitio** *(potencial)*. Los anuncios no se ven afectados, porque son iframes dentro de la página. Pero algunas vistas previas del panel de AdSense, como la de anuncios automáticos, cargan el sitio dentro de un frame y pueden mostrar "rechazó la conexión". Si molesta, se puede relajar solo en las páginas públicas. *Sin política asociada: herramienta del panel.*
-8. **Privacidad y términos bilingües en una sola URL** *(confirmado)*. No tienen `hreflang` propio. Es menor, porque las dos versiones están en la misma página. *Política: buenas prácticas de Search.*
-9. **Anuncios dentro de la app** *(para después de aprobar)*.
-   - Hoy no hay bloques configurados en la app, porque faltan `VITE_ADSENSE_SLOT_*`.
-   - Al activarlos:
-     - no ponerlos en pantallas sin contenido, como login, unirse o crear viaje;
-     - mantenerlos lejos del botón "+".
-   - *Política: Ad placement policies — clics accidentales; ads on screens without publisher content.*
+7. **`X-Frame-Options: DENY` en todo el sitio** *(potencial, sin cambios)*. No afecta a los anuncios, pero algunas vistas previas del panel de AdSense pueden no cargar el sitio. *Sin política asociada.*
+8. **Privacidad y términos bilingües en una sola URL** *(confirmado, sin cambios)*. Menor. *Política: buenas prácticas de Search.*
+9. **Anuncios dentro de la app** *(para después de aprobar)*. Nada en login, unirse, crear viaje ni confirmar email; lejos del botón "+". *Política: Ad placement policies; ads on screens without publisher content.*
 
 ## Content Quality Assessment
 
-- **Volumen:** 35 URLs de contenido, 45 en el sitemap:
-  - 18 guías en español y 14 en inglés;
-  - 6 herramientas;
-  - índices, home, nosotros, contacto, privacidad y términos.
-- **Profundidad:** las guías tienen entre 817 y 1.801 palabras, con un promedio cercano a 1.050. Incluyen ejemplos con números, preguntas frecuentes, tablas y capturas reales de la app.
-- **Originalidad y experiencia:**
-  - hay casos propios, como la Costa Atlántica, que cuenta experiencia personal;
-  - hay temas locales con valor real, como dólar tarjeta/MEP/blue y Pix en Brasil;
-  - las guías en inglés están adaptadas, no solo traducidas.
-- **Riesgos:** la cantidad publicada en poco tiempo (punto 3) y que el sitio todavía es un producto con contenido de apoyo. Las guías se sostienen solas, así que no lo veo como un problema.
-- **Uso de IA:** sin señales de contenido generado sin revisar. Los textos tienen datos concretos, enlaces internos coherentes y fuentes citadas en las guías con datos.
+- **Volumen:** 46 URLs en el sitemap: 31 guías (17 en español y 14 en inglés), 6 herramientas, índices, home, nosotros, contacto, privacidad y términos.
+- **Profundidad y originalidad:** sin cambios respecto del 1/11. Guías largas, con ejemplos numéricos, capturas propias y temas locales con valor real (dólar tarjeta/MEP/blue, Pix, tarjetas en el exterior).
+- **Riesgo:** el ritmo de publicación (punto 3).
 
 ## Publisher Policy Assessment
 
-No hay contenido sexual, violento, de odio, peligroso, ilegal, de armas, drogas ni apuestas. Tampoco hay infracciones de copyright: las imágenes son capturas propias. El contenido financiero es informativo y fechado, con descargo, sin promesas ni asesoramiento. **Cumple.**
+Sin contenido sexual, violento, de odio, peligroso, ilegal, de armas, drogas ni apuestas. Imágenes propias. Contenido financiero informativo, sin promesas ni asesoramiento. **Cumple.**
 
 ## Publisher Restriction Assessment
 
-No hay alcohol, citas, temas sociales sensibles, salud ni política. Los tipos de dólar en Argentina son información de cambio, no especulación. **Sin restricciones aplicables.**
+Sin alcohol, citas, temas sociales sensibles, salud ni política. **Sin restricciones aplicables.**
 
 ## Invalid Traffic Assessment
 
-- No hay incentivos para hacer clic, ni intercambio de tráfico, ni pop-ups.
-- Los bloques están etiquetados como "Publicidad".
-- El anuncio de la app ya está separado del botón flotante.
-- Recomendación: no hacer clic en tus propios anuncios ni pedirle a nadie que lo haga, y no comprar tráfico al empezar.
-
-**Riesgo bajo.**
+Sin incentivos para hacer clic, intercambio de tráfico ni pop-ups. **Riesgo bajo.** Al empezar: no comprar tráfico ni hacer clic en tus propios anuncios.
 
 ## Spam Policy Assessment
 
-- No hay contenido oculto, cloaking, páginas puerta, dominio expirado ni abuso de reputación de terceros.
-- Los pares es/en usan `hreflang` y canonical correctos.
-- Solo hay una señal a vigilar: la publicación en tandas (punto 3).
-
-**Cumple, con un riesgo menor.**
+Sin contenido oculto propio, cloaking, páginas puerta, dominio expirado ni abuso de reputación. Hay un link oculto con `nofollow` que inyecta Cloudflare (protección contra bots); Google suele quedar excluido como bot verificado, pero si AdSense marca "sitio inaccesible", es lo primero que hay que revisar. **Cumple, con el riesgo del punto 3.**
 
 ## Trust & Transparency Assessment
 
-- **Nosotros:** autor con nombre, ciudad, bio, experiencia y LinkedIn; `Person` en JSON-LD; caja de autor en cada guía.
-- **Contacto:** `contacto@tribusplit.com`, con MX activo en Cloudflare Email Routing.
-- **Privacidad:** cubre cookies de AdSense, publicidad personalizada, CMP en EEE/UK/Suiza, menores de 13 años y ausencia de analítica.
-- **Términos:** completos.
-- **Pendiente:** confirmar que el correo de contacto llegue a una casilla que leés, con un mail de prueba.
+Nosotros con autor identificado y LinkedIn, contacto con dominio propio, privacidad completa (cookies de AdSense, CMP, menores), términos. Ahora también hay login con Google y confirmación de email en la app, que no afectan la revisión. **Sin cambios: bien.**
 
 ## User Experience Assessment
 
-- **Navegación:** clara, con header y footer que enlazan guías, herramientas, legales e idioma. El 404 es real.
-- **Mobile:** diseño responsive y probado en 320 a 390 px. Las tablas no desbordan.
-- **Velocidad:** el HTML responde en 0,08 a 0,3 s desde Cloudflare. Faltan las métricas de Lighthouse y CrUX (punto 5).
-- **Interacción:** hay animaciones de hover y foco visible.
+- **Mejoras desde el 1/11:** `www` redirige con 301; la 404 tiene header, footer y enlaces a guías, en español e inglés.
+- Navegación clara, diseño responsive, HTML rápido desde Cloudflare. Faltan métricas de Lighthouse.
 
 ## Monetization Assessment
 
-- **Listo:**
-  - `ads.txt`: `google.com, pub-2261714480132826, DIRECT, f08c47fec0942fa0`;
-  - meta `google-adsense-account`;
-  - el script `adsbygoogle` en las páginas públicas, no en la app;
-  - `robots.txt` deja a Mediapartners-Google ver `/app/`.
-- **Falta:** indexación, tráfico y CMP publicado. Los temas (viajes, seguros, tarjetas, eSIM) tienen buena demanda de anunciantes.
+- **Listo:** `ads.txt` válido, meta `google-adsense-account`, script de AdSense en las páginas públicas (no en la 404 ni en la app), `robots.txt` que deja pasar a Mediapartners-Google.
+- **Indexación:** confirmada por Search Console (40 de 45 URLs con impresiones).
+- **Falta (todo fuera del código):** entender la caída de impresiones, algo de tráfico real y el CMP publicado.
+- **Audiencia:** mayormente Latinoamérica (México, Argentina, Perú, Colombia). Estados Unidos aparece con 386 impresiones en posición 33. Las guías en inglés de seguros y eSIM reciben búsquedas, pero en posiciones de 50 a 70.
 
 ## Revenue Optimization Opportunities
 
 - Guías de mayor valor publicitario en inglés: seguros, tarjetas sin comisión, eSIM, presupuestos por destino.
-- Páginas de presupuesto por destino (por ejemplo, Florianópolis, Río o Bariloche en grupo).
-- Después de aprobar, links de afiliados (seguro de viaje, eSIM) como complemento.
-- Atraer tráfico de países que pagan más (EE. UU., Canadá, Australia, Reino Unido) con guías adaptadas.
+- Páginas por destino (Chile, Brasil, Uruguay en grupo), que además dan ritmo de publicación.
+- Después de aprobar: afiliados de seguro de viaje y eSIM.
 
 ## Ad Placement Recommendations
 
-- **Guías:**
-  - anuncios automáticos con la densidad baja-media, o un bloque dentro del artículo después del segundo `h2` más uno antes de las preguntas frecuentes;
-  - anclado en mobile sí;
-  - viñeta (vignette) mejor apagada al principio.
-- **Herramientas:** un solo bloque debajo del resultado, nunca entre el input y el botón.
-- **App:** solo en Resumen y al final de la lista de gastos, lejos del "+". Nada en login, unirse ni crear viaje.
-- **Home:** como mucho un bloque, debajo de los primeros contenidos, no en el hero.
+- **Guías:** anuncios automáticos con densidad baja-media, anclado en mobile, viñeta apagada al principio.
+- **Herramientas:** un solo bloque debajo del resultado.
+- **App:** solo en Resumen y al final de la lista de gastos.
+- **Home:** como mucho un bloque, fuera del hero.
 
 ## Approval Readiness Verdict
 
 **CONDITIONAL PASS.**
 
-Ni las políticas ni la parte técnica bloquean nada. La condición es esperar a que Google indexe las páginas y confirmar que el CMP está publicado antes de pedir la revisión.
+El sitio no tiene nada técnico ni de políticas que bloquee la aprobación, y la indexación ya está confirmada. Antes de pedir la revisión: ver si las impresiones vuelven en los próximos días y confirmar que el CMP está publicado.
